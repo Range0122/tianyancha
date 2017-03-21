@@ -8,4 +8,5 @@
 
 class TianyanchaPipeline(object):
     def process_item(self, item, spider):
+        print item["legal_representative"], "\n\n", item["registered_capital"]
         return item

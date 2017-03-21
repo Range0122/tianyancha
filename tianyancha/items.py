@@ -9,6 +9,22 @@ import scrapy
 
 
 class TianyanchaItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
+    #企业背景-基本信息
+    legal_representative = scrapy.Field()
+    registered_capital = scrapy.Field()
     pass
+    # registered_time = scrapy.Field()
+    # condition = scrapy.Field()
+    # registered_number = scrapy.Field()
+    # organization_number = scrapy.Field()
+    # credit_number = scrapy.Field()
+    # enterprise_type = scrapy.Field()
+    # industry = scrapy.Field()
+    # operating_period = scrapy.Field()
+    # approved_date = scrapy.Field()
+    # registration_authority = scrapy.Field()
+    # registered_address = scrapy.Field()
+    # business_scope = scrapy.Field()
+    # telephone = scrapy.Field()
+    # email = scrapy.Field()
+    # website = scrapy.Field()
