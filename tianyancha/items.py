@@ -10,7 +10,7 @@ import scrapy
 
 class TianyanchaItem(scrapy.Item):
     #企业背景-基本信息
-    companu_id = scrapy.Field()
+    company_id = scrapy.Field()
     company_name = scrapy.Field()
     legal_representative = scrapy.Field()
     registered_capital = scrapy.Field()
