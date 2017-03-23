@@ -70,9 +70,12 @@ class JavaScriptMiddleware(object):
         driver = webdriver.PhantomJS(executable_path='E:\Webdriver\phantomjs-2.1.1-windows\\bin\phantomjs.exe',
                                      desired_capabilities=dcap)
         driver.get(request.url)
-        time.sleep(10)
+        sleep_time = random.randint(15, 22)
+        time.sleep(sleep_time)
         body = driver.page_source
-        return HtmlResponse(driver.current_url, body=body, encoding='utf-8', request=request)
+        url = driver.current_url
+        driver.quit()
+        return HtmlResponse(url=url, body=body, request=request, encoding='utf-8')
 
     user_agent_list = [
         'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
