@@ -32,3 +32,9 @@ class TianyanchaItem(scrapy.Item):
     logo_location = scrapy.Field()
     address = scrapy.Field()
     score = scrapy.Field()
+
+    #企业背景-主要人员
+    person_id = scrapy.Field()
+    person_name = scrapy.Field()
+    position = scrapy.Field()
+

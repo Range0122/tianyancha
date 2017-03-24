@@ -28,16 +28,18 @@ class TianYanCha_Spider(CrawlSpider):
                 yield requests
 
     def parse_search_page(self, response):
-        url_list = response.xpath('//div[@class="b-c-white search_result_container ng-scope"]/div/div[2]/div[1]/div[1]/a/@href').extract()
+        # url_list = response.xpath('//div[@class="b-c-white search_result_container ng-scope"]/div/div[2]/div[1]/div[1]/a/@href').extract()
         url_list = re.findall('(http://www.tianyancha.com/company/[\d]*)', response.body)
         if not url_list:
             time_now = time.asctime(time.localtime(time.time()))
             with codecs.open('log.txt', 'a', encoding='utf-8') as f:
                 f.write(str(response.url) + ' ' + str(time_now) + '\r')
             print "THE LIST IS EMPTY ", response.url
-        for url in url_list:
-            requests = scrapy.Request(url, callback=self.parse_info_page)
-            yield requests
+        else:
+            url_list = {}.fromkeys(url_list).keys()
+            for url in url_list:
+                requests = scrapy.Request(url, callback=self.parse_info_page)
+                yield requests
 
     def parse_info_page(self, response):
         print response.body
@@ -46,11 +48,16 @@ class TianYanCha_Spider(CrawlSpider):
         l = ItemLoader(item=item, response=response)
 
         company_id = response.url[34:]
-        company_name = response.xpath('//div[@class="company_info_text"]/div[1]/text()' or '//span[@class="base-company f16 ng-binding"]/text()').extract()[0]
-        legal_representative = response.xpath(u'//div[text()="法定代表人"]/following-sibling::div[1]/a/text()' or '//a[@ng-if="company.baseInfo.legalPersonName"]/text()').extract()[0]
-        registered_capital = response.xpath(u'//div[text()="注册资本"]/following-sibling::div[1]/text()' or '//td[@class="td-regCapital-value"]/p/text()').extract()[0]
-        registered_time = response.xpath(u'//div[text()="注册时间"]/following-sibling::div[1]/text()' or '//td[@class="td-regTime-value"]/p/text()').extract()[0]
-        condition = response.xpath(u'//div[text()="状态"]/following-sibling::div[1]/text()' or '//td[@class="td-regStatus-value"]/p/text()').extract()[0]
+        company_name = response.xpath('//div[@class="company_info_text"]/div[1]/text()' or
+                                      '//span[@class="base-company f16 ng-binding"]/text()').extract()[0]
+        legal_representative = response.xpath(u'//div[text()="法定代表人"]/following-sibling::div[1]/a/text()' or
+                                              '//a[@ng-if="company.baseInfo.legalPersonName"]/text()').extract()[0]
+        registered_capital = response.xpath(u'//div[text()="注册资本"]/following-sibling::div[1]/text()' or
+                                            '//td[@class="td-regCapital-value"]/p/text()').extract()[0]
+        registered_time = response.xpath(u'//div[text()="注册时间"]/following-sibling::div[1]/text()' or
+                                         '//td[@class="td-regTime-value"]/p/text()').extract()[0]
+        condition = response.xpath(u'//div[text()="状态"]/following-sibling::div[1]/text()' or
+                                   '//td[@class="td-regStatus-value"]/p/text()').extract()[0]
         temp_items = response.xpath('//td[@class="basic-td"]/div[1]/span/text()').extract()
         registered_number = temp_items[0]
         organization_number = temp_items[1]
@@ -66,12 +73,22 @@ class TianYanCha_Spider(CrawlSpider):
         telephone = temp_items[0]
         email = temp_items[1]
         address = temp_items[5]
-        website = response.xpath('//div[@class="company_info_text"]/span[3]/a/text()' or '//div[@class="company_info_text"]/span[3]/span[2]/text()' or '//span[@ng-hide="company.websiteList"]/text()').extract_first(default=u'暂无')
-        score = response.xpath('//td[@class="td-score position-rel"]/img/@ng-alt' or '//img[@class="td-score-img"]/@ng-alt').extract()[0][-2:]
+        website = response.xpath('//div[@class="company_info_text"]/span[3]/a/text()' or
+                                 '//div[@class="company_info_text"]/span[3]/span[2]/text()' or
+                                 '//span[@ng-hide="company.websiteList"]/text()').extract_first(default=u'暂无')
+        score = response.xpath('//td[@class="td-score position-rel"]/img/@ng-alt' or
+                               '//img[@class="td-score-img"]/@ng-alt').extract()[0][-2:]
         logo_location = response.xpath('//div[@class="company_info"]/div[1]/img/@src').extract()[0]
         # 有一些logo的链接坏掉了，网站给出了备用logo
         # logo_location = response.xpath('//div[@class="company_info"]/div[1]/img/@onerror').extract()[0].replace('this.src=', '').replace("'", '')
         # logo_location = http://static.tianyancha.com/wap/images/company_pic_v2.png
+
+        person_id = response.xpath(
+            '//div[@class="staffinfo-module-container ng-scope"]/div/div/div[2]/div[1]/a/@href').extract()
+        person_name = response.xpath(
+            '//div[@class="staffinfo-module-container ng-scope"]/div/div/div[2]/div[1]/a/text()').extract()
+        position = response.xpath(
+            '//div[@class="staffinfo-module-container ng-scope"]/div/div/div[2]/div[2]/span/text()').extract()
 
         l.add_value("company_name", company_name)
         l.add_value("legal_representative", legal_representative)
@@ -95,6 +112,9 @@ class TianYanCha_Spider(CrawlSpider):
         l.add_value("address", address)
         l.add_value("score", score)
         l.add_value("company_id", company_id)
+        l.add_value("person_id", person_id)
+        l.add_value("person_name", person_name)
+        l.add_value("position", position)
         print "ONE OK"
 
         yield l.load_item()
@@ -104,3 +124,5 @@ class TianYanCha_Spider(CrawlSpider):
         #     with codecs.open('log.txt', 'a', encoding='utf-8') as f:
         #         time_now = time.asctime(time.localtime(time.time()))
         #         f.write(str(response.url) + ' ' + str(e) + ' ' + str(time_now) + '\r')
+
+

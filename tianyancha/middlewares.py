@@ -72,6 +72,16 @@ class JavaScriptMiddleware(object):
         driver.get(request.url)
         sleep_time = random.randint(15, 22)
         time.sleep(sleep_time)
+        # service_args = ['--proxy=127.0.0.1:9999', '--proxy-type=socks5']
+        # # 打开带配置信息的phantomJS浏览器
+        # driver = webdriver.PhantomJS(phantomjs_driver_path, desired_capabilities=dcap, service_args=service_args)
+        # # 隐式等待5秒，可以自己调节
+        driver.implicitly_wait(5)
+        # # 设置10秒页面超时返回，类似于requests.get()的timeout选项，driver.get()没有timeout选项
+        # # 以前遇到过driver.get(url)一直不返回，但也不报错的问题，这时程序会卡住，设置超时选项能解决这个问题。
+        driver.set_page_load_timeout(10)
+        # # 设置10秒脚本超时时间
+        driver.set_script_timeout(10)
         body = driver.page_source
         url = driver.current_url
         driver.quit()

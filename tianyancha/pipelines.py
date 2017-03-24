@@ -17,20 +17,29 @@ class TianyanchaPipeline(object):
     #         u'企业名称', u'法定代表人', u'注册资本', u'注册时间', u'状态', u'工商注册号', u'组织机构代码', u'统一信用代码',
     #         u'企业类型', u'行业', u'营业期限', u'核准日期', u'登记机关', u'注册地址', u'经营范围', u'电话', u'邮箱',
     #         u'网址']
-        self.item_en_names = ['company_name', 'company_id', 'legal_representative', 'registered_capital', 'registered_time', 'condition',
+        self.basic_info = ['company_name', 'company_id', 'legal_representative', 'registered_capital', 'registered_time', 'condition',
                               'registered_number', 'organization_number', 'credit_number', 'enterprise_type', 'industry',
                               'operating_period', 'approved_date', 'registration_authority', 'registered_address',
                               'business_scope', 'telephone', 'email', 'website', 'logo_location', 'address', 'score']
+        self.main_person = ['person_id', 'person_name', 'position']
 
     def process_item(self, item, spider):
-        page = self.dom.createElement('company')
-        self.root.appendChild(page)
-
-        for i in range(0, len(self.item_en_names)):
-            content = self.dom.createElement(str(self.item_en_names[i]))
-            data = self.dom.createTextNode(str(item[self.item_en_names[i]][0]))
+        basic_info = self.dom.createElement('basic_info')
+        self.root.appendChild(basic_info)
+        for item_name in basic_info:
+            content = self.dom.createElement(str(item_name))
+            data = self.dom.createTextNode(str(item[item_name][0]))
             content.appendChild(data)
-            page.appendChild(content)
+            basic_info.appendChild(content)
+
+        main_person = self.dom.createElement('main_person')
+        self.root.appendChild(main_person)
+        for i in range(0, len(item["person_id"])):
+            for item_name in main_person:
+                content = self.dom.createElement(str(item_name))
+                data = self.dom.createTextNode(str(item[item_name][i]))
+                content.appendChild(data)
+                main_person.appendChild(content)
 
         return item
 
