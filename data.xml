@@ -1,2 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<root/>
+<root>
+  <company>
+    <basic_info>
+      <company_name>广州市老人院吉泽皮革加工厂</company_name>
+      <company_id>2732096671</company_id>
+      <legal_representative>刘耀雄</legal_representative>
+      <registered_capital>3万元人民币</registered_capital>
+      <registered_time>1989-03-17</registered_time>
+      <condition>注销</condition>
+      <registered_number>4401011304183</registered_number>
+      <organization_number>19050891-2</organization_number>
+      <credit_number>未公开</credit_number>
+      <enterprise_type>全民所有制</enterprise_type>
+      <industry>皮革、毛皮、羽毛及其制品和制鞋业</industry>
+      <operating_period>1989-03-17至2099-01-01</operating_period>
+      <approved_date>2010-07-27</approved_date>
+      <registration_authority>广州市工商行政管理局白云分局</registration_authority>
+      <registered_address>广州市白云区钟落谭上水</registered_address>
+      <business_scope>加工革皮包、革皮票夹。</business_scope>
+      <telephone> 暂无 </telephone>
+      <email> 暂无</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/954a6ccb0fd3bde2bb301c2ad7ea085b.png</logo_location>
+      <address> 广州市白云区钟落谭上水</address>
+      <score>评分</score>
+      <former_name>广州市老人院皮革加工厂	</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>1816027431-c2732096671</person_id>
+      <person_name>刘耀雄</person_name>
+      <position>负责人</position>
+    </main_person>
+  </company>
+</root>

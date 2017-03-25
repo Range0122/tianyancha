@@ -1,5 +1,20 @@
-[INFO  - 2017-03-24T07:42:59.256Z] GhostDriver - Main - running on port 52062
-[INFO  - 2017-03-24T07:43:00.317Z] Session [812e3580-1065-11e7-a798-935e70138548] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0a2) Gecko/20110622 Firefox/6.0a2","webSecurityEnabled":true}
-[INFO  - 2017-03-24T07:43:00.317Z] Session [812e3580-1065-11e7-a798-935e70138548] - page.customHeaders:  - {}
-[INFO  - 2017-03-24T07:43:00.317Z] Session [812e3580-1065-11e7-a798-935e70138548] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"},"phantomjs.page.settings.loadImages":false,"phantomjs.page.settings.userAgent":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0a2) Gecko/20110622 Firefox/6.0a2"}
-[INFO  - 2017-03-24T07:43:00.317Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 812e3580-1065-11e7-a798-935e70138548
+[INFO  - 2017-03-25T14:09:30.225Z] GhostDriver - Main - running on port 54896
+[INFO  - 2017-03-25T14:09:33.305Z] Session [abaef060-1164-11e7-a986-f1298e5b5222] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0b4pre) Gecko/20100815 Minefield/4.0b4pre","webSecurityEnabled":true}
+[INFO  - 2017-03-25T14:09:33.306Z] Session [abaef060-1164-11e7-a986-f1298e5b5222] - page.customHeaders:  - {}
+[INFO  - 2017-03-25T14:09:33.306Z] Session [abaef060-1164-11e7-a986-f1298e5b5222] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"},"phantomjs.page.settings.loadImages":false,"phantomjs.page.settings.userAgent":"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0b4pre) Gecko/20100815 Minefield/4.0b4pre"}
+[INFO  - 2017-03-25T14:09:33.306Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: abaef060-1164-11e7-a986-f1298e5b5222
+[ERROR - 2017-03-25T14:09:38.377Z] Session [abaef060-1164-11e7-a986-f1298e5b5222] - page.onError - msg: Error: null is not an object (evaluating 't.data.data.total')
+http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:22:30299
+http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:8:2283
+$eval@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:8:16918
+$digest@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:8:15418
+$apply@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:8:17216
+s@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:7:48029
+f@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:7:57769
+onload@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:7:58320
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2017-03-25T14:09:38.378Z] Session [abaef060-1164-11e7-a986-f1298e5b5222] - page.onError - stack:
+  (anonymous function) (http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:7)
+
+  phantomjs://platform/console++.js:263 in error
