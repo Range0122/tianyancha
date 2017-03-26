@@ -2,6 +2,574 @@
 <root>
   <company>
     <basic_info>
+      <company_name>龙门乡龙门村粮米加工厂</company_name>
+      <company_id>3015166506</company_id>
+      <legal_representative>加工厂</legal_representative>
+      <registered_capital>1万</registered_capital>
+      <registered_time>1983-08-24</registered_time>
+      <condition>注销</condition>
+      <registered_number>未公开</registered_number>
+      <organization_number>未公开</organization_number>
+      <credit_number>3008</credit_number>
+      <enterprise_type>未公开</enterprise_type>
+      <industry>农副食品加工业</industry>
+      <operating_period>1983-08-24至无固定期限</operating_period>
+      <approved_date>1986-09-08</approved_date>
+      <registration_authority>未公开</registration_authority>
+      <registered_address> </registered_address>
+      <business_scope> （依法须经批准的项目，经相关部门批准后方可开展经营活动）</business_scope>
+      <telephone> 暂无 </telephone>
+      <email> 暂无</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/fbd33dbed18b2bf006d33c05f6831a28.png</logo_location>
+      <address>  </address>
+      <score>分1</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>2903695727-c3015166506</person_id>
+      <person_name>加工厂</person_name>
+      <position>未知</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>东莞市万江惠华建材经营部</company_name>
+      <company_id>2341898002</company_id>
+      <legal_representative>钟惠红</legal_representative>
+      <registered_capital>-</registered_capital>
+      <registered_time>2012-06-07</registered_time>
+      <condition>存续</condition>
+      <registered_number>441900604844056</registered_number>
+      <organization_number>未公开</organization_number>
+      <credit_number>未公开</credit_number>
+      <enterprise_type>个体户</enterprise_type>
+      <industry>批发业</industry>
+      <operating_period>未公开</operating_period>
+      <approved_date>2015-08-17</approved_date>
+      <registration_authority>东莞市工商行政管理局</registration_authority>
+      <registered_address>东莞市万江区谷涌社区华发建筑物资交易市场106号</registered_address>
+      <business_scope>销售：建筑材料。 (依法须经批准的项目，经相关部门批准后方可开展经营活动)〓</business_scope>
+      <telephone> 暂无 </telephone>
+      <email> 暂无</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/cd4d41e34117f0f0ad118a46cfc33cae.png</logo_location>
+      <address> 东莞市万江区谷涌社区华发建筑物资交易市场106号</address>
+      <score>10</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>None</person_id>
+      <person_name>None</person_name>
+      <position>None</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>开平市优赢建筑脚手架有限公司</company_name>
+      <company_id>2330404293</company_id>
+      <legal_representative>司徒添荣</legal_representative>
+      <registered_capital>200万人民币元</registered_capital>
+      <registered_time>2003-08-22</registered_time>
+      <condition>存续</condition>
+      <registered_number>440783000026242</registered_number>
+      <organization_number>753670834</organization_number>
+      <credit_number>914407837536708349</credit_number>
+      <enterprise_type>有限责任公司(自然人投资或控股)</enterprise_type>
+      <industry>建筑安装业</industry>
+      <operating_period>2003-08-22至无固定期限</operating_period>
+      <approved_date>2016-07-08</approved_date>
+      <registration_authority>开平市工商行政管理局</registration_authority>
+      <registered_address>开平市赤坎镇河南路102号之2</registered_address>
+      <business_scope>钢脚手架、铝脚手架、建筑钢构架、钢模板、器械、金属制品及其配件生产销售；建筑脚手架搭设、设计、租赁、安装。 (依法须经批准的项目，经相关部门批准后方可开展经营活动)〓</business_scope>
+      <telephone> 0750-2029536 </telephone>
+      <email> kpyy@youying.com</email>
+      <website>http://www.youying.com</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/0c87462caadecf5f7d7cb0ea6979d137.png</logo_location>
+      <address> 开平市赤坎镇河南路102号之2</address>
+      <score>59</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>1836774870-c2330404293</person_id>
+      <person_name>司徒添荣</person_name>
+      <position>执行董事，</position>
+      <person_id>1836771537-c2330404293</person_id>
+      <person_name>司徒植荣</person_name>
+      <position>经理</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>阳新县城东新区昌盛脚手架出租行</company_name>
+      <company_id>2511906235</company_id>
+      <legal_representative>赵英银</legal_representative>
+      <registered_capital>-</registered_capital>
+      <registered_time>2016-04-12</registered_time>
+      <condition>注销</condition>
+      <registered_number>420222600627129</registered_number>
+      <organization_number>未公开</organization_number>
+      <credit_number>未公开</credit_number>
+      <enterprise_type>个体工商户</enterprise_type>
+      <industry>租赁业</industry>
+      <operating_period>未公开</operating_period>
+      <approved_date>2016-11-02</approved_date>
+      <registration_authority>阳新县工商行政管理局上街工商所</registration_authority>
+      <registered_address>阳新县城东新区双港新村</registered_address>
+      <business_scope>工程脚手架租赁服务***（涉及许可经营项目，应取得相关部门许可后方可经营）</business_scope>
+      <telephone> 暂无 </telephone>
+      <email> 暂无</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/f7226f40ef641eb08645f60344c3b214.png</logo_location>
+      <address> 阳新县城东新区双港新村</address>
+      <score>10</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>None</person_id>
+      <person_name>None</person_name>
+      <position>None</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>广州市增城鑫峰包装部</company_name>
+      <company_id>2326541118</company_id>
+      <legal_representative>周建军</legal_representative>
+      <registered_capital>-</registered_capital>
+      <registered_time>2005-08-11</registered_time>
+      <condition>吊销</condition>
+      <registered_number>440125321005290</registered_number>
+      <organization_number>未公开</organization_number>
+      <credit_number> </credit_number>
+      <enterprise_type>个体工商户</enterprise_type>
+      <industry>造纸和纸制品业</industry>
+      <operating_period>未公开</operating_period>
+      <approved_date>2005-08-11</approved_date>
+      <registration_authority>广州市工商行政管理局增城分局新塘工商所</registration_authority>
+      <registered_address>广州市增城新塘工业加工区新内街13号</registered_address>
+      <business_scope>服装包装。</business_scope>
+      <telephone> 暂无 </telephone>
+      <email> 暂无</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/53214130e213908edfd2c88e14f67729.png</logo_location>
+      <address> 广州市增城新塘工业加工区新内街13号</address>
+      <score>评分</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>None</person_id>
+      <person_name>None</person_name>
+      <position>None</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>东胜区盛鑫移动脚手架出租部</company_name>
+      <company_id>2345595535</company_id>
+      <legal_representative>宋加兴</legal_representative>
+      <registered_capital>-</registered_capital>
+      <registered_time>2012-12-13</registered_time>
+      <condition>存续</condition>
+      <registered_number>150602600068295</registered_number>
+      <organization_number>未公开</organization_number>
+      <credit_number>未公开</credit_number>
+      <enterprise_type>个体户</enterprise_type>
+      <industry>租赁业</industry>
+      <operating_period>2099-01-01至2099-01-01</operating_period>
+      <approved_date>2012-12-13</approved_date>
+      <registration_authority>鄂尔多斯市工商行政管理局东胜分局</registration_authority>
+      <registered_address>大桥路横东大厦西侧</registered_address>
+      <business_scope>许可经营项目：无 一般经营项目：脚手架 出租 (依法须经批准的项目，经相关部门批准后方可开展经营活动)〓</business_scope>
+      <telephone> 15847371320 </telephone>
+      <email> 暂无</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/dde0c8ce0e71241af5321f06579c502a.png</logo_location>
+      <address> 大桥路横东大厦西侧</address>
+      <score>10</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>1888989074-c2345595535</person_id>
+      <person_name>宋加兴</person_name>
+      <position>家庭成员</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>广州市人和制伞加工厂</company_name>
+      <company_id>2808302933</company_id>
+      <legal_representative>叶鉴宁</legal_representative>
+      <registered_capital>3万元人民币</registered_capital>
+      <registered_time>1988-04-19</registered_time>
+      <condition>注销</condition>
+      <registered_number>19111080X</registered_number>
+      <organization_number>未公开</organization_number>
+      <credit_number>未公开</credit_number>
+      <enterprise_type>集体所有制</enterprise_type>
+      <industry>其他制造业</industry>
+      <operating_period>未公开</operating_period>
+      <approved_date>1997-11-25</approved_date>
+      <registration_authority>广州市工商行政管理局白云分局</registration_authority>
+      <registered_address>广州市白云区人和镇太成村</registered_address>
+      <business_scope>制伞。</business_scope>
+      <telephone> 暂无 </telephone>
+      <email> 暂无</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/03cb081fe2e97ddbc4cd74778a69f87e.png</logo_location>
+      <address> 广州市白云区人和镇太成村</address>
+      <score>评分</score>
+      <former_name>广州市人和太成制伞加工厂	</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>2905362346-c2808302933</person_id>
+      <person_name>叶鉴宁</person_name>
+      <position>负责人</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>广东优赢建筑模架工程有限公司</company_name>
+      <company_id>2330629754</company_id>
+      <legal_representative>司徒添荣</legal_representative>
+      <registered_capital>800万人民币元</registered_capital>
+      <registered_time>1995-07-20</registered_time>
+      <condition>存续</condition>
+      <registered_number>440783000000865</registered_number>
+      <organization_number>707631009</organization_number>
+      <credit_number>91440783707631009Y</credit_number>
+      <enterprise_type>有限责任公司(自然人投资或控股)</enterprise_type>
+      <industry>建筑安装业</industry>
+      <operating_period>1995-07-20至无固定期限</operating_period>
+      <approved_date>2016-07-08</approved_date>
+      <registration_authority>开平市工商行政管理局</registration_authority>
+      <registered_address>开平市长沙区325国道八姓路段八姓圩开发区5号1-2幢</registered_address>
+      <business_scope>设计、生产、安装、销售：脚手架、模板、钢构、网架及其屋面体系工程、钢管、冷弯型钢、彩瓦、Ｈ型钢、金属制品；租赁：脚手架、模板及建筑设备。 (依法须经批准的项目，经相关部门批准后方可开展经营活动)〓</business_scope>
+      <telephone> 0750-2029536 </telephone>
+      <email> kpyy@youying.com</email>
+      <website>http://www.youying.com</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/4e47b6646aef2eaf595292b288a12ccb.png</logo_location>
+      <address> 开平市长沙区325国道八姓路段八姓圩开发区5号1-2幢</address>
+      <score>66</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>2112378901-c2330629754</person_id>
+      <person_name>罗小红</person_name>
+      <position>监事</position>
+      <person_id>1836774870-c2330629754</person_id>
+      <person_name>司徒添荣</person_name>
+      <position>执行董事，</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>东莞市万江华邦兴建材经营部</company_name>
+      <company_id>2337652958</company_id>
+      <legal_representative>黄远香</legal_representative>
+      <registered_capital>-</registered_capital>
+      <registered_time>2013-11-18</registered_time>
+      <condition>注销</condition>
+      <registered_number>441900605918750</registered_number>
+      <organization_number>未公开</organization_number>
+      <credit_number>未公开</credit_number>
+      <enterprise_type>个体户</enterprise_type>
+      <industry>批发业</industry>
+      <operating_period>未公开</operating_period>
+      <approved_date>2016-04-13</approved_date>
+      <registration_authority>东莞市工商行政管理局</registration_authority>
+      <registered_address>东莞市万江区大莲塘社区泰新路北7号</registered_address>
+      <business_scope>销售：建材、钢材；钢管、钢板、脚手架及其他建筑工程设备租赁服务。 (依法须经批准的项目，经相关部门批准后方可开展经营活动)〓</business_scope>
+      <telephone> 13902614184 </telephone>
+      <email> 暂无</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/00cd877ee87040377d4961b9c5bf7ae9.png</logo_location>
+      <address> 东莞市万江区大莲塘社区泰新路北7号</address>
+      <score>10</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>2302248934-c2337652958</person_id>
+      <person_name>黄远香</person_name>
+      <position>未知</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>广州达蒙安防科技有限公司贵州分公司</company_name>
+      <company_id>1215529429</company_id>
+      <legal_representative>韩凤金</legal_representative>
+      <registered_capital>0 万人民币元</registered_capital>
+      <registered_time>2013-03-26</registered_time>
+      <condition>存续</condition>
+      <registered_number>520102000524866</registered_number>
+      <organization_number>065751171</organization_number>
+      <credit_number>91520102065751171T</credit_number>
+      <enterprise_type>有限责任公司分公司(自然人投资或控股)</enterprise_type>
+      <industry>科技推广和应用服务业</industry>
+      <operating_period>2013-03-26至无固定期限</operating_period>
+      <approved_date>2015-08-19</approved_date>
+      <registration_authority>贵阳市南明区市场监督管理局</registration_authority>
+      <registered_address>贵州省贵阳市南明区富水南路188号1层25号[大南社区]</registered_address>
+      <business_scope>法律、法规、国务院决定规定禁止的不得经营；法律、法规、国务院决定规定应当许可（审批）的，经审批机关批准后凭许可（审批）文件经营;法律、法规、国务院决定规定无需许可（审批）的，市场主体自主选择经营。(建筑技术开发；附着脚手架的设计、安装（持有效资质证经营）；研究、开发、安装、批发、零售：安防产品；机械设备租赁；货物进出口及技术进出口（国家限...</business_scope>
+      <telephone> 18863736883 </telephone>
+      <email> 11456783@qq.com</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/c3486f4cc63eec56f682625ed9342f7f.png</logo_location>
+      <address> 贵州省贵阳市南明区富水南路188号1层25号[大南社区]</address>
+      <score>29</score>
+      <former_name>广州市达蒙建筑技术有限公司贵州分公司	</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>2269103254-c1215529429</person_id>
+      <person_name>韩凤金</person_name>
+      <position>负责人</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>开平市中赢金属制品有限公司</company_name>
+      <company_id>2353639375</company_id>
+      <legal_representative>冯政</legal_representative>
+      <registered_capital>100万人民币元</registered_capital>
+      <registered_time>2016-01-14</registered_time>
+      <condition>存续</condition>
+      <registered_number>440783000061377</registered_number>
+      <organization_number>MA4ULHGQ7</organization_number>
+      <credit_number>91440783MA4ULHGQ7T</credit_number>
+      <enterprise_type>有限责任公司(自然人独资)</enterprise_type>
+      <industry>金属制品业</industry>
+      <operating_period>2016-01-14至无固定期限</operating_period>
+      <approved_date>2016-01-14</approved_date>
+      <registration_authority>开平市工商行政管理局</registration_authority>
+      <registered_address>开平市长沙区祥苑中路11号之四首层24号杂物房</registered_address>
+      <business_scope>销售：钢脚手架、路桥安全爬梯、铝脚手架、建筑钢结构、钢模板、建筑工程机械、五金建材、金属制品及其配件；建筑脚手架搭设、设计、租赁、安装。 (依法须经批准的项目，经相关部门批准后方可开展经营活动)〓</business_scope>
+      <telephone> 暂无 </telephone>
+      <email> 暂无</email>
+      <website>www.kpzy2016.com</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/0622f8a8e0b280b1cb98b858e476a1f1.png</logo_location>
+      <address> 开平市长沙区祥苑中路11号之四首层24号杂物房</address>
+      <score>58</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>1801653544-c2353639375</person_id>
+      <person_name>冯政</person_name>
+      <position>执行董事，</position>
+      <person_id>1800122339-c2353639375</person_id>
+      <person_name>冯乔建</person_name>
+      <position>经理</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>佳辉设备（东莞）有限公司</company_name>
+      <company_id>2316919814</company_id>
+      <legal_representative>古永善</legal_representative>
+      <registered_capital>410 万美元</registered_capital>
+      <registered_time>2002-09-26</registered_time>
+      <condition>存续</condition>
+      <registered_number>441900400006753</registered_number>
+      <organization_number>743650928</organization_number>
+      <credit_number>914419007436509288</credit_number>
+      <enterprise_type>有限责任公司(台港澳法人独资)</enterprise_type>
+      <industry>计算机、通信和其他电子设备制造业</industry>
+      <operating_period>2002-09-26至2017-09-25</operating_period>
+      <approved_date>2016-01-26</approved_date>
+      <registration_authority>东莞市工商行政管理局</registration_authority>
+      <registered_address>东莞市塘厦镇石马村</registered_address>
+      <business_scope>生产和销售线路板电镀生产线及周边机械设备、烤箱、建筑设备、脚手架、五金钢铁制品，并提供上述产品的售后服务；从事线路板电镀生产线及周边机械设备零部件的批发、进出口业务（不涉及国营贸易管理商品，涉及配额、许可证管理商品的，按国家相关规定办理）；从事道路普通货运（凭许可证经营）。 (依法须经批准的项目，经相关部门批准后方可开展经营活动)〓</business_scope>
+      <telephone> 0769-87987805 </telephone>
+      <email> weng@gainford.com.hk</email>
+      <website>www.scaffoldcn.com</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/e2c8a174dd2cdefe5d448cc1b2a55cf2.png</logo_location>
+      <address> 东莞市塘厦镇石马村</address>
+      <score>79</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>2202826937-c2316919814</person_id>
+      <person_name>邓德权</person_name>
+      <position>董事</position>
+      <person_id>2202221973-c2316919814</person_id>
+      <person_name>邓国樑</person_name>
+      <position>董事</position>
+      <person_id>2352331476-c2316919814</person_id>
+      <person_name>古永善</person_name>
+      <position>董事长，</position>
+      <person_id>2352331477-c2316919814</person_id>
+      <person_name>邓淑眉</person_name>
+      <position>总经理</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>普宁市池尾补强清洁服务部</company_name>
+      <company_id>602319098</company_id>
+      <legal_representative>罗仕良</legal_representative>
+      <registered_capital>-</registered_capital>
+      <registered_time>2008-03-10</registered_time>
+      <condition>存续</condition>
+      <registered_number>445281600057870</registered_number>
+      <organization_number>未公开</organization_number>
+      <credit_number>未公开</credit_number>
+      <enterprise_type>个体户</enterprise_type>
+      <industry>其他服务业</industry>
+      <operating_period>2099-01-01至2099-01-01</operating_period>
+      <approved_date>2015-07-22</approved_date>
+      <registration_authority>普宁市工商行政管理局</registration_authority>
+      <registered_address>池尾贵政山村(潮汕学院对面)</registered_address>
+      <business_scope>服务：清洁、补漏。 (依法须经批准的项目，经相关部门批准后方可开展经营活动)〓</business_scope>
+      <telephone> 暂无 </telephone>
+      <email> 暂无</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/903431fed8d42e280ca9e7313d2664b5.png</logo_location>
+      <address> 池尾贵政山村(潮汕学院对面)</address>
+      <score>10</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>None</person_id>
+      <person_name>None</person_name>
+      <position>None</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>佛山市建大脚手架有限公司</company_name>
+      <company_id>2358683304</company_id>
+      <legal_representative>谢新苑</legal_representative>
+      <registered_capital>100万人民币元</registered_capital>
+      <registered_time>2014-09-25</registered_time>
+      <condition>存续</condition>
+      <registered_number>440682000526935</registered_number>
+      <organization_number>315094099</organization_number>
+      <credit_number>914406053150940991</credit_number>
+      <enterprise_type>有限责任公司(自然人投资或控股)</enterprise_type>
+      <industry>租赁业</industry>
+      <operating_period>2014-09-25至无固定期限</operating_period>
+      <approved_date>2016-07-19</approved_date>
+      <registration_authority>佛山市南海区工商行政管理局</registration_authority>
+      <registered_address>佛山市南海区狮山镇穆院村穆北村民小组”鸡口“（自编3号车间）</registered_address>
+      <business_scope>生产、加工、销售：脚手架及配件、五金制品；销售、租赁：建筑材料。（依法须经批准的项目，经相关部门批准后方可开展经营活动。） (依法须经批准的项目，经相关部门批准后方可开展经营活动)〓</business_scope>
+      <telephone> 13929163788 </telephone>
+      <email> 592872181@qq.com</email>
+      <website>www.kuntianjsj.com</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/8bf15caa11ce7dab113936d20acdaed4.png</logo_location>
+      <address> 佛山市南海区狮山镇穆院村穆北村民小组”鸡口“（自编3号车间）</address>
+      <score>58</score>
+      <former_name>佛山市南海区坤天脚手架有限公司	</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>2176362831-c2358683304</person_id>
+      <person_name>谢明轩</person_name>
+      <position>监事</position>
+      <person_id>2310948645-c2358683304</person_id>
+      <person_name>谢新苑</person_name>
+      <position>执行董事，</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>茂名市威丽雅装饰工程有限公司化州分公司</company_name>
+      <company_id>2350681897</company_id>
+      <legal_representative>李康健</legal_representative>
+      <registered_capital>-</registered_capital>
+      <registered_time>2014-08-27</registered_time>
+      <condition>存续</condition>
+      <registered_number>440982000032845</registered_number>
+      <organization_number>314896479</organization_number>
+      <credit_number>91440982314896479J</credit_number>
+      <enterprise_type>有限责任公司分公司(自然人投资或控股)</enterprise_type>
+      <industry>建筑装饰和其他建筑业</industry>
+      <operating_period>2014-08-27至无固定期限</operating_period>
+      <approved_date>2016-11-25</approved_date>
+      <registration_authority>化州市工商行政管理局</registration_authority>
+      <registered_address>化州市鉴江区池圹桦明月路71号二楼商铺</registered_address>
+      <business_scope>室内外装修，室内设计，建筑设计，建筑装饰施工，广告设计、制作、发布，房地产信息服务，活动策划服务，批发：建筑装饰材料、电器、家具。 (依法须经批准的项目，经相关部门批准后方可开展经营活动)〓</business_scope>
+      <telephone> 13360737888 </telephone>
+      <email> 710035764@qq.com</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/b423ffad35c01e90d2eeb018a72df2fe.png</logo_location>
+      <address> 化州市鉴江区池圹桦明月路71号二楼商铺</address>
+      <score>46</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>None</person_id>
+      <person_name>None</person_name>
+      <position>None</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>深圳市立达建筑工程有限公司</company_name>
+      <company_id>2548646571</company_id>
+      <legal_representative>赖耀钦</legal_representative>
+      <registered_capital>(人民币)50.0000万元</registered_capital>
+      <registered_time>2006-08-28</registered_time>
+      <condition>存续</condition>
+      <registered_number>440307107661275</registered_number>
+      <organization_number>79257839-5</organization_number>
+      <credit_number>91440300792578395K</credit_number>
+      <enterprise_type>有限责任公司（自然人独资）</enterprise_type>
+      <industry>建筑装饰和其他建筑业</industry>
+      <operating_period>2006-08-28至2026-08-28</operating_period>
+      <approved_date>2016-08-25</approved_date>
+      <registration_authority>深圳市市场监督管理局</registration_authority>
+      <registered_address>深圳市龙岗区坂田街道岗头亚洲工业园</registered_address>
+      <business_scope>建筑工程设备、装饰材料的购销；建筑工程设备、装饰材料的租赁；室内、室外装潢设计；建筑工程（不含专营、专控、专卖商品）。^铝合金架、五金制品、五金配件的产销（不含国家禁止、限制项目）。；</business_scope>
+      <telephone> 0755-8333728 </telephone>
+      <email> ladder_ap@126.com</email>
+      <website>http://www.ldjzsb.com/index.html</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/22ae6a7811e2e6e28f92242827c73d8b.png</logo_location>
+      <address> 深圳市龙岗区坂田街道岗头亚洲工业园</address>
+      <score>47</score>
+      <former_name>深圳市立达建筑工程设备有限公司	</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>2298718574-c2548646571</person_id>
+      <person_name>黄春明</person_name>
+      <position>监事</position>
+      <person_id>2188598510-c2548646571</person_id>
+      <person_name>赖耀钦</person_name>
+      <position>执行（常务）董事，</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
+      <company_name>东莞市万江奕华建材经营部</company_name>
+      <company_id>2330786306</company_id>
+      <legal_representative>邓奕华</legal_representative>
+      <registered_capital>-</registered_capital>
+      <registered_time>2015-07-29</registered_time>
+      <condition>存续</condition>
+      <registered_number>441900607029100</registered_number>
+      <organization_number>未公开</organization_number>
+      <credit_number>未公开</credit_number>
+      <enterprise_type>个体户</enterprise_type>
+      <industry>批发业</industry>
+      <operating_period>未公开</operating_period>
+      <approved_date>2015-07-29</approved_date>
+      <registration_authority>东莞市工商行政管理局</registration_authority>
+      <registered_address>东莞市万江区万江社区万福路38A号</registered_address>
+      <business_scope>销售：建筑材料。 (依法须经批准的项目，经相关部门批准后方可开展经营活动)〓</business_scope>
+      <telephone> 暂无 </telephone>
+      <email> 暂无</email>
+      <website>暂无</website>
+      <logo_location>http://static.tianyancha.com/logo/ll/21eb16acbc4382046b40e42a24059a42.png</logo_location>
+      <address> 东莞市万江区万江社区万福路38A号</address>
+      <score>10</score>
+      <former_name>None</former_name>
+    </basic_info>
+    <main_person>
+      <person_id>None</person_id>
+      <person_name>None</person_name>
+      <position>None</position>
+    </main_person>
+  </company>
+  <company>
+    <basic_info>
       <company_name>广州市老人院吉泽皮革加工厂</company_name>
       <company_id>2732096671</company_id>
       <legal_representative>刘耀雄</legal_representative>

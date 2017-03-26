@@ -27,22 +27,22 @@ class TianyanchaPipeline(object):
         company = self.dom.createElement('company')
         basic_info = self.dom.createElement('basic_info')
         company.appendChild(basic_info)
-        print item["former_name"]
         for item_name in self.basic_info:
             content = self.dom.createElement(str(item_name))
             data = self.dom.createTextNode(str(item[item_name][0]))
             content.appendChild(data)
             basic_info.appendChild(content)
-        if item["former_name"]:
+        if item["former_name"] != 'None':
             content = self.dom.createElement("former_name")
             data = self.dom.createTextNode(str(item["former_name"][0]))
             content.appendChild(data)
             basic_info.appendChild(content)
 
-        if item["person_id"]:
+        if item["person_id"] != 'None':
             main_person = self.dom.createElement('main_person')
             company.appendChild(main_person)
             for i in range(0, len(item["person_id"])):
+                #++person
                 for item_name in self.main_person:
                     content = self.dom.createElement(str(item_name))
                     data = self.dom.createTextNode(str(item[item_name][i]))
