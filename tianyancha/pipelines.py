@@ -22,6 +22,8 @@ class TianyanchaPipeline(object):
                            'industry', 'operating_period', 'approved_date', 'registration_authority', 'registered_address',
                            'business_scope', 'telephone', 'email', 'website', 'logo_location', 'address', 'score']
         self.main_person = ['person_id', 'person_name', 'position']
+        self.shareholder_info = ['shareholder_id', 'shareholder_name', 'investment_proportion', 'subscribed_contribution',
+                                 'really_contribution']
 
     def process_item(self, item, spider):
         company = self.dom.createElement('company')
@@ -32,22 +34,35 @@ class TianyanchaPipeline(object):
             data = self.dom.createTextNode(str(item[item_name][0]))
             content.appendChild(data)
             basic_info.appendChild(content)
-        if item["former_name"] != 'None':
-            content = self.dom.createElement("former_name")
+        if item["former_name"] != ['None']:
+            content = self.dom.createElement('former_name')
             data = self.dom.createTextNode(str(item["former_name"][0]))
             content.appendChild(data)
             basic_info.appendChild(content)
 
-        if item["person_id"] != 'None':
+        if item["person_id"] != ['None']:
             main_person = self.dom.createElement('main_person')
             company.appendChild(main_person)
             for i in range(0, len(item["person_id"])):
-                #++person
+                person = self.dom.createElement('person')
+                main_person.appendChild(person)
                 for item_name in self.main_person:
                     content = self.dom.createElement(str(item_name))
+                    person.appendChild(content)
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
-                    main_person.appendChild(content)
+
+        if item["shareholder_id"] != ['None']:
+            shareholder_info = self.dom.createElement('shareholder_info')
+            company.appendChild(shareholder_info)
+            for i in range(0, len(item["shareholder_id"])):
+                shareholder = self.dom.createElement('shareholder')
+                shareholder_info.appendChild(shareholder)
+                for item_name in self.shareholder_info:
+                    content = self.dom.createElement(str(item_name))
+                    shareholder_info.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
 
         self.root.appendChild(company)
 

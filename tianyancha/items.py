@@ -39,3 +39,11 @@ class TianyanchaItem(scrapy.Item):
     person_name = scrapy.Field()
     position = scrapy.Field()
 
+    #企业背景-股东信息
+    shareholder_id = scrapy.Field()
+    shareholder_name = scrapy.Field()
+    investment_proportion = scrapy.Field()
+    subscribed_contribution = scrapy.Field()
+    really_contribution = scrapy.Field()
+
+
