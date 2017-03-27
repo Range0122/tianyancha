@@ -79,10 +79,8 @@ class TianYanCha_Spider(CrawlSpider):
         else:
             website = u'暂无'
         score = response.selector.xpath('//td[@class="td-score position-rel"]/img/@ng-alt | //img[@class="td-score-img"]/@ng-alt').extract()[0][-2:]
-        try:
-            logo_location = response.selector.xpath('//div[@class="company_info"]/div[1]/img/@src').extract()[0]
-        except:
-            print response.body
+        logo_location = response.selector.xpath('//div[@class="company_info"]/div[1]/img/@src').extract()[0]
+
         former_name = response.selector.xpath(u'//span[text()="曾用名"]/following-sibling::span[2]/text()').extract_first(default='None')
 
         # 有一些logo的链接坏掉了，网站给出了备用logo
