@@ -54,6 +54,7 @@ COOKIES_ENABLED = False
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'tianyancha.middlewares.JavaScriptMiddleware': 543,
+    'tianyancha.middlewares.RotateUserAgentMiddleware': 400,
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None
 }
 

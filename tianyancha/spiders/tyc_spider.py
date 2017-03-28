@@ -15,7 +15,7 @@ sys.setdefaultencoding('utf8')
 
 class TianYanCha_Spider(CrawlSpider):
     name = 'tyc_spider'
-    start_urls = ['http://www.tianyancha.com/']
+    start_urls = ['http://www.tianyancha.com                 ']
 
     def parse(self, response):
         with codecs.open('../company_test.txt', 'r', encoding='utf-8') as f:
@@ -26,7 +26,7 @@ class TianYanCha_Spider(CrawlSpider):
 
     def parse_page(self, response):
         # try:
-
+        print response.body
         item = TianyanchaItem()
         l = ItemLoader(item=item, response=response)
         company_id = response.url[34:]
@@ -54,33 +54,21 @@ class TianYanCha_Spider(CrawlSpider):
             operating_period = response.selector.xpath('//p[@ng-if="company.baseInfo.fromTime"]/text()').extract_first(default=u'未公开')
             approved_date = response.selector.xpath('//p[@ng-if="company.baseInfo.estiblishTime"]/text()').extract_first(default=u'未公开')
             registration_authority = response.selector.xpath('//p[@ng-if="company.baseInfo.regInstitute"]/text()').extract_first(default=u'未公开')
-        registered_address = response.selector.xpath('//td[@class="basic-td ng-scope"]/div/span/text() | //p[@ng-if="company.baseInfo.regLocation"]/text()').extract()
-        if registered_address:
-            registered_address = registered_address[0]
-        else:
-            registered_address = u'暂无'
-        business_scope = response.selector.xpath('//td[@class="basic-td ng-scope"]/div/span/span/text() | //span[@ng-if="company.baseInfo.businessScope"]/text()').extract()
-        if business_scope:
-            business_scope = business_scope[0]
-        else:
-            business_scope = u'暂无'
-        temp_items = response.selector.xpath('//div[@class="company_info_text"]/span/text()').extract()
-        if temp_items:
-            telephone = temp_items[0]
-            email = temp_items[1]
-            address = temp_items[5]
-        else:
-            telephone = u'暂无'
+        registered_address = response.selector.xpath('//td[@class="basic-td ng-scope"]/div/span/text() | //p[@ng-if="company.baseInfo.regLocation"]/text()').extract_first(default=u'暂无')
+        business_scope = response.selector.xpath('//td[@class="basic-td ng-scope"]/div/span/span/text() | //span[@ng-if="company.baseInfo.businessScope"]/text()').extract_first(default=u'暂无')
+        telephone = response.selector.xpath('//div[@class="company_info_text"]/span/text()').extract_first(default=u'暂无')
+        try:
+            email = response.selector.xpath('//div[@class="company_info_text"]/span/text()').extract[1]
+        except:
             email = u'暂无'
+        try:
+            address = response.selector.xpath('//div[@class="company_info_text"]/span/text()').extract[5]
+        except:
             address = u'暂无'
-        website = response.selector.xpath('//div[@class="company_info_text"]/span[3]/a/text() | //div[@class="company_info_text"]/span[3]/span[2]/text() | //span[@ng-hide="company.websiteList"]/text()').extract()
-        if website:
-            website = website[0]
-        else:
-            website = u'暂无'
+        #website.xpath //div[@class="company_info_text"]/span[3]/a/text() | //div[@class="company_info_text"]/span[3]/span[2]/text() |
+        website = response.selector.xpath('//a[@ng-if="company.websiteList"]/text()').extract_first(default=u'暂无')
         score = response.selector.xpath('//td[@class="td-score position-rel"]/img/@ng-alt | //img[@class="td-score-img"]/@ng-alt').extract()[0][-2:]
         logo_location = response.selector.xpath('//div[@class="company_info"]/div[1]/img/@src').extract()[0]
-
         former_name = response.selector.xpath(u'//span[text()="曾用名"]/following-sibling::span[2]/text()').extract_first(default='None')
 
         # 有一些logo的链接坏掉了，网站给出了备用logo
@@ -96,9 +84,9 @@ class TianYanCha_Spider(CrawlSpider):
             for i in range(0, len(person_id)):
                 person_id[i] = person_id[i][7:]
         else:
-            person_id = 'None'
-            person_name = 'None'
-            position = 'None'
+            person_id = ['None']
+            person_name = ['None']
+            position = ['None']
         if not position:
             position = ['None']
 
@@ -153,8 +141,8 @@ class TianYanCha_Spider(CrawlSpider):
         l.add_value("person_name", person_name)
         l.add_value("position", position)
         l.add_value("former_name", former_name)
-        l.add_value("shareholder_id",shareholder_id)
-        l.add_value("shareholder_name",shareholder_name)
+        l.add_value("shareholder_id", shareholder_id)
+        l.add_value("shareholder_name", shareholder_name)
         l.add_value("investment_proportion", investment_proportion)
         l.add_value("subscribed_contribution", subscribed_contribution)
         l.add_value("really_contribution", really_contribution)
