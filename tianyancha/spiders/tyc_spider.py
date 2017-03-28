@@ -74,46 +74,46 @@ class TianYanCha_Spider(CrawlSpider):
         # 有一些logo的链接坏掉了，网站给出了备用logo
         # logo_location = response.xpath('//div[@class="company_info"]/div[1]/img/@onerror').extract()[0].replace('this.src=', '').replace("'", '')
         # logo_location = http://static.tianyancha.com/wap/images/company_pic_v2.png
-        person_id = response.selector.xpath(
-            '//div[@class="staffinfo-module-container ng-scope"]/div/div/div[2]/div[1]/a/@href').extract()
-        person_name = response.selector.xpath(
-            '//div[@class="staffinfo-module-container ng-scope"]/div/div/div[2]/div[1]/a/text()').extract()
-        position = response.selector.xpath(
-            '//div[@class="staffinfo-module-container ng-scope"]/div/div/div[2]/div[2]/span/text()').extract()
-        if person_id:
-            for i in range(0, len(person_id)):
-                person_id[i] = person_id[i][7:]
-        else:
-            person_id = ['None']
-            person_name = ['None']
-            position = ['None']
-        if not position:
-            position = ['None']
+        # person_id = response.selector.xpath(
+        #     '//div[@class="staffinfo-module-container ng-scope"]/div/div/div[2]/div[1]/a/@href').extract()
+        # person_name = response.selector.xpath(
+        #     '//div[@class="staffinfo-module-container ng-scope"]/div/div/div[2]/div[1]/a/text()').extract()
+        # position = response.selector.xpath(
+        #     '//div[@class="staffinfo-module-container ng-scope"]/div/div/div[2]/div[2]/span/text()').extract()
+        # if person_id:
+        #     for i in range(0, len(person_id)):
+        #         person_id[i] = person_id[i][7:]
+        # else:
+        #     person_id = ['None']
+        #     person_name = ['None']
+        #     position = ['None']
+        # if not position:
+        #     position = ['None']
 
-        shareholder_id = response.selector.xpath(
-            '//div[@ng-if="dataItemCount.holderCount>0"]/table/tbody/tr/td/a/@href').extract()
-        shareholder_name = response.selector.xpath(
-            '//div[@ng-if="dataItemCount.holderCount>0"]/table/tbody/tr/td[1]/a/text()').extract()
-        investment_proportion = response.selector.xpath(
-            '//div[@ng-if="dataItemCount.holderCount>0"]/table/tbody/tr/td[2]/div/div/span/text()').extract()
-        subscribed_contribution = response.selector.xpath(
-            '//div[@ng-if="dataItemCount.holderCount>0"]/table/tbody/tr/td[3]/div/span[@class="ng-binding"]/text()').extract()
-        if shareholder_id:
-            for i in range(0, len(shareholder_id)):
-                shareholder_id[i] = shareholder_id[i][7:]
-
-            really_contribution = []
-            for i in range(0, len(shareholder_name)):
-                temp = response.selector.xpath(
-                    u'//span[text()="%s"]/parent::*/parent::td/following-sibling::td[1]/div/span/text()' %
-                    subscribed_contribution[i]).extract_first(default=u'暂无')
-                really_contribution.append(str(temp))
-        else:
-            shareholder_id = ['None']
-            shareholder_name = ['None']
-            investment_proportion = ['None']
-            subscribed_contribution = ['None']
-            really_contribution = ['None']
+        # shareholder_id = response.selector.xpath(
+        #     '//div[@ng-if="dataItemCount.holderCount>0"]/table/tbody/tr/td/a/@href').extract()
+        # shareholder_name = response.selector.xpath(
+        #     '//div[@ng-if="dataItemCount.holderCount>0"]/table/tbody/tr/td[1]/a/text()').extract()
+        # investment_proportion = response.selector.xpath(
+        #     '//div[@ng-if="dataItemCount.holderCount>0"]/table/tbody/tr/td[2]/div/div/span/text()').extract()
+        # subscribed_contribution = response.selector.xpath(
+        #     '//div[@ng-if="dataItemCount.holderCount>0"]/table/tbody/tr/td[3]/div/span[@class="ng-binding"]/text()').extract()
+        # if shareholder_id:
+        #     for i in range(0, len(shareholder_id)):
+        #         shareholder_id[i] = shareholder_id[i][7:]
+        #
+        #     really_contribution = []
+        #     for i in range(0, len(shareholder_name)):
+        #         temp = response.selector.xpath(
+        #             u'//span[text()="%s"]/parent::*/parent::td/following-sibling::td[1]/div/span/text()' %
+        #             subscribed_contribution[i]).extract_first(default=u'暂无')
+        #         really_contribution.append(str(temp))
+        # else:
+        #     shareholder_id = ['None']
+        #     shareholder_name = ['None']
+        #     investment_proportion = ['None']
+        #     subscribed_contribution = ['None']
+        #     really_contribution = ['None']
 
         l.add_value("company_name", company_name)
         l.add_value("legal_representative", legal_representative)
@@ -137,15 +137,17 @@ class TianYanCha_Spider(CrawlSpider):
         l.add_value("address", address)
         l.add_value("score", score)
         l.add_value("company_id", company_id)
-        l.add_value("person_id", person_id)
-        l.add_value("person_name", person_name)
-        l.add_value("position", position)
         l.add_value("former_name", former_name)
-        l.add_value("shareholder_id", shareholder_id)
-        l.add_value("shareholder_name", shareholder_name)
-        l.add_value("investment_proportion", investment_proportion)
-        l.add_value("subscribed_contribution", subscribed_contribution)
-        l.add_value("really_contribution", really_contribution)
+
+        # l.add_value("person_id", person_id)
+        # l.add_value("person_name", person_name)
+        # l.add_value("position", position)
+
+        # l.add_value("shareholder_id", shareholder_id)
+        # l.add_value("shareholder_name", shareholder_name)
+        # l.add_value("investment_proportion", investment_proportion)
+        # l.add_value("subscribed_contribution", subscribed_contribution)
+        # l.add_value("really_contribution", really_contribution)
 
         print "ONE OK"
         yield l.load_item()
