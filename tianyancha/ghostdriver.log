@@ -1,20 +1,5 @@
-[INFO  - 2017-03-28T12:14:12.206Z] GhostDriver - Main - running on port 53620
-[INFO  - 2017-03-28T12:14:13.280Z] Session [0e464eb0-13b0-11e7-a225-8be0e43e1d75] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows; U; Windows NT 5.1; tr; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8 ( .NET CLR 3.5.30729; .NET4.0E)","webSecurityEnabled":true}
-[INFO  - 2017-03-28T12:14:13.280Z] Session [0e464eb0-13b0-11e7-a225-8be0e43e1d75] - page.customHeaders:  - {}
-[INFO  - 2017-03-28T12:14:13.280Z] Session [0e464eb0-13b0-11e7-a225-8be0e43e1d75] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"},"phantomjs.page.settings.loadImages":false,"phantomjs.page.settings.userAgent":"Mozilla/5.0 (Windows; U; Windows NT 5.1; tr; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8 ( .NET CLR 3.5.30729; .NET4.0E)"}
-[INFO  - 2017-03-28T12:14:13.280Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 0e464eb0-13b0-11e7-a225-8be0e43e1d75
-[ERROR - 2017-03-28T12:14:29.167Z] Session [0e464eb0-13b0-11e7-a225-8be0e43e1d75] - page.onError - msg: Error: null is not an object (evaluating 't.data.data.total')
-http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:22:30299
-http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:8:2283
-$eval@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:8:16918
-$digest@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:8:15418
-$apply@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:8:17216
-s@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:7:48029
-f@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:7:57769
-onload@http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:7:58320
-
-  phantomjs://platform/console++.js:263 in error
-[ERROR - 2017-03-28T12:14:29.167Z] Session [0e464eb0-13b0-11e7-a225-8be0e43e1d75] - page.onError - stack:
-  (anonymous function) (http://static.tianyancha.com/wap/resources/scripts/app-df6ee61e0b.js:7)
-
-  phantomjs://platform/console++.js:263 in error
+[INFO  - 2017-03-29T13:21:03.355Z] GhostDriver - Main - running on port 54055
+[INFO  - 2017-03-29T13:21:04.434Z] Session [8f8595d0-1482-11e7-b8c2-151c0f4c3f6a] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.36 Safari/535.7","webSecurityEnabled":true}
+[INFO  - 2017-03-29T13:21:04.435Z] Session [8f8595d0-1482-11e7-b8c2-151c0f4c3f6a] - page.customHeaders:  - {}
+[INFO  - 2017-03-29T13:21:04.435Z] Session [8f8595d0-1482-11e7-b8c2-151c0f4c3f6a] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"},"phantomjs.page.settings.loadImages":false,"phantomjs.page.settings.userAgent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.36 Safari/535.7"}
+[INFO  - 2017-03-29T13:21:04.435Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 8f8595d0-1482-11e7-b8c2-151c0f4c3f6a

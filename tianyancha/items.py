@@ -9,6 +9,8 @@ import scrapy
 
 
 class TianyanchaItem(scrapy.Item):
+    flag = scrapy.Field()
+
     #企业背景-基本信息
     company_id = scrapy.Field()
     company_name = scrapy.Field()
@@ -44,6 +46,22 @@ class TianyanchaItem(scrapy.Item):
     shareholder_name = scrapy.Field()
     investment_proportion = scrapy.Field()
     subscribed_contribution = scrapy.Field()
+    subscribed_contribution_time = scrapy.Field()
     really_contribution = scrapy.Field()
 
+    #企业背景-对外投资
+    invested_company_id = scrapy.Field()
+    invested_company_name = scrapy.Field()
+    invested_representative = scrapy.Field()
+    registered_cap = scrapy.Field()
+    investment_amount = scrapy.Field()
+    investment_prop = scrapy.Field()
+    registered_date = scrapy.Field()
+    condit = scrapy.Field()
+
+    #企业背景-变更记录
+    change_time = scrapy.Field()
+    change_item = scrapy.Field()
+    before_change = scrapy.Field()
+    after_change = scrapy.Field()
 

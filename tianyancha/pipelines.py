@@ -20,10 +20,13 @@ class TianyanchaPipeline(object):
         self.basic_info = ['company_name', 'company_id', 'legal_representative', 'registered_capital', 'registered_time',
                            'condition', 'registered_number', 'organization_number', 'credit_number', 'enterprise_type',
                            'industry', 'operating_period', 'approved_date', 'registration_authority', 'registered_address',
-                           'business_scope', 'telephone', 'email', 'website', 'logo_location', 'address', 'score']
+                           'business_scope', 'telephone', 'email', 'website', 'logo_location', 'address', 'score', 'former_name']
         self.main_person = ['person_id', 'person_name', 'position']
         self.shareholder_info = ['shareholder_id', 'shareholder_name', 'investment_proportion', 'subscribed_contribution',
-                                 'really_contribution']
+                                 'subscribed_contribution_time', 'really_contribution']
+        self.investment = ['invested_company_id', 'invested_company_name', 'invested_representative', 'registered_cap',
+                           'investment_amount', 'investment_prop', 'registered_date', 'condit']
+        self.change_record = ['change_time', 'change_item', 'before_change', 'after_change']
 
     def process_item(self, item, spider):
         company = self.dom.createElement('company')
@@ -31,16 +34,11 @@ class TianyanchaPipeline(object):
         company.appendChild(basic_info)
         for item_name in self.basic_info:
             content = self.dom.createElement(str(item_name))
-            data = self.dom.createTextNode(str(item[item_name][0]))
-            content.appendChild(data)
-            basic_info.appendChild(content)
-        if item["former_name"] != ['None']:
-            content = self.dom.createElement('former_name')
-            data = self.dom.createTextNode(str(item["former_name"][0]))
+            data = self.dom.createTextNode(str(item[item_name]))
             content.appendChild(data)
             basic_info.appendChild(content)
 
-        if item["person_id"] != ['None']:
+        if item["person_id"]:
             main_person = self.dom.createElement('main_person')
             company.appendChild(main_person)
             for i in range(0, len(item["person_id"])):
@@ -52,7 +50,7 @@ class TianyanchaPipeline(object):
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
 
-        if item["shareholder_id"] != ['None']:
+        if item["shareholder_id"]:
             shareholder_info = self.dom.createElement('shareholder_info')
             company.appendChild(shareholder_info)
             for i in range(0, len(item["shareholder_id"])):
@@ -60,7 +58,22 @@ class TianyanchaPipeline(object):
                 shareholder_info.appendChild(shareholder)
                 for item_name in self.shareholder_info:
                     content = self.dom.createElement(str(item_name))
-                    shareholder_info.appendChild(content)
+                    shareholder.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        # if item["change_time"]:
+        #     change_record =
+
+        if item["invested_company_id"]:
+            investment = self.dom.createElement('investment')
+            company.appendChild(investment)
+            for i in range(0, len(item["invested_company_id"])):
+                investment_company = self.dom.createElement('investment_company')
+                investment.appendChild(investment_company)
+                for item_name in self.investment:
+                    content = self.dom.createElement(str(item_name))
+                    investment_company.appendChild(content)
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
 
