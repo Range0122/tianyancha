@@ -73,9 +73,11 @@ class JavaScriptMiddleware(object):
             driver.get(request.url)
             sleep_time = random.randint(15, 22)
             time.sleep(sleep_time)
-            detail = driver.find_element_by_xpath('//a[@ng-click="showDetail = btnOnClick(showDetail)"]')
-            if detail:
+            try:
+                detail = driver.find_element_by_xpath('//a[@ng-click="showDetail = btnOnClick(showDetail)"]')
                 detail.click()
+            except:
+                pass
             body = driver.page_source
             url = driver.current_url
             driver.quit()

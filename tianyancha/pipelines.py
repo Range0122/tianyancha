@@ -38,10 +38,10 @@ class TianyanchaPipeline(object):
             content.appendChild(data)
             basic_info.appendChild(content)
 
-        if item["person_id"]:
+        if len(item["person_id"]) > 1:
             main_person = self.dom.createElement('main_person')
             company.appendChild(main_person)
-            for i in range(0, len(item["person_id"])):
+            for i in range(1, len(item["person_id"])):
                 person = self.dom.createElement('person')
                 main_person.appendChild(person)
                 for item_name in self.main_person:
@@ -50,10 +50,10 @@ class TianyanchaPipeline(object):
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
 
-        if item["shareholder_id"]:
+        if len(item["shareholder_id"]) > 1:
             shareholder_info = self.dom.createElement('shareholder_info')
             company.appendChild(shareholder_info)
-            for i in range(0, len(item["shareholder_id"])):
+            for i in range(1, len(item["shareholder_id"])):
                 shareholder = self.dom.createElement('shareholder')
                 shareholder_info.appendChild(shareholder)
                 for item_name in self.shareholder_info:
@@ -62,13 +62,10 @@ class TianyanchaPipeline(object):
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
 
-        # if item["change_time"]:
-        #     change_record =
-
-        if item["invested_company_id"]:
+        if len(item["invested_company_id"]) > 1:
             investment = self.dom.createElement('investment')
             company.appendChild(investment)
-            for i in range(0, len(item["invested_company_id"])):
+            for i in range(1, len(item["invested_company_id"])):
                 investment_company = self.dom.createElement('investment_company')
                 investment.appendChild(investment_company)
                 for item_name in self.investment:
