@@ -98,16 +98,21 @@ class TianYanCha_Spider(CrawlSpider):
 
         if flag[2] == 1:
             data = json.loads(response.body)
-
-            n = data["data"]["total"]
-            for i in range(0, n):
-                person_id.append(data["data"]["result"][i]["id"])
-                person_name.append(data["data"]["result"][i]["name"])
-                position.append(data["data"]["result"][i]["typeJoin"][0])
+            for dic in data["data"]["result"]:
+                person_id.append(dic["id"])
+                person_name.append(dic["name"])
+                position.append(dic["typeJoin"][0])
 
         item["person_id"] = person_id
         item["person_name"] = person_name
         item["position"] = position
+
+        item["shareholder_id"] = ['None']
+        item["shareholder_name"] = ['None']
+        item["investment_proportion"] = ['None']
+        item["subscribed_contribution"] = ['None']
+        item["subscribed_contribution_time"] = ['None']
+        item["really_contribution"] = ['None']
 
         next_url = "http://www.tianyancha.com/expanse/holder.json?id=" + str(item["company_id"]) + "&ps=20&pn=1"
         request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_shareholder_info)
@@ -117,30 +122,36 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
-        shareholder_id = ['None']
-        shareholder_name = ['None']
-        investment_proportion = ['None']
-        subscribed_contribution = ['None']
-        subscribed_contribution_time = ['None']
-        really_contribution = ['None']
+        shareholder_id = item["shareholder_id"]
+        shareholder_name = item["shareholder_name"]
+        investment_proportion = item["investment_proportion"]
+        subscribed_contribution = item["subscribed_contribution"]
+        subscribed_contribution_time = item["subscribed_contribution_time"]
+        really_contribution = item["really_contribution"]
 
         if flag[3] == 1:
             data = json.loads(response.body)
-
-            n = data["data"]["total"]
-            for i in range(0, n):
-                shareholder_id.append(data["data"]["result"][i]["id"])
-                shareholder_name.append(data["data"]["result"][i]["name"])
-                investment_proportion.append(data["data"]["result"][i]["capital"][0]["percent"])
-                subscribed_contribution.append(data["data"]["result"][i]["capital"][0]["amomon"])
+            for dic in data["data"]["result"]:
+                shareholder_id.append(dic["id"])
+                shareholder_name.append(dic["name"])
 
                 try:
-                    subscribed_contribution_time.append(data["data"]["result"][i]["capital"][0]["time"] or u'无')
+                    investment_proportion.append(dic["capital"][0]["percent"] or u'无')
+                except:
+                    investment_proportion.append(u'无')
+
+                try:
+                    subscribed_contribution.append(dic["capital"][0]["amomon"] or u'无')
+                except:
+                    subscribed_contribution.append(u'无')
+
+                try:
+                    subscribed_contribution_time.append(dic["capital"][0]["time"] or u'无')
                 except:
                     subscribed_contribution_time.append(u'无')
 
                 try:
-                    really_contribution.append(data["data"]["result"][i]["capitalActl"][0]["amomon"] or u'无')
+                    really_contribution.append(dic["capitalActl"][0]["amomon"] or u'无')
                 except:
                     really_contribution.append(u'无')
 
@@ -151,18 +162,23 @@ class TianYanCha_Spider(CrawlSpider):
         item["subscribed_contribution_time"] = subscribed_contribution_time
         item["really_contribution"] = really_contribution
 
-        item["invested_company_id"] = ['None']
-        item["invested_company_name"] = ['None']
-        item["invested_representative"] = ['None']
-        item["registered_cap"] = ['None']
-        item["investment_amount"] = ['None']
-        item["investment_prop"] = ['None']
-        item["registered_date"] = ['None']
-        item["condit"] = ['None']
+        if len(response.body) > 1000:
+            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_shareholder_info)
+            yield request
+        else:
+            item["invested_company_id"] = ['None']
+            item["invested_company_name"] = ['None']
+            item["invested_representative"] = ['None']
+            item["registered_cap"] = ['None']
+            item["investment_amount"] = ['None']
+            item["investment_prop"] = ['None']
+            item["registered_date"] = ['None']
+            item["condit"] = ['None']
 
-        next_url = "http://www.tianyancha.com/expanse/inverst.json?id=" + str(item["company_id"]) + "&ps=20&pn=1"
-        request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_investment)
-        yield request
+            next_url = "http://www.tianyancha.com/expanse/inverst.json?id=" + str(item["company_id"]) + "&ps=20&pn=1"
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_investment)
+            yield request
 
     def parse_investment(self, response):
         flag = response.meta["flag"]
@@ -182,11 +198,17 @@ class TianYanCha_Spider(CrawlSpider):
             for dic in data["data"]["result"]:
                 invested_company_id.append(dic["id"])
                 invested_company_name.append(dic["name"])
-                invested_representative.append(dic["legalPersonName"])
+
+                try:
+                    invested_representative.append(dic["legalPersonName"] or  u'无')
+                except:
+                    invested_representative.append(u'无')
+
                 try:
                     registered_cap.append(dic["regCapital"] or u'无')
                 except:
                     registered_cap.append(u'无')
+
                 if dic["amount"] == 0:
                     investment_amount.append(u'无')
                 else:
@@ -194,10 +216,12 @@ class TianYanCha_Spider(CrawlSpider):
                         investment_amount.append(str(dic["amount"]) + u'万元人民币')
                     except:
                         investment_amount.append(u'无')
+
                 try:
                     investment_prop.append(dic["percent"] or u'无')
                 except:
                     investment_prop.append(u'无')
+
                 date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["estiblishTime"])[:10])))
                 registered_date.append(str(date))
                 condit.append(dic["regStatus"])
@@ -238,7 +262,10 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[5] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["result"]:
-                change_time.append(dic["changeTime"])
+                try:
+                    change_time.append(dic["changeTime"] or u'无')
+                except:
+                    change_time.append(u'无')
                 try:
                     change_item.append(dic["changeItem"] or u'无')
                 except:
@@ -317,6 +344,15 @@ class TianYanCha_Spider(CrawlSpider):
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_branch)
             yield request
         else:
+            item["finance_date"] = ['None']
+            item["finance_round"] = ['None']
+            item["valuation"] = ['None']
+            item["finance_amount"] = ['None']
+            item["finance_proportion"] = ['None']
+            item["investor"] = ['None']
+            item["news_title"] = ['None']
+            item["news_url"] = ['None']
+
             next_url = 'http://www.tianyancha.com/expanse/findHistoryRongzi.json?name=' + str(item["company_name"]) + '&ps=10&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_finance_history)
             yield request
@@ -324,7 +360,156 @@ class TianYanCha_Spider(CrawlSpider):
     def parse_finance_history(self, response):
         flag = response.meta["flag"]
         item = response.meta["item"]
+
+        finance_date = item["finance_date"]
+        finance_round = item["finance_round"]
+        valuation = item["valuation"]
+        finance_amount = item["finance_amount"]
+        finance_proportion = item["finance_proportion"]
+        investor = item["investor"]
+        news_title = item["news_title"]
+        news_url = item["news_url"]
+
+        if flag[8] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["page"]["rows"]:
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["date"])[:10])))
+                finance_date.append(date)
+                finance_round.append(dic["round"])
+
+                try:
+                    valuation.append(dic["value"] or u'无')
+                except:
+                    valuation.append(u'无')
+
+                finance_amount.append(dic["money"])
+
+                try:
+                    finance_proportion.append(dic["share"] or u'无')
+                except:
+                    finance_proportion.append(u'无')
+
+                try:
+                    investor.append(("，".join(re.findall(r'[\{|\,](.*?)\:', dic["rongziMap"])) or u'无'))
+                except:
+                    investor.append(u'无')
+
+                try:
+                    news_title.append(dic["newsTitle"] or u'无')
+                except:
+                    news_title.append(u'无')
+
+                try:
+                    news_url.append(dic["newsUrl"] or u'无')
+                except:
+                    news_url.append(u'无')
+
+        if len(response.body) > 6000:
+            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_finance_history)
+            yield request
+
+        else:
+            item["member_name"] = ['None']
+            item["member_pos"] = ['None']
+            item["member_intro"] = ['None']
+            item["member_icon"] = ['None']
+
+            next_url = 'http://www.tianyancha.com/expanse/findTeamMember.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_core_team)
+            yield request
+
+    def parse_core_team(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        member_name = item["member_name"]
+        member_pos = item["member_pos"]
+        member_intro = item["member_intro"]
+        member_icon = item["member_icon"]
+
+        if flag[9] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["page"]["rows"]:
+                member_name.append(dic["name"])
+                member_pos.append(dic["title"])
+                member_intro.append(dic["desc"])
+
+                try:
+                    member_icon.append(dic["icon"] or u'无')
+                except:
+                    member_icon.append(u'无')
+
+        item["member_name"] = member_name
+        item["member_pos"] = member_pos
+        item["member_intro"] = member_intro
+        item["member_icon"] = member_icon
+
+        if len(response.body) > 3000:
+            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_core_team)
+            yield request
+        else:
+            item["product_name"] = ['None']
+            item["product_type"] = ['None']
+            item["product_intro"] = ['None']
+            item["product_logo"] = ['None']
+
+            next_url = 'http://www.tianyancha.com/expanse/findProduct.json?name=' + str(item["company_name"]) + '&ps=15&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_business_product)
+            yield request
+
+    def parse_business_product(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        product_name = item["product_name"]
+        product_type = item["product_type"]
+        product_intro = item["product_intro"]
+        product_logo = item["product_logo"]
+
+        if flag[10] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["page"]["rows"]:
+                product_name.append(dic["product"])
+                product_type.append(dic["hangye"])
+                product_intro.append(dic["yewu"])
+
+                try:
+                    product_logo.append(dic["logo"] or u'无')
+                except:
+                    product_logo.append(u'无')
+
+        item["product_name"] = product_name
+        item["product_type"] = product_type
+        item["product_intro"] = product_intro
+        item["product_logo"] = product_logo
+
+        if len(response.body) > 7000:
+            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_business_product)
+            yield request
+        else:
+            # item["finance_date"] = ['None']
+            # item["finance_round"] = ['None']
+            # item["valuation"] = ['None']
+            # item["finance_amount"] = ['None']
+            # item["finance_proportion"] = ['None']
+            # item["investor"] = ['None']
+            # item["news_title"] = ['None']
+            # item["news_url"] = ['None']
+
+            next_url = 'http://www.tianyancha.com/expanse/findTzanli.json?name=' + str(item["company_name"]) + '&ps=10&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_investment_event)
+            yield request
+
+    def parse_investment_event(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        if flag[11] == 1:
+            data = json.loads(response.body)
+            print len(response.body) #>>>>>3000
+            print data
+
         return item
-
-
-

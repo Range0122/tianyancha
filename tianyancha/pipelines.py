@@ -26,6 +26,10 @@ class TianyanchaPipeline(object):
         self.change_record = ['change_time', 'change_item', 'before_change', 'after_change']
         self.annual_reports = ['annual_year', 'annual_url']
         self.branches = ['branch_id', 'branch_name', 'branch_legalrep', 'branch_cond', 'branch_regtime']
+        self.finance_history = ['finance_date', 'finance_round', 'valuation', 'finance_amount', 'finance_proportion',
+                                'investor', 'news_title', 'news_url']
+        self.core_team = ['member_name', 'member_pos', 'member_intro', 'member_icon']
+        self.business_product = ['product_name', 'product_type', 'product_intro', 'product_logo']
 
     def process_item(self, item, spider):
         company = self.dom.createElement('company')
@@ -106,6 +110,42 @@ class TianyanchaPipeline(object):
                 for item_name in self.branches:
                     content = self.dom.createElement(str(item_name))
                     branch.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["finance_date"]) > 1:
+            finance_history = self.dom.createElement('finance_history')
+            company.appendChild(finance_history)
+            for i in range(1, len(item["finance_date"])):
+                finance = self.dom.createElement('finance')
+                finance_history.appendChild(finance)
+                for item_name in self.finance_history:
+                    content = self.dom.createElement(str(item_name))
+                    finance.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["member_name"]) > 1:
+            core_team = self.dom.createElement("core_team")
+            company.appendChild(core_team)
+            for i in range(1, len(item["member_name"])):
+                member = self.dom.createElement('member')
+                core_team.appendChild(member)
+                for item_name in self.core_team:
+                    content = self.dom.createElement(str(item_name))
+                    member.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["product_name"]) > 1:
+            business_product = self.dom.createElement("business_product")
+            company.appendChild(business_product)
+            for i in range(1, len(item["product_name"])):
+                product = self.dom.createElement("product")
+                business_product.appendChild(product)
+                for item_name in self.business_product:
+                    content = self.dom.createElement(str(item_name))
+                    product.appendChild(content)
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
 

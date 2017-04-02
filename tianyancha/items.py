@@ -76,3 +76,27 @@ class TianyanchaItem(scrapy.Item):
     branch_cond = scrapy.Field()
     branch_regtime = scrapy.Field()
 
+    #企业发展-融资历史
+    finance_date = scrapy.Field()
+    finance_round = scrapy.Field()
+    valuation = scrapy.Field()
+    finance_amount = scrapy.Field()
+    finance_proportion = scrapy.Field()
+    investor = scrapy.Field()
+    news_title = scrapy.Field()
+    news_url = scrapy.Field()
+
+    #企业发展-核心团队
+    member_name = scrapy.Field()
+    member_pos = scrapy.Field()
+    member_intro = scrapy.Field()
+    member_icon = scrapy.Field()
+
+    #企业发展-企业业务
+    product_name = scrapy.Field()
+    product_type = scrapy.Field()
+    product_intro = scrapy.Field()
+    product_logo = scrapy.Field()
+
+
+
