@@ -65,3 +65,14 @@ class TianyanchaItem(scrapy.Item):
     before_change = scrapy.Field()
     after_change = scrapy.Field()
 
+    #企业背景-企业年报
+    annual_year = scrapy.Field()
+    annual_url = scrapy.Field()
+
+    #企业背景-分支机构
+    branch_id = scrapy.Field()
+    branch_name = scrapy.Field()
+    branch_legalrep = scrapy.Field()
+    branch_cond = scrapy.Field()
+    branch_regtime = scrapy.Field()
+

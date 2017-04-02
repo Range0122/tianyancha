@@ -13,10 +13,7 @@ class TianyanchaPipeline(object):
         self.impl = xml.dom.minidom.getDOMImplementation()
         self.dom = self.impl.createDocument(None, 'root', None)
         self.root = self.dom.documentElement
-    #     self.item_zh_names = [
-    #         u'企业名称', u'法定代表人', u'注册资本', u'注册时间', u'状态', u'工商注册号', u'组织机构代码', u'统一信用代码',
-    #         u'企业类型', u'行业', u'营业期限', u'核准日期', u'登记机关', u'注册地址', u'经营范围', u'电话', u'邮箱',
-    #         u'网址']
+
         self.basic_info = ['company_name', 'company_id', 'legal_representative', 'registered_capital', 'registered_time',
                            'condition', 'registered_number', 'organization_number', 'credit_number', 'enterprise_type',
                            'industry', 'operating_period', 'approved_date', 'registration_authority', 'registered_address',
@@ -27,6 +24,8 @@ class TianyanchaPipeline(object):
         self.investment = ['invested_company_id', 'invested_company_name', 'invested_representative', 'registered_cap',
                            'investment_amount', 'investment_prop', 'registered_date', 'condit']
         self.change_record = ['change_time', 'change_item', 'before_change', 'after_change']
+        self.annual_reports = ['annual_year', 'annual_url']
+        self.branches = ['branch_id', 'branch_name', 'branch_legalrep', 'branch_cond', 'branch_regtime']
 
     def process_item(self, item, spider):
         company = self.dom.createElement('company')
@@ -74,8 +73,43 @@ class TianyanchaPipeline(object):
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
 
-        self.root.appendChild(company)
+        if len(item["change_time"]) > 1:
+            change_record = self.dom.createElement('change_record')
+            company.appendChild(change_record)
+            for i in range(1, len(item["change_time"])):
+                change = self.dom.createElement('change')
+                change_record.appendChild(change)
+                for item_name in self.change_record:
+                    content = self.dom.createElement(str(item_name))
+                    change.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
 
+        if len(item["annual_year"]) > 1:
+            annual_reports = self.dom.createElement('annual_reports')
+            company.appendChild(annual_reports)
+            for i in range(1, len(item["annual_year"])):
+                annual = self.dom.createElement('annual')
+                annual_reports.appendChild(annual)
+                for item_name in self.annual_reports:
+                    content = self.dom.createElement(str(item_name))
+                    annual.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["branch_id"]) > 1:
+            branches = self.dom.createElement('branches')
+            company.appendChild(branches)
+            for i in range(1, len(item["branch_id"])):
+                branch = self.dom.createElement('branch')
+                branches.appendChild(branch)
+                for item_name in self.branches:
+                    content = self.dom.createElement(str(item_name))
+                    branch.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        self.root.appendChild(company)
         return item
 
     def close_spider(self, spider):
