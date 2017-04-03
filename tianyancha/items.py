@@ -93,10 +93,54 @@ class TianyanchaItem(scrapy.Item):
     member_icon = scrapy.Field()
 
     #企业发展-企业业务
+    business_name = scrapy.Field()
+    business_type = scrapy.Field()
+    business_intro = scrapy.Field()
+    business_logo = scrapy.Field()
+
+    #企业发展-投资事件
+    invest_time = scrapy.Field()
+    invest_round = scrapy.Field()
+    invest_amount = scrapy.Field()
+    invest_company = scrapy.Field()
+    invest_product = scrapy.Field()
+    invest_pro_icon = scrapy.Field()
+    invest_area = scrapy.Field()
+    invest_industry = scrapy.Field()
+    invest_business = scrapy.Field()
+
+    #企业发展-竞品信息
     product_name = scrapy.Field()
-    product_type = scrapy.Field()
-    product_intro = scrapy.Field()
     product_logo = scrapy.Field()
+    product_area = scrapy.Field()
+    product_round = scrapy.Field()
+    product_industry = scrapy.Field()
+    product_business = scrapy.Field()
+    setup_date = scrapy.Field()
+    product_valuation = scrapy.Field()
+
+    #司法风险-法院公告
+    announce_time = scrapy.Field()
+    appeal = scrapy.Field()
+    respondent = scrapy.Field()
+    announce_type = scrapy.Field()
+    court = scrapy.Field()
+    announce_content = scrapy.Field()
+
+    #司法风险-失信人
+    dis_company = scrapy.Field()
+    dic_legalrepre = scrapy.Field()
+    dis_code = scrapy.Field()
+    execute_number = scrapy.Field()
+    cace_number = scrapy.Field()
+    execute_unite = scrapy.Field()
+    legal_obligation = scrapy.Field()
+    performance = scrapy.Field()
+    execute_court = scrapy.Field()
+    province = scrapy.Field()
+    filing_time = scrapy.Field()
+    pub_time = scrapy.Field()
+
 
 
 
