@@ -33,6 +33,10 @@ class TianyanchaPipeline(object):
         self.investment_event = ['invest_time', 'invest_round', 'invest_amount', 'invest_company', 'invest_product',
                                  'invest_pro_icon', 'invest_area', 'invest_industry', 'invest_business']
         self.court_announcement = ['announce_time', 'appeal', 'respondent', 'announce_type', 'court', 'announce_content']
+        self.the_dishonest = ['dis_company', 'dic_legalrepre', 'dis_code', 'execute_number', 'case_number', 'execute_unite',
+                             'legal_obligation', 'performance', 'execute_court', 'province', 'filing_time', 'pub_time']
+        self.the_executed = ['filing_date', 'executed_target', 'case_code', 'executed_court']
+        self.abnormal_management = ['include_date', 'include_reason', 'include_authority']
 
     def process_item(self, item, spider):
         company = self.dom.createElement('company')
@@ -173,6 +177,43 @@ class TianyanchaPipeline(object):
                 for item_name in self.court_announcement:
                     content = self.dom.createElement(str(item_name))
                     announce.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["dis_company"]) > 1:
+            print 'here'
+            the_dishonest = self.dom.createElement("the_dishonest")
+            company.appendChild(the_dishonest)
+            for i in range(1, len(item["dis_company"])):
+                dishonest = self.dom.createElement("dishonest")
+                the_dishonest.appendChild(dishonest)
+                for item_name in self.the_dishonest:
+                    content = self.dom.createElement(str(item_name))
+                    dishonest.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["filing_date"]) > 1:
+            the_executed = self.dom.createElement("the_executed")
+            company.appendChild(the_executed)
+            for i in range(1, len(item["filing_date"])):
+                executed = self.dom.createElement("executed")
+                the_executed.appendChild(executed)
+                for item_name in self.the_executed:
+                    content = self.dom.createElement(str(item_name))
+                    executed.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["include_date"]) > 1:
+            abnormal_management = self.dom.createElement("abnormal_management")
+            company.appendChild(abnormal_management)
+            for i in range(1, len(item["include_date"])):
+                abnormal = self.dom.createElement("abnormal")
+                abnormal_management.appendChild(abnormal)
+                for item_name in self.abnormal_management:
+                    content = self.dom.createElement(str(item_name))
+                    abnormal.appendChild(content)
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
 

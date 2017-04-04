@@ -132,7 +132,7 @@ class TianyanchaItem(scrapy.Item):
     dic_legalrepre = scrapy.Field()
     dis_code = scrapy.Field()
     execute_number = scrapy.Field()
-    cace_number = scrapy.Field()
+    case_number = scrapy.Field()
     execute_unite = scrapy.Field()
     legal_obligation = scrapy.Field()
     performance = scrapy.Field()
@@ -141,6 +141,24 @@ class TianyanchaItem(scrapy.Item):
     filing_time = scrapy.Field()
     pub_time = scrapy.Field()
 
+    #司法风险-被执行人
+    filing_date = scrapy.Field()
+    executed_target = scrapy.Field()
+    case_code = scrapy.Field()
+    executed_court = scrapy.Field()
+
+    #经营风险-经营异常
+    include_date = scrapy.Field()
+    include_reason = scrapy.Field()
+    include_authority = scrapy.Field()
+
+    #经营风险-行政处罚
+    pub_code = scrapy.Field()
+    pub_type = scrapy.Field()
+    pub_content = scrapy.Field()
+    pub_date = scrapy.Field()
+    pub_authority = scrapy.Field()
+    pub_people = scrapy.Field()
 
 
 

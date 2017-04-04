@@ -635,7 +635,6 @@ class TianYanCha_Spider(CrawlSpider):
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_competing_product)
             yield request
         else:
-
             next_url = 'http://www.tianyancha.com/v2/court/' + str(item["company_name"]) + '.json?'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_court_announcement)
             yield request
@@ -653,7 +652,6 @@ class TianYanCha_Spider(CrawlSpider):
 
         if flag[14] == 1:
             data = json.loads(response.body)
-            print data
             for dic in data["courtAnnouncements"]:
                 announce_time.append(dic["publishdate"])
                 try:
@@ -683,13 +681,11 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
-        return item
-
         dis_company = ['None']
         dic_legalrepre = ['None']
         dis_code = ['None']
         execute_number = ['None']
-        cace_number = ['None']
+        case_number = ['None']
         execute_unite = ['None']
         legal_obligation = ['None']
         performance = ['None']
@@ -700,5 +696,144 @@ class TianYanCha_Spider(CrawlSpider):
 
         if flag[15] == 1:
             data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                dis_company.append(dic["iname"])
+                dic_legalrepre.append(dic["businessentity"])
+                dis_code.append(dic["cardnum"])
+                execute_number.append(dic["casecode"])
+                case_number.append(dic["gistid"])
+                execute_unite.append(dic["gistunit"])
+                legal_obligation.append(dic["duty"])
+                performance.append(dic["performance"])
+                execute_court.append(dic["courtname"])
+                province.append(dic["areaname"])
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["regdate"])[:10])))
+                filing_time.append(date)
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishdate"])[:10])))
+                pub_time.append(date)
 
-        next_url = 'http://www.tianyancha.com/expanse/zhixing.json?id=' + str(item["company_id"]) + '&pn=1&ps=100000'
+        item["dis_company"] = dis_company
+        item["dic_legalrepre"] = dic_legalrepre
+        item["dis_code"] = dis_code
+        item["execute_number"] = execute_number
+        item["case_number"] = case_number
+        item["execute_unite"] = execute_unite
+        item["legal_obligation"] = legal_obligation
+        item["performance"] = performance
+        item["execute_court"] = execute_court
+        item["province"] = province
+        item["filing_time"] = filing_time
+        item["pub_time"] = pub_time
+
+        item["filing_date"] = ['None']
+        item["executed_target"] = ['None']
+        item["case_code"] = ['None']
+        item["executed_court"] = ['None']
+
+        next_url = 'http://www.tianyancha.com/expanse/zhixing.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
+        request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_the_executed)
+        yield request
+
+    def parse_the_executed(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        filing_date = item["filing_date"]
+        executed_target = item["executed_target"]
+        case_code = item["case_code"]
+        executed_court = item["executed_court"]
+
+        if flag[16] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["caseCreateTime"])[:10])))
+                filing_date.append(date)
+                executed_target.append(dic["execMoney"])
+                case_code.append(dic["caseCode"])
+                executed_court.append(dic["execCourtName"])
+
+        item["filing_date"] = filing_date
+        item["executed_target"] = executed_target
+        item["case_code"] = case_code
+        item["executed_court"] = executed_court
+
+        if len(response.body) > 700:
+            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_the_executed)
+            yield request
+        else:
+            item["include_date"] = ['None']
+            item["include_reason"] = ['None']
+            item["include_authority"] = ['None']
+
+            next_url = 'http://www.tianyancha.com/expanse/abnormal.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_abnormal_management)
+            yield request
+
+    def parse_abnormal_management(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+        include_date = item["include_date"]
+        include_reason = item["include_reason"]
+        include_authority = item["include_authority"]
+
+        if flag[17] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["result"]:
+                include_date.append(dic["putDate"])
+                include_reason.append(dic["putReason"])
+                include_authority.append(dic["putDepartment"])
+
+        item["include_date"] = include_date
+        item["include_reason"] = include_reason
+        item["include_authority"] = include_authority
+
+        if len(response.body) > 900:
+            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_abnormal_management)
+            yield request
+        else:
+            item["pub_code"] = ['None']
+            item["pub_type"] = ['None']
+            item["pub_content"] = ['None']
+            item["pub_date"] = ['None']
+            item["pub_authority"] = ['None']
+            item["pub_people"] = ['None']
+
+            next_url = 'http://www.tianyancha.com/expanse/punishment.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_adminis_pubnish)
+            yield request
+
+    def parse_adminis_pubnish(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        pub_code = item["pub_code"]
+        pub_type = item["pub_type"]
+        pub_content = item["pub_content"]
+        pub_date = item["pub_date"]
+        pub_authority = item["pub_authority"]
+        pub_people = item["pub_people"]
+
+        if flag[18] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                pub_code.append(dic["punishNumber"])
+                pub_type.append(dic["type"])
+                try:
+                    pub_content.append(dic["content"] or u'未公示')
+                except:
+                    pub_content.append(u'未公示')
+                pub_date.append(dic["decisionDate"])
+                pub_authority.append(dic["departmentName"])
+                pub_people.append(dic["legalPersonName"])
+
+        item["pub_code"] = pub_code
+        item["pub_type"] = pub_type
+        item["pub_content"] = pub_content
+        item["pub_date"] = pub_date
+        item["pub_authority"] = pub_authority
+        item["pub_people"] = pub_people
+
+        print len(response.body)
+        return item
