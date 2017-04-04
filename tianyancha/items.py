@@ -160,5 +160,11 @@ class TianyanchaItem(scrapy.Item):
     pub_authority = scrapy.Field()
     pub_people = scrapy.Field()
 
+    #经营风险-严重违法
+    set_time = scrapy.Field()
+    set_reason = scrapy.Field()
+    set_department = scrapy.Field()
+
+
 
 

@@ -37,6 +37,8 @@ class TianyanchaPipeline(object):
                              'legal_obligation', 'performance', 'execute_court', 'province', 'filing_time', 'pub_time']
         self.the_executed = ['filing_date', 'executed_target', 'case_code', 'executed_court']
         self.abnormal_management = ['include_date', 'include_reason', 'include_authority']
+        self.adminis_pubnish = ['pub_code', 'pub_type', 'pub_content', 'pub_date', 'pub_authority', 'pub_people']
+        self.seriously_illegal = ['set_time', 'set_reason', 'set_department']
 
     def process_item(self, item, spider):
         company = self.dom.createElement('company')
@@ -214,6 +216,18 @@ class TianyanchaPipeline(object):
                 for item_name in self.abnormal_management:
                     content = self.dom.createElement(str(item_name))
                     abnormal.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["pub_code"]) > 1:
+            adminis_pubnish = self.dom.createElement("adminis_pubnish")
+            company.appendChild(adminis_pubnish)
+            for i in range(1, len(item["pub_code"])):
+                pubnish = self.dom.createElement("pubnish")
+                adminis_pubnish.appendChild(pubnish)
+                for item_name in self.adminis_pubnish:
+                    content = self.dom.createElement(str(item_name))
+                    pubnish.appendChild(content)
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
 

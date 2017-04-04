@@ -835,5 +835,29 @@ class TianYanCha_Spider(CrawlSpider):
         item["pub_authority"] = pub_authority
         item["pub_people"] = pub_people
 
+        if len(response.body) > 1500:
+            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_adminis_pubnish)
+            yield request
+        else:
+            item["pub_code"] = ['None']
+            item["pub_type"] = ['None']
+            item["pub_content"] = ['None']
+            item["pub_date"] = ['None']
+            item["pub_authority"] = ['None']
+            item["pub_people"] = ['None']
+
+            next_url = 'http://www.tianyancha.com/expanse/illegal.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_seriously_illegal)
+            yield request
+
+    def parse_seriously_illegal(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
         print len(response.body)
+
         return item
+        if flag[18] == 1:
+            data = json.loads(response.body)
+
