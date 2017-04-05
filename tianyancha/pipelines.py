@@ -39,6 +39,12 @@ class TianyanchaPipeline(object):
         self.abnormal_management = ['include_date', 'include_reason', 'include_authority']
         self.adminis_pubnish = ['pub_code', 'pub_type', 'pub_content', 'pub_date', 'pub_authority', 'pub_people']
         self.seriously_illegal = ['set_time', 'set_reason', 'set_department']
+        self.equity_pledge = ['regist_date', 'regist_num', 'regist_cond', 'pledged_amount', 'pledgor', 'pledged_code',
+                              'pledgee', 'pledgee_code']
+        self.chattel_mortgage = ['registed_num', 'registed_depart', 'registed_date', 'registed_cond', 'vouched_type',
+                                 'vouched_amount', 'debt_deadline', 'vouched_range', 'cancel_date', 'cancel_reason']
+        self.sub_chattel_mortgage1 = ['mortgagee_name', 'mortgagee_type', 'id_number']
+        self.sub_chattel_mortgage2 = ['pawn_name', 'pawn_belong', 'pawn_condition']
 
     def process_item(self, item, spider):
         company = self.dom.createElement('company')
@@ -230,6 +236,62 @@ class TianyanchaPipeline(object):
                     pubnish.appendChild(content)
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
+
+        if len(item["set_time"]) > 1:
+            seriously_illegal = self.dom.createElement("seriously_illegal")
+            company.appendChild(seriously_illegal)
+            for i in range(1, len(item["set_time"])):
+                illegal = self.dom.createElement("illegal")
+                seriously_illegal.appendChild(illegal)
+                for item_name in self.seriously_illegal:
+                    content = self.dom.createElement(str(item_name))
+                    illegal.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["regist_date"]) > 1:
+            equity_pledge = self.dom.createElement("equity_pledge")
+            company.appendChild(equity_pledge)
+            for i in range(1, len(item["regist_date"])):
+                equity = self.dom.createElement("equity")
+                equity_pledge.appendChild(equity)
+                for item_name in self.equity_pledge:
+                    content = self.dom.createElement(str(item_name))
+                    equity.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["registed_num"]) > 1:
+            chattel_mortgage = self.dom.createElement("chattel_mortgage")
+            company.appendChild(chattel_mortgage)
+            for i in range(1, len(item["registed_num"])):
+                mortgage = self.dom.createElement("mortgage")
+                chattel_mortgage.appendChild(mortgage)
+                for item_name in self.chattel_mortgage:
+                    content = self.dom.createElement(str(item_name))
+                    mortgage.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+                mortgagee = self.dom.createElement("mortgagee")
+                chattel_mortgage.appendChild(mortgagee)
+                for i in range(1, len(item["mortgagee_name"])):
+                    sub_mortgagee =self.dom.createElement("sub_mortgagee")
+                    mortgage.appendChild(sub_mortgagee)
+                    for item_name in self.sub_chattel_mortgage1:
+                        content = self.dom.createElement(str(item_name))
+                        sub_mortgagee.appendChild(content)
+                        data = self.dom.createTextNode(str(item[item_name][i]))
+                        content.appendChild(data)
+                pawn = self.dom.createElement("pawn")
+                chattel_mortgage.appendChild(pawn)
+                for i in range(1, len(item["pawn_name"])):
+                    sub_pawn = self.dom.createElement("sub_pawn")
+                    pawn.appendChild(sub_pawn)
+                    for item_name in self.sub_chattel_mortgage2:
+                        content = self.dom.createElement(str(item_name))
+                        sub_pawn.appendChild(content)
+                        data = self.dom.createTextNode(str(item[item_name][i]))
+                        content.appendChild(data)
 
         self.root.appendChild(company)
         return item

@@ -165,6 +165,36 @@ class TianyanchaItem(scrapy.Item):
     set_reason = scrapy.Field()
     set_department = scrapy.Field()
 
+    #经营风险-股权出质
+    regist_date = scrapy.Field()
+    regist_num = scrapy.Field()
+    regist_cond = scrapy.Field()
+    pledged_amount = scrapy.Field()
+    pledgor = scrapy.Field()
+    pledged_code = scrapy.Field()
+    pledgee = scrapy.Field()
+    pledgee_code = scrapy.Field()
+
+    #经营风险-动产抵押
+    registed_num = scrapy.Field()
+    registed_depart = scrapy.Field()
+    registed_date = scrapy.Field()
+    registed_cond = scrapy.Field()
+    vouched_type = scrapy.Field()
+    vouched_amount = scrapy.Field()
+    debt_deadline = scrapy.Field()
+    vouched_range = scrapy.Field()
+    mortgagee_name = scrapy.Field()
+    mortgagee_type = scrapy.Field()
+    id_number = scrapy.Field()
+    cancel_date = scrapy.Field()
+    cancel_reason = scrapy.Field()
+    pawn_name = scrapy.Field()
+    pawn_belong = scrapy.Field()
+    pawn_condition = scrapy.Field()
+
+
+
 
 
 

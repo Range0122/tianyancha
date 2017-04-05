@@ -840,12 +840,9 @@ class TianYanCha_Spider(CrawlSpider):
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_adminis_pubnish)
             yield request
         else:
-            item["pub_code"] = ['None']
-            item["pub_type"] = ['None']
-            item["pub_content"] = ['None']
-            item["pub_date"] = ['None']
-            item["pub_authority"] = ['None']
-            item["pub_people"] = ['None']
+            item["set_time"] = ['None']
+            item["set_reason"] = ['None']
+            item["set_department"] = ['None']
 
             next_url = 'http://www.tianyancha.com/expanse/illegal.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_seriously_illegal)
@@ -855,9 +852,187 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
-        print len(response.body)
+        set_time = item["set_time"]
+        set_reason = item["set_reason"]
+        set_department = item["set_department"]
 
-        return item
-        if flag[18] == 1:
+        if flag[19] == 1:
             data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["putDate"])[:10])))
+                    set_time.append(date)
+                except:
+                    set_time.append(u'无')
+                try:
+                    set_reason.append(dic["putReason"])
+                except:
+                    set_reason.append(u'无')
+                try:
+                    set_department.append(dic["putDepartment"])
+                except:
+                    set_department.append(u'无')
 
+        item["set_time"] = set_time
+        item["set_reason"] = set_reason
+        item["set_department"] = set_department
+
+        if len(response.body) > 700:
+            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_seriously_illegal)
+            yield request
+        else:
+            item["regist_date"] = ['None']
+            item["regist_num"] = ['None']
+            item["regist_cond"] = ['None']
+            item["pledged_amount"] = ['None']
+            item["pledgor"] = ['None']
+            item["pledged_code"] = ['None']
+            item["pledgee"] = ['None']
+            item["pledgee_code"] = ['None']
+
+            next_url = 'http://www.tianyancha.com/expanse/companyEquity.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_equity_pledge)
+            yield request
+
+    def parse_equity_pledge(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        regist_date = item["regist_date"]
+        regist_num = item["regist_num"]
+        regist_cond = item["regist_cond"]
+        pledged_amount = item["pledged_amount"]
+        pledgor = item["pledgor"]
+        pledged_code = item["pledged_code"]
+        pledgee = item["pledgee"]
+        pledgee_code = item["pledgee_code"]
+
+        if flag[20] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["regDate"])[:10])))
+                regist_date.append(date)
+                regist_num.append(dic["regNumber"])
+                regist_cond.append(dic["state"])
+                pledged_amount.append(dic["equityAmount"])
+                pledgor.append(dic["pledgor"])
+                pledged_code.append(dic["certifNumber"])
+                pledgee.append(dic["pledgee"])
+                pledgee_code.append(dic["certifNumberR"])
+
+        item["regist_date"] = regist_date
+        item["regist_num"] = regist_num
+        item["regist_cond"] = regist_cond
+        item["pledged_amount"] = pledged_amount
+        item["pledgor"] = pledgor
+        item["pledged_code"] = pledged_code
+        item["pledgee"] = pledgee
+        item["pledgee_code"] = pledgee_code
+
+        if len(response.body) > 900:
+            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_equity_pledge)
+            yield request
+        else:
+            item["registed_num"] = ['None']
+            item["registed_depart"] = ['None']
+            item["registed_date"] = ['None']
+            item["registed_cond"] = ['None']
+            item["vouched_type"] = ['None']
+            item["vouched_amount"] = ['None']
+            item["debt_deadline"] = ['None']
+            item["vouched_range"] = ['None']
+            item["mortgagee_name"] = ['None']
+            item["mortgagee_type"] = ['None']
+            item["id_number"] = ['None']
+            item["cancel_date"] = ['None']
+            item["cancel_reason"] = ['None']
+            item["pawn_name"] = ['None']
+            item["pawn_belong"] = ['None']
+            item["pawn_condition"] = ['None']
+
+            next_url = 'http://www.tianyancha.com/expanse/mortgageInfo.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_chattel_mortgage)
+            yield request
+
+    def parse_chattel_mortgage(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        registed_num = item["registed_num"]
+        registed_depart = item["registed_depart"]
+        registed_date = item["registed_date"]
+        registed_cond = item["registed_cond"]
+        vouched_type = item["vouched_type"]
+        vouched_amount = item["vouched_amount"]
+        debt_deadline = item["debt_deadline"]
+        vouched_range = item["vouched_range"]
+        mortgagee_name = item["mortgagee_name"]
+        mortgagee_type = item["mortgagee_type"]
+        id_number = item["id_number"]
+        cancel_date = item["cancel_date"]
+        cancel_reason = item["cancel_reason"]
+        pawn_name = item["pawn_name"]
+        pawn_belong = item["pawn_belong"]
+        pawn_condition = item["pawn_condition"]
+
+        if flag[21] == 1:
+            data = json.loads(response.body)
+            data = json.loads(data["data"])
+            for dic in data["items"]:
+                registed_num.append(dic["baseInfo"]["regNum"])
+                registed_depart.append(dic["baseInfo"]["regDepartment"])
+                registed_date.append(dic["baseInfo"]["regDate"])
+                registed_cond.append(dic["baseInfo"]["status"])
+                vouched_type.append(dic["baseInfo"]["type"])
+                vouched_amount.append(dic["baseInfo"]["amount"])
+                debt_deadline.append(dic["baseInfo"]["term"])
+                vouched_range.append(dic["baseInfo"]["scope"])
+                for sub_dic in dic["peopleInfo"]:
+                    mortgagee_name.append(sub_dic["peopleName"])
+                    mortgagee_type.append(sub_dic["liceseType"])
+                    id_number.append(sub_dic["licenseNum"])
+                try:
+                    cancel_date.append(dic["baseInfo"]["cancelDate"])
+                    cancel_reason.append(dic["baseInfo"]["cancelReason"])
+                except:
+                    cancel_date.append(u'无')
+                    cancel_reason.append(u'无')
+                for sub_dic in dic["pawnInfoList"]:
+                    pawn_name.append(sub_dic["pawnName"])
+                    pawn_belong.append(sub_dic["ownership"])
+                    pawn_condition.append(sub_dic["detail"])
+
+        item["registed_num"] = registed_num
+        item["registed_depart"] = registed_depart
+        item["registed_date"] = registed_date
+        item["registed_cond"] = registed_cond
+        item["vouched_type"] = vouched_type
+        item["vouched_amount"] = vouched_amount
+        item["debt_deadline"] = debt_deadline
+        item["vouched_range"] = vouched_range
+        item["mortgagee_name"] = mortgagee_name
+        item["mortgagee_type"] = mortgagee_type
+        item["id_number"] = id_number
+        item["cancel_date"] = cancel_date
+        item["cancel_reason"] = cancel_reason
+        item["pawn_name"] = pawn_name
+        item["pawn_belong"] = pawn_belong
+        item["pawn_condition"] = pawn_condition
+
+        if len(response.body) > 3000:
+            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_chattel_mortgage)
+            yield request
+        else:
+
+
+            next_url = 'http://www.tianyancha.com/expanse/owntax.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_owe_tax)
+            yield request
+
+    def parse_owe_tax(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+        return item
