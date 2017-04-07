@@ -84,7 +84,7 @@ class TianYanCha_Spider(CrawlSpider):
         item["company_id"] = company_id
         item["former_name"] = former_name
 
-        next_url = "http://www.tianyancha.com/expanse/staff.json?id=" + str(item["company_id"]) + "&ps=20&pn=1"
+        next_url = 'http://www.tianyancha.com/expanse/staff.json?id=' + str(item["company_id"]) + '&ps=20&pn=1'
         request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_main_person)
         yield request
 
@@ -113,8 +113,9 @@ class TianYanCha_Spider(CrawlSpider):
         item["subscribed_contribution"] = ['None']
         item["subscribed_contribution_time"] = ['None']
         item["really_contribution"] = ['None']
+        item["page"] = 1
 
-        next_url = "http://www.tianyancha.com/expanse/holder.json?id=" + str(item["company_id"]) + "&ps=20&pn=1"
+        next_url = 'http://www.tianyancha.com/expanse/holder.json?id=' + str(item["company_id"]) + '&ps=20&pn=1'
         request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_shareholder_info)
         yield request
 
@@ -163,7 +164,8 @@ class TianYanCha_Spider(CrawlSpider):
         item["really_contribution"] = really_contribution
 
         if len(response.body) > 1000:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/holder.json?id=' + str(item["company_id"]) + '&ps=20&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_shareholder_info)
             yield request
         else:
@@ -175,8 +177,9 @@ class TianYanCha_Spider(CrawlSpider):
             item["investment_prop"] = ['None']
             item["registered_date"] = ['None']
             item["condit"] = ['None']
+            item["page"] = 1
 
-            next_url = "http://www.tianyancha.com/expanse/inverst.json?id=" + str(item["company_id"]) + "&ps=20&pn=1"
+            next_url = 'http://www.tianyancha.com/expanse/inverst.json?id=' + str(item["company_id"]) + '&ps=20&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_investment)
             yield request
 
@@ -236,15 +239,16 @@ class TianYanCha_Spider(CrawlSpider):
         item["condit"] = condit
 
         if len(response.body) > 3000:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/inverst.json?id=' + str(item["company_id"]) + '&ps=20&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_investment)
             yield request
-
         else:
             item["change_time"] = ['None']
             item["change_item"] = ['None']
             item["before_change"] = ['None']
             item["after_change"] = ['None']
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/changeinfo.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_change_record)
@@ -279,7 +283,8 @@ class TianYanCha_Spider(CrawlSpider):
         item["after_change"] = after_change
 
         if len(response.body) > 800:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/changeinfo.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_change_record)
             yield request
         else:
@@ -309,8 +314,9 @@ class TianYanCha_Spider(CrawlSpider):
         item["branch_legalrep"] = ['None']
         item["branch_cond"] = ['None']
         item["branch_regtime"] = ['None']
+        item["page"] = 1
 
-        next_url = 'http://www.tianyancha.com/expanse/branch.json?id=' + str(item["company_id"])+ '&ps=10&pn=1'
+        next_url = 'http://www.tianyancha.com/expanse/branch.json?id=' + str(item["company_id"]) + '&ps=10&pn=1'
         request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_branch)
         yield request
 
@@ -340,7 +346,8 @@ class TianYanCha_Spider(CrawlSpider):
         item["branch_regtime"] = branch_regtime
 
         if len(response.body) > 500:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/branch.json?id=' + str(item["company_id"]) + '&ps=10&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_branch)
             yield request
         else:
@@ -352,6 +359,7 @@ class TianYanCha_Spider(CrawlSpider):
             item["investor"] = ['None']
             item["news_title"] = ['None']
             item["news_url"] = ['None']
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/findHistoryRongzi.json?name=' + str(item["company_name"]) + '&ps=10&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_finance_history)
@@ -405,7 +413,8 @@ class TianYanCha_Spider(CrawlSpider):
                     news_url.append(u'无')
 
         if len(response.body) > 6000:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/findHistoryRongzi.json?name=' + str(item["company_name"]) + '&ps=10&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_finance_history)
             yield request
 
@@ -414,6 +423,7 @@ class TianYanCha_Spider(CrawlSpider):
             item["member_pos"] = ['None']
             item["member_intro"] = ['None']
             item["member_icon"] = ['None']
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/findTeamMember.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_core_team)
@@ -446,7 +456,8 @@ class TianYanCha_Spider(CrawlSpider):
         item["member_icon"] = member_icon
 
         if len(response.body) > 3000:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/findTeamMember.json?name=' + str(item["company_name"]) + '&ps=5&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_core_team)
             yield request
         else:
@@ -454,6 +465,7 @@ class TianYanCha_Spider(CrawlSpider):
             item["business_type"] = ['None']
             item["business_intro"] = ['None']
             item["business_logo"] = ['None']
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/findProduct.json?name=' + str(item["company_name"]) + '&ps=15&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_enterprise_business)
@@ -465,7 +477,7 @@ class TianYanCha_Spider(CrawlSpider):
 
         product_name = item["business_name"]
         product_type = item["business_type"]
-        product_intro = item["business_intro"]
+        product_short = item["business_intro"]
         product_logo = item["business_logo"]
 
         if flag[10] == 1:
@@ -473,7 +485,7 @@ class TianYanCha_Spider(CrawlSpider):
             for dic in data["data"]["page"]["rows"]:
                 product_name.append(dic["product"])
                 product_type.append(dic["hangye"])
-                product_intro.append(dic["yewu"])
+                product_short.append(dic["yewu"])
 
                 try:
                     product_logo.append(dic["logo"] or u'无')
@@ -482,11 +494,12 @@ class TianYanCha_Spider(CrawlSpider):
 
         item["business_name"] = product_name
         item["business_type"] = product_type
-        item["business_intro"] = product_intro
+        item["business_intro"] = product_short
         item["business_logo"] = product_logo
 
         if len(response.body) > 7000:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/findProduct.json?name=' + str(item["company_name"]) + '&ps=15&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_enterprise_business)
             yield request
         else:
@@ -499,6 +512,7 @@ class TianYanCha_Spider(CrawlSpider):
             item["invest_area"] = ['None']
             item["invest_industry"] = ['None']
             item["invest_business"] = ['None']
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/findTzanli.json?name=' + str(item["company_name"]) + '&ps=10&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_investment_event)
@@ -557,7 +571,8 @@ class TianYanCha_Spider(CrawlSpider):
         item["invest_business"] = invest_business
 
         if len(response.body) > 3000:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/findTzanli.json?name=' + str(item["company_name"]) + '&ps=10&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_investment_event)
             yield request
         else:
@@ -569,6 +584,7 @@ class TianYanCha_Spider(CrawlSpider):
             item["product_business"] = ['None']
             item["setup_date"] = ['None']
             item["product_valuation"] = ['None']
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/findJingpin.json?name=' + str(item["company_name"]) + '&ps=10&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_competing_product)
@@ -631,7 +647,8 @@ class TianYanCha_Spider(CrawlSpider):
         item["product_valuation"] = product_valuation
 
         if len(response.body) > 3000:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/findJingpin.json?name=' + str(item["company_name"]) + '&ps=10&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_competing_product)
             yield request
         else:
@@ -758,13 +775,15 @@ class TianYanCha_Spider(CrawlSpider):
         item["executed_court"] = executed_court
 
         if len(response.body) > 700:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/zhixing.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_the_executed)
             yield request
         else:
             item["include_date"] = ['None']
             item["include_reason"] = ['None']
             item["include_authority"] = ['None']
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/abnormal.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_abnormal_management)
@@ -789,7 +808,8 @@ class TianYanCha_Spider(CrawlSpider):
         item["include_authority"] = include_authority
 
         if len(response.body) > 900:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/abnormal.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_abnormal_management)
             yield request
         else:
@@ -799,6 +819,7 @@ class TianYanCha_Spider(CrawlSpider):
             item["pub_date"] = ['None']
             item["pub_authority"] = ['None']
             item["pub_people"] = ['None']
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/punishment.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_adminis_pubnish)
@@ -836,13 +857,15 @@ class TianYanCha_Spider(CrawlSpider):
         item["pub_people"] = pub_people
 
         if len(response.body) > 1500:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/punishment.json?name=' + str(item["company_name"]) + '&ps=5&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_adminis_pubnish)
             yield request
         else:
             item["set_time"] = ['None']
             item["set_reason"] = ['None']
             item["set_department"] = ['None']
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/illegal.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_seriously_illegal)
@@ -878,7 +901,8 @@ class TianYanCha_Spider(CrawlSpider):
         item["set_department"] = set_department
 
         if len(response.body) > 700:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/illegal.json?name=' + str(item["company_name"]) + '&ps=5&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_seriously_illegal)
             yield request
         else:
@@ -890,6 +914,7 @@ class TianYanCha_Spider(CrawlSpider):
             item["pledged_code"] = ['None']
             item["pledgee"] = ['None']
             item["pledgee_code"] = ['None']
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/companyEquity.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_equity_pledge)
@@ -931,7 +956,8 @@ class TianYanCha_Spider(CrawlSpider):
         item["pledgee_code"] = pledgee_code
 
         if len(response.body) > 900:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/companyEquity.json?name=' + str(item["company_name"]) + '&ps=5&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_equity_pledge)
             yield request
         else:
@@ -943,14 +969,15 @@ class TianYanCha_Spider(CrawlSpider):
             item["vouched_amount"] = ['None']
             item["debt_deadline"] = ['None']
             item["vouched_range"] = ['None']
-            item["mortgagee_name"] = ['None']
-            item["mortgagee_type"] = ['None']
-            item["id_number"] = ['None']
+            item["mortgagee_name"] = [['None']]
+            item["mortgagee_type"] = [['None']]
+            item["id_number"] = [['None']]
             item["cancel_date"] = ['None']
             item["cancel_reason"] = ['None']
-            item["pawn_name"] = ['None']
-            item["pawn_belong"] = ['None']
-            item["pawn_condition"] = ['None']
+            item["pawn_name"] = [['None']]
+            item["pawn_belong"] = [['None']]
+            item["pawn_condition"] = [['None']]
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/mortgageInfo.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_chattel_mortgage)
@@ -989,20 +1016,32 @@ class TianYanCha_Spider(CrawlSpider):
                 vouched_amount.append(dic["baseInfo"]["amount"])
                 debt_deadline.append(dic["baseInfo"]["term"])
                 vouched_range.append(dic["baseInfo"]["scope"])
-                for sub_dic in dic["peopleInfo"]:
-                    mortgagee_name.append(sub_dic["peopleName"])
-                    mortgagee_type.append(sub_dic["liceseType"])
-                    id_number.append(sub_dic["licenseNum"])
                 try:
                     cancel_date.append(dic["baseInfo"]["cancelDate"])
                     cancel_reason.append(dic["baseInfo"]["cancelReason"])
                 except:
                     cancel_date.append(u'无')
                     cancel_reason.append(u'无')
+                mortgagee_name_list = []
+                mortgagee_type_list = []
+                id_number_list = []
+                for sub_dic in dic["peopleInfo"]:
+                    mortgagee_name_list.append(sub_dic["peopleName"])
+                    mortgagee_type_list.append(sub_dic["liceseType"])
+                    id_number_list.append(sub_dic["licenseNum"])
+                mortgagee_name.append(mortgagee_name_list)
+                mortgagee_type.append(mortgagee_type_list)
+                id_number.append(id_number_list)
+                pawn_name_list = []
+                pawn_belong_list = []
+                pawn_condition_list = []
                 for sub_dic in dic["pawnInfoList"]:
-                    pawn_name.append(sub_dic["pawnName"])
-                    pawn_belong.append(sub_dic["ownership"])
-                    pawn_condition.append(sub_dic["detail"])
+                    pawn_name_list.append(sub_dic["pawnName"])
+                    pawn_belong_list.append(sub_dic["ownership"])
+                    pawn_condition_list.append(sub_dic["detail"])
+                pawn_name.append(pawn_name_list)
+                pawn_belong.append(pawn_belong_list)
+                pawn_condition.append(pawn_condition_list)
 
         item["registed_num"] = registed_num
         item["registed_depart"] = registed_depart
@@ -1022,11 +1061,18 @@ class TianYanCha_Spider(CrawlSpider):
         item["pawn_condition"] = pawn_condition
 
         if len(response.body) > 3000:
-            next_url = str(response.url)[:-1] + str(int(str(response.url)[-1]) + 1)
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/mortgageInfo.json?name=' + str(item["company_name"]) + '&ps=5&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_chattel_mortgage)
             yield request
         else:
-
+            item["tax_date"] = ['None']
+            item["tax_num"] = ['None']
+            item["tax_type"] = ['None']
+            item["tax_current"] = ['None']
+            item["tax_balance"] = ['None']
+            item["tax_depart"] = ['None']
+            item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/owntax.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_owe_tax)
@@ -1035,4 +1081,719 @@ class TianYanCha_Spider(CrawlSpider):
     def parse_owe_tax(self, response):
         flag = response.meta["flag"]
         item = response.meta["item"]
+
+        tax_date = item["tax_date"]
+        tax_num = item["tax_num"]
+        tax_type = item["tax_type"]
+        tax_current = item["tax_current"]
+        tax_balance = item["tax_balance"]
+        tax_depart = item["tax_depart"]
+
+        if flag[22] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                try:
+                    tax_date.append(dic["publishDate"] or u'无')
+                except:
+                    tax_date.append(u'无')
+                try:
+                    tax_num.append(dic["taxIdNumber"] or u'无')
+                except:
+                    tax_num.append(u'无')
+                try:
+                    tax_type.append(dic["taxCategory"] or u'无')
+                except:
+                    tax_type.append(u'无')
+                try:
+                    tax_current.append(dic[""] or u'无')
+                except:
+                    tax_current.append(u'无')
+                try:
+                    tax_balance.append(dic["ownTaxAmount"] or u'无')
+                except:
+                    tax_balance.append(u'无')
+                try:
+                    tax_depart.append(dic[""] or u'无')
+                except:
+                    tax_depart.append(u'无')
+
+        item["tax_date"] = tax_date
+        item["tax_num"] = tax_num
+        item["tax_type"] = tax_type
+        item["tax_current"] = tax_current
+        item["tax_balance"] = tax_balance
+        item["tax_depart"] = tax_depart
+
+        if len(response.body) > 800:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/owntax.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_owe_tax)
+            yield request
+        else:
+            item["bid_url"] = ['None']
+            item["bid_time"] = ['None']
+            item["bid_title"] = ['None']
+            item["bid_purchaser"] = ['None']
+            item["bid_content"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/expanse/bid.json?id=' + str(item["company_id"]) + '&ps=10&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_bidding)
+            yield request
+
+    def parse_bidding(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        bid_url = item["bid_url"]
+        bid_time = item["bid_time"]
+        bid_title = item["bid_title"]
+        bid_purchaser = item["bid_purchaser"]
+        bid_content = item["bid_content"]
+
+        try:
+            data = json.loads(response.body)
+            test = data["data"]["items"]
+        except:
+            flag[23] = 0
+
+        if flag[23] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                url = 'http://www.tianyancha.com/bid/' + str(dic["uuid"])
+                bid_url.append(url)
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishTime"])[:10])))
+                bid_time.append(date)
+                bid_title.append(dic["title"])
+                bid_purchaser.append(dic["purchaser"])
+                bid_content.append(dic["content"])
+
+        item["bid_url"] = bid_url
+        item["bid_time"] = bid_time
+        item["bid_title"] = bid_title
+        item["bid_purchaser"] = bid_purchaser
+        item["bid_content"] = bid_content
+
+        if len(response.body) > 10000:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/bid.json?id=' + str(item["company_id"]) + '&ps=10&pn=1' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_bidding)
+            yield request
+        else:
+            item["bond_name"] = ['None']
+            item["bond_code"] = ['None']
+            item["bond_publisher"] = ['None']
+            item["bond_type"] = ['None']
+            item["bond_start"] = ['None']
+            item["bond_end"] = ['None']
+            item["bond_duration"] = ['None']
+            item["trading_day"] = ['None']
+            item["interest_mode"] = ['None']
+            item["bond_delisting"] = ['None']
+            item["credit_agency"] = ['None']
+            item["bond_rating"] = ['None']
+            item["face_value"] = ['None']
+            item["reference_rate"] = ['None']
+            item["coupon_rate"] = ['None']
+            item["actual_circulation"] = ['None']
+            item["planned_circulation"] = ['None']
+            item["issue_price"] = ['None']
+            item["spread"] = ['None']
+            item["frequency"] = ['None']
+            item["bond_date"] = ['None']
+            item["exercise_type"] = ['None']
+            item["exercise_date"] = ['None']
+            item["trustee"] = ['None']
+            item["circulation_scope"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/extend/getBondList.json?companyName=' + str(item["company_name"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_bond_infomation)
+            yield request
+
+    def parse_bond_infomation(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+        bond_name = item["bond_name"]
+        bond_code = item["bond_code"]
+        bond_publisher = item["bond_publisher"]
+        bond_type = item["bond_type"]
+        bond_start = item["bond_start"]
+        bond_end = item["bond_end"]
+        bond_duration = item["bond_duration"]
+        trading_day = item["trading_day"]
+        interest_mode = item["interest_mode"]
+        bond_delisting = item["bond_delisting"]
+        credit_agency = item["credit_agency"]
+        bond_rating = item["bond_rating"]
+        face_value = item["face_value"]
+        reference_rate = item["reference_rate"]
+        coupon_rate = item["coupon_rate"]
+        actual_circulation = item["actual_circulation"]
+        planned_circulation = item["planned_circulation"]
+        issue_price = item["issue_price"]
+        spread = item["spread"]
+        frequency = item["frequency"]
+        bond_date = item["bond_date"]
+        exercise_type = item["exercise_type"]
+        exercise_date = item["exercise_date"]
+        trustee = item["trustee"]
+        circulation_scope = item["circulation_scope"]
+
+        if flag[24] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["bondList"]:
+                bond_name.append(dic["bondName"])
+                bond_code.append(dic["bondNum"])
+                bond_publisher.append(dic["publisherName"])
+                bond_type.append(dic["bondType"])
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishTime"])[:10])))
+                bond_start.append(date)
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishExpireTime"])[:10])))
+                bond_end.append(date)
+                bond_duration.append(dic["bondTimeLimit"])
+                trading_day.append(dic["bondTradeTime"])
+                interest_mode.append(dic["calInterestType"])
+                bond_delisting.append(dic["bondStopTime"])
+                try:
+                    credit_agency.append(dic["creditRatingGov"] or u'未公示')
+                except:
+                    credit_agency.append(u'未公示')
+                try:
+                    bond_rating.append(dic["debtRating"] or u'未公示')
+                except:
+                    bond_rating.append(u'未公示')
+                face_value.append(dic["faceValue"])
+                try:
+                    reference_rate.append(dic["refInterestRate"] or u'未公示')
+                except:
+                    reference_rate.append(u'未公示')
+                coupon_rate.append(dic["faceInterestRate"])
+                actual_circulation.append(dic["realIssuedQuantity"])
+                planned_circulation.append(dic["planIssuedQuantity"])
+                issue_price.append(dic["issuedPrice"])
+                try:
+                    spread.append(dic["interestDiff"] or u'未公示')
+                except:
+                    spread.append(u'未公示')
+                frequency.append(dic["payInterestHZ"])
+                bond_date.append(dic["startCalInterestTime"])
+                try:
+                    exercise_type.append(dic["exeRightType"] or u'未公示')
+                except:
+                    exercise_type.append(u'未公示')
+                try:
+                    exercise_date.append(dic["exeRightTime"] or u'未公示')
+                except:
+                    exercise_date.append(u'未公示')
+                trustee.append(dic["escrowAgent"])
+                circulation_scope.append(dic["flowRange"])
+
+        item["bond_name"] = bond_name
+        item["bond_code"] = bond_code
+        item["bond_publisher"] = bond_publisher
+        item["bond_type"] = bond_type
+        item["bond_start"] = bond_start
+        item["bond_end"] = bond_end
+        item["bond_duration"] = bond_duration
+        item["trading_day"] = trading_day
+        item["interest_mode"] = interest_mode
+        item["bond_delisting"] = bond_delisting
+        item["credit_agency"] = credit_agency
+        item["bond_rating"] = bond_rating
+        item["face_value"] = face_value
+        item["reference_rate"] = reference_rate
+        item["coupon_rate"] = coupon_rate
+        item["actual_circulation"] = actual_circulation
+        item["planned_circulation"] = planned_circulation
+        item["issue_price"] = issue_price
+        item["spread"] = spread
+        item["frequency"] = frequency
+        item["bond_date"] = bond_date
+        item["exercise_type"] = exercise_type
+        item["exercise_date"] = exercise_date
+        item["trustee"] = trustee
+        item["circulation_scope"] = circulation_scope
+
+        if len(response.body) > 2000:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/extend/getBondList.json?companyName=' + str(item["company_name"]) + '&ps=5&pn=' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_bond_infomation)
+            yield request
+        else:
+            item["admini_region"] = ['None']
+            item["supervision_num"] = ['None']
+            item["pruchase_trustee"] = ['None']
+            item["trasaction_price"] = ['None']
+            item["signed_date"] = ['None']
+            item["total_area"] = ['None']
+            item["parcel_location"] = ['None']
+            item["purchase_assignee"] = ['None']
+            item["superior_company"] = ['None']
+            item["land_use"] = ['None']
+            item["supply_mode"] = ['None']
+            item["max_volume"] = ['None']
+            item["min_volume"] = ['None']
+            item["start_time"] = ['None']
+            item["end_time"] = ['None']
+            item["link_url"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/expanse/purchaseland.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_purchase_island)
+            yield request
+
+    def parse_purchase_island(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        admini_region = item["admini_region"]
+        supervision_num = item["supervision_num"]
+        pruchase_trustee = item["pruchase_trustee"]
+        trasaction_price = item["trasaction_price"]
+        signed_date = item["signed_date"]
+        total_area = item["total_area"]
+        parcel_location = item["parcel_location"]
+        purchase_assignee = item["purchase_assignee"]
+        superior_company = item["superior_company"]
+        land_use = item["land_use"]
+        supply_mode = item["supply_mode"]
+        max_volume = item["max_volume"]
+        min_volume = item["min_volume"]
+        start_time = item["start_time"]
+        end_time = item["end_time"]
+        link_url = item["link_url"]
+
+        if flag[25] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["companyPurchaseLandList"]:
+                admini_region.append(dic["adminRegion"])
+                supervision_num.append(dic["elecSupervisorNo"])
+                pruchase_trustee.append(dic["assignee"])
+                trasaction_price.append(dic["dealPrice"])
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["signedDate"])[:10])))
+                signed_date.append(date)
+                total_area.append(dic["totalArea"])
+                parcel_location.append(dic["location"])
+                purchase_assignee.append(dic["assignee"])
+                superior_company.append(dic["parentCompany"])
+                land_use.append(dic["purpose"])
+                supply_mode.append(dic["supplyWay"])
+                max_volume.append(dic["maxVolume"])
+                min_volume.append(dic["minVolume"])
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["startTime"])[:10])))
+                start_time.append(date)
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["endTime"])[:10])))
+                end_time.append(date)
+                link_url.append(dic["linkUrl"])
+
+        item["admini_region"] = admini_region
+        item["supervision_num"] = supervision_num
+        item["pruchase_trustee"] = pruchase_trustee
+        item["trasaction_price"] = trasaction_price
+        item["signed_date"] = signed_date
+        item["total_area"] = total_area
+        item["parcel_location"] = parcel_location
+        item["purchase_assignee"] = purchase_assignee
+        item["superior_company"] = superior_company
+        item["land_use"] = land_use
+        item["supply_mode"] = supply_mode
+        item["max_volume"] = max_volume
+        item["min_volume"] = min_volume
+        item["start_time"] = start_time
+        item["end_time"] = end_time
+        item["link_url"] = link_url
+
+        if len(response.body) > 2000:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/purchaseland.json?name=' + str(item["company_name"]) + '&ps=5&pn=' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_purchase_island)
+            yield request
+        else:
+            item["employ_position"] = ['None']
+            item["employ_city"] = ['None']
+            item["employ_area"] = ['None']
+            item["employ_company"] = ['None']
+            item["wage"] = ['None']
+            item["experience"] = ['None']
+            item["source"] = ['None']
+            item["source_url"] = ['None']
+            item["start_date"] = ['None']
+            item["end_date"] = ['None']
+            item["education"] = ['None']
+            item["employ_num"] = ['None']
+            item["position_desc"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/extend/getEmploymentList.json?companyName=' + str(item["company_name"]) + '&ps=10&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_the_employ)
+            yield request
+
+    def parse_the_employ(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        employ_position = item["employ_position"]
+        employ_city = item["employ_city"]
+        employ_area = item["employ_area"]
+        employ_company = item["employ_company"]
+        wage = item["wage"]
+        experience = item["experience"]
+        source = item["source"]
+        source_url = item["source_url"]
+        start_date = item["start_date"]
+        end_date = item["end_date"]
+        education = item["education"]
+        employ_num = item["employ_num"]
+        position_desc = item["position_desc"]
+
+        if flag[26] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["companyEmploymentList"]:
+                employ_position.append(dic["title"])
+                employ_city.append(dic["city"])
+                employ_area.append(dic["district"])
+                employ_company.append(dic["companyName"])
+                wage.append(dic["oriSalary"])
+                experience.append(dic["experience"])
+                source.append(dic["source"])
+                source_url.append(dic["urlPath"])
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["startdate"])[:10])))
+                start_date.append(date)
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["enddate"])[:10])))
+                end_date.append(date)
+                education.append(dic["education"])
+                employ_num.append(dic["employerNumber"])
+                position_desc.append(dic["description"])
+
+        item["employ_position"] = employ_position
+        item["employ_city"] = employ_city
+        item["employ_area"] = employ_area
+        item["employ_company"] = employ_company
+        item["wage"] = wage
+        item["experience"] = experience
+        item["source"] = source
+        item["source_url"] = source_url
+        item["start_date"] = start_date
+        item["end_date"] = end_date
+        item["education"] = education
+        item["employ_num"] = employ_num
+        item["position_desc"] = position_desc
+
+        if len(response.body) > 6000:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/extend/getEmploymentList.json?companyName=' + str(item["company_name"]) + '&ps=10&pn=' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_the_employ)
+            yield request
+        else:
+            item["rating_year"] = ['None']
+            item["rating_level"] = ['None']
+            item["rating_type"] = ['None']
+            item["rating_num"] = ['None']
+            item["rating_office"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/expanse/taxcredit.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_rating_tax)
+            yield request
+
+    def parse_rating_tax(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        rating_year = item["rating_year"]
+        rating_level = item["rating_level"]
+        rating_type = item["rating_type"]
+        rating_num = item["rating_num"]
+        rating_office = item["rating_office"]
+
+        if flag[27] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                rating_year.append(dic["year"])
+                rating_level.append(dic["grade"])
+                rating_type.append(dic["type"])
+                rating_num.append(dic["idNumber"])
+                rating_office.append(dic["evalDepartment"])
+
+        if len(response.body) > 500:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/taxcredit.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_rating_tax)
+            yield request
+        else:
+            item["check_date"] = ['None']
+            item["check_type"] = ['None']
+            item["check_result"] = ['None']
+            item["check_office"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/expanse/companyCheckInfo.json?name=' + str(item["company_name"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_random_check)
+            yield request
+
+    def parse_random_check(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        check_date = item["check_date"]
+        check_type = item["check_type"]
+        check_result = item["check_result"]
+        check_office = item["check_office"]
+
+        if flag[28] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                try:
+                    check_date.append(dic["checkDate"] or '无')
+                except:
+                    check_date.append('无')
+                try:
+                    check_type.append(dic["checkType"] or '无')
+                except:
+                    check_type.append('无')
+                try:
+                    check_result.append(dic["checkResult"] or '无')
+                except:
+                    check_result.append('无')
+                try:
+                    check_office.append(dic["checkOrg"] or '无')
+                except:
+                    check_office.append('无')
+
+        item["check_date"] = check_date
+        item["check_type"] = check_type
+        item["check_result"] = check_result
+        item["check_office"] = check_office
+
+        if len(response.body) > 300:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/companyCheckInfo.json?name=' + str(item["company_name"]) + '&ps=5&pn=' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_random_check)
+            yield request
+        else:
+            item["product_icon"] = ['None']
+            item["product_title"] = ['None']
+            item["product_short"] = ['None']
+            item["product_type"] = ['None']
+            item["product_field"] = ['None']
+            item["product_desc"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/expanse/appbkinfo.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_product_info)
+            yield request
+
+    def parse_product_info(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        product_icon = item["product_icon"]
+        product_title = item["product_title"]
+        product_short = item["product_short"]
+        product_type = item["product_type"]
+        product_field = item["product_field"]
+        product_desc = item["product_desc"]
+
+        if flag[29] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                product_icon.append(dic["icon"])
+                product_title.append(dic["name"])
+                product_short.append(dic["filterName"])
+                product_type.append(dic["type"])
+                product_field.append(dic["classes"])
+                product_desc.append(dic["brief"])
+
+        item["product_icon"] = product_icon
+        item["product_title"] = product_title
+        item["product_short"] = product_short
+        item["product_type"] = product_type
+        item["product_field"] = product_field
+        item["product_desc"] = product_desc
+
+        if len(response.body) > 3000:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/appbkinfo.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_product_info)
+            yield request
+        else:
+            item["brand_date"] = ['None']
+            item["brand_icon"] = ['None']
+            item["brand_name"] = ['None']
+            item["brand_num"] = ['None']
+            item["brand_type"] = ['None']
+            item["brand_cond"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/tm/getTmList.json?id=' + str(item["company_id"]) + '&ps=5&&pageNum=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_brand_info)
+            yield request
+
+    def parse_brand_info(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        brand_date = item["brand_date"]
+        brand_icon = item["brand_icon"]
+        brand_name = item["brand_name"]
+        brand_num = item["brand_num"]
+        brand_type = item["brand_type"]
+        brand_cond = item["brand_cond"]
+
+        if flag[29] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                brand_date.append(dic[""])
+                brand_icon.append(dic[""])
+                brand_name.append(dic[""])
+                brand_num.append(dic[""])
+                brand_type.append(dic[""])
+                brand_cond.append(dic[""])
+
+        item["brand_date"] = brand_date
+        item["brand_icon"] = brand_icon
+        item["brand_name"] = brand_name
+        item["brand_num"] = brand_num
+        item["brand_type"] = brand_type
+        item["brand_cond"] = brand_cond
+
+        if len(response.body) > 3000:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/tm/getTmList.json?id=' + str(item["company_id"]) + '&ps=5&&pageNum=' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_brand_info)
+            yield request
+        else:
+            item["product_icon"] = ['None']
+            item["product_title"] = ['None']
+            item["product_short"] = ['None']
+            item["product_type"] = ['None']
+            item["product_field"] = ['None']
+            item["product_desc"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/expanse/patent.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_patent)
+            yield request
+
+    def parse_patent(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        product_icon = item["product_icon"]
+        product_title = item["product_title"]
+        product_short = item["product_short"]
+        product_type = item["product_type"]
+        product_field = item["product_field"]
+        product_desc = item["product_desc"]
+
+        if flag[29] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                product_icon.append(dic["icon"])
+                product_title.append(dic["name"])
+                product_short.append(dic["filterName"])
+                product_type.append(dic["type"])
+                product_field.append(dic["classes"])
+                product_desc.append(dic["brief"])
+
+        item["product_icon"] = product_icon
+        item["product_title"] = product_title
+        item["product_short"] = product_short
+        item["product_type"] = product_type
+        item["product_field"] = product_field
+        item["product_desc"] = product_desc
+
+        if len(response.body) > 3000:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/patent.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_patent)
+            yield request
+        else:
+            item["product_icon"] = ['None']
+            item["product_title"] = ['None']
+            item["product_short"] = ['None']
+            item["product_type"] = ['None']
+            item["product_field"] = ['None']
+            item["product_desc"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/expanse/copyReg.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_copyright)
+            yield request
+
+    def parse_copyright(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        product_icon = item["product_icon"]
+        product_title = item["product_title"]
+        product_short = item["product_short"]
+        product_type = item["product_type"]
+        product_field = item["product_field"]
+        product_desc = item["product_desc"]
+
+        if flag[29] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                product_icon.append(dic["icon"])
+                product_title.append(dic["name"])
+                product_short.append(dic["filterName"])
+                product_type.append(dic["type"])
+                product_field.append(dic["classes"])
+                product_desc.append(dic["brief"])
+
+        item["product_icon"] = product_icon
+        item["product_title"] = product_title
+        item["product_short"] = product_short
+        item["product_type"] = product_type
+        item["product_field"] = product_field
+        item["product_desc"] = product_desc
+
+        if len(response.body) > 3000:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/copyReg.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_copyright)
+            yield request
+        else:
+            item["product_icon"] = ['None']
+            item["product_title"] = ['None']
+            item["product_short"] = ['None']
+            item["product_type"] = ['None']
+            item["product_field"] = ['None']
+            item["product_desc"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/v2/IcpList/' + str(item["company_id"]) + '.json'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_website_filing)
+            yield request
+
+    def parse_website_filing(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        product_icon = item["product_icon"]
+        product_title = item["product_title"]
+        product_short = item["product_short"]
+        product_type = item["product_type"]
+        product_field = item["product_field"]
+        product_desc = item["product_desc"]
+
+        if flag[29] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                product_icon.append(dic["icon"])
+                product_title.append(dic["name"])
+                product_short.append(dic["filterName"])
+                product_type.append(dic["type"])
+                product_field.append(dic["classes"])
+                product_desc.append(dic["brief"])
+
+        item["product_icon"] = product_icon
+        item["product_title"] = product_title
+        item["product_short"] = product_short
+        item["product_type"] = product_type
+        item["product_field"] = product_field
+        item["product_desc"] = product_desc
+
         return item

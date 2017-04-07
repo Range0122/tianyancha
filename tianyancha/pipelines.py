@@ -32,6 +32,8 @@ class TianyanchaPipeline(object):
         self.enterprise_business = ['business_name', 'business_type', 'business_intro', 'business_logo']
         self.investment_event = ['invest_time', 'invest_round', 'invest_amount', 'invest_company', 'invest_product',
                                  'invest_pro_icon', 'invest_area', 'invest_industry', 'invest_business']
+        self.competing_product = ['product_name', 'product_logo', 'product_area', 'product_round', 'product_industry',
+                                  'product_business', 'setup_date', 'product_valuation']
         self.court_announcement = ['announce_time', 'appeal', 'respondent', 'announce_type', 'court', 'announce_content']
         self.the_dishonest = ['dis_company', 'dic_legalrepre', 'dis_code', 'execute_number', 'case_number', 'execute_unite',
                              'legal_obligation', 'performance', 'execute_court', 'province', 'filing_time', 'pub_time']
@@ -45,6 +47,23 @@ class TianyanchaPipeline(object):
                                  'vouched_amount', 'debt_deadline', 'vouched_range', 'cancel_date', 'cancel_reason']
         self.sub_chattel_mortgage1 = ['mortgagee_name', 'mortgagee_type', 'id_number']
         self.sub_chattel_mortgage2 = ['pawn_name', 'pawn_belong', 'pawn_condition']
+        self.owe_tax = ['tax_date', 'tax_num', 'tax_type', 'tax_current', 'tax_balance', 'tax_depart']
+        self.bidding = ['bid_url', 'bid_time', 'bid_title', 'bid_purchaser', 'bid_content']
+        self.bond_information = ['bond_name', 'bond_code', 'bond_publisher', 'bond_type', 'bond_start', 'bond_end',
+                                'bond_duration', 'trading_day', 'interest_mode', 'bond_delisting', 'credit_agency',
+                                'bond_rating', 'face_value', 'reference_rate', 'coupon_rate', 'actual_circulation',
+                                'planned_circulation', 'issue_price', 'spread', 'frequency', 'bond_date', 'exercise_type',
+                                'exercise_date', 'trustee', 'circulation_scope']
+        self.purchase_island = ['admini_region', 'supervision_num', 'pruchase_trustee', 'trasaction_price', 'signed_date',
+                                'total_area', 'parcel_location', 'purchase_assignee', 'superior_company', 'land_use',
+                                'supply_mode', 'max_volume', 'min_volume', 'start_time', 'end_time', 'link_url']
+        self.the_employ = ['employ_position', 'employ_city', 'employ_area', 'employ_company', 'wage', 'experience', 'source',
+                           'start_date', 'end_date', 'education', 'employ_num', 'position_desc']
+        self.rating_tax = ['rating_year', 'rating_level', 'rating_type', 'rating_num', 'rating_office']
+        self.random_check = ['check_date', 'check_type', 'check_result', 'check_office']
+        self.product_info = ['product_icon', 'product_title', 'product_short', 'product_type', 'product_field', 'product_desc']
+        self.quality_cert = ['device_name', 'cert_type', 'cert_start', 'cert_end', 'device_num', 'permit_num']
+        self.brand_info = ['brand_date', 'brand_icon', 'brand_name', 'brand_num', 'brand_type', 'brand_cond']
 
     def process_item(self, item, spider):
         company = self.dom.createElement('company')
@@ -176,6 +195,18 @@ class TianyanchaPipeline(object):
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
 
+        if len(item["product_name"]) > 1:
+            competing_product = self.dom.createElement("competing_product")
+            company.appendChild(competing_product)
+            for i in range(1, len(item["product_name"])):
+                products = self.dom.createElement("products")
+                competing_product.appendChild(products)
+                for item_name in self.competing_product:
+                    content = self.dom.createElement(str(item_name))
+                    products.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
         if len(item["announce_time"]) > 1:
             court_announcement = self.dom.createElement("court_announcement")
             company.appendChild(court_announcement)
@@ -189,7 +220,6 @@ class TianyanchaPipeline(object):
                     content.appendChild(data)
 
         if len(item["dis_company"]) > 1:
-            print 'here'
             the_dishonest = self.dom.createElement("the_dishonest")
             company.appendChild(the_dishonest)
             for i in range(1, len(item["dis_company"])):
@@ -273,25 +303,145 @@ class TianyanchaPipeline(object):
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
                 mortgagee = self.dom.createElement("mortgagee")
-                chattel_mortgage.appendChild(mortgagee)
-                for i in range(1, len(item["mortgagee_name"])):
-                    sub_mortgagee =self.dom.createElement("sub_mortgagee")
-                    mortgage.appendChild(sub_mortgagee)
+                mortgage.appendChild(mortgagee)
+                for j in range(0, len(item["mortgagee_name"][i])):
+                    sub_mortgagee = self.dom.createElement("sub_mortgagee")
+                    mortgagee.appendChild(sub_mortgagee)
                     for item_name in self.sub_chattel_mortgage1:
                         content = self.dom.createElement(str(item_name))
                         sub_mortgagee.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
+                        data = self.dom.createTextNode(str(item[item_name][i][j]))
                         content.appendChild(data)
                 pawn = self.dom.createElement("pawn")
-                chattel_mortgage.appendChild(pawn)
-                for i in range(1, len(item["pawn_name"])):
+                mortgage.appendChild(pawn)
+                for k in range(0, len(item["pawn_name"][i])):
                     sub_pawn = self.dom.createElement("sub_pawn")
                     pawn.appendChild(sub_pawn)
                     for item_name in self.sub_chattel_mortgage2:
                         content = self.dom.createElement(str(item_name))
                         sub_pawn.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
+                        data = self.dom.createTextNode(str(item[item_name][i][k]))
                         content.appendChild(data)
+
+        if len(item["tax_date"]) > 1:
+            owe_tax = self.dom.createElement("owe_tax")
+            company.appendChild(owe_tax)
+            for i in range(1, len(item["tax_date"])):
+                tax = self.dom.createElement("tax")
+                owe_tax.appendChild(tax)
+                for item_name in self.owe_tax:
+                    content = self.dom.createElement(str(item_name))
+                    tax.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["bid_url"]) > 1:
+            bidding = self.dom.createElement("bidding")
+            company.appendChild(bidding)
+            for i in range(1, len(item["bid_url"])):
+                bid = self.dom.createElement("bid")
+                bidding.appendChild(bid)
+                for item_name in self.bidding:
+                    content = self.dom.createElement(str(item_name))
+                    bid.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["bond_name"]) > 1:
+            bond_information = self.dom.createElement("bond_information")
+            company.appendChild(bond_information)
+            for i in range(1, len(item["bond_name"])):
+                bond = self.dom.createElement("bond")
+                bond_information.appendChild(bond)
+                for item_name in self.bond_information:
+                    content = self.dom.createElement(str(item_name))
+                    bond.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["admini_region"]) > 1:
+            purchase_island = self.dom.createElement("purchase_island")
+            company.appendChild(purchase_island)
+            for i in range(1, len(item["admini_region"])):
+                purchase = self.dom.createElement("purchase")
+                purchase_island.appendChild(purchase)
+                for item_name in self.purchase_island:
+                    content = self.dom.createElement(str(item_name))
+                    purchase.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["employ_position"]) > 1:
+            the_employ = self.dom.createElement("the_employ")
+            company.appendChild(the_employ)
+            for i in range(1, len(item["employ_position"])):
+                employ = self.dom.createElement("employ")
+                the_employ.appendChild(employ)
+                for item_name in self.the_employ:
+                    content = self.dom.createElement(str(item_name))
+                    employ.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["rating_year"]) > 1:
+            rating_tax = self.dom.createElement("rating_tax")
+            company.appendChild(rating_tax)
+            for i in range(1, len(item["rating_year"])):
+                rating = self.dom.createElement("rating")
+                rating_tax.appendChild(rating)
+                for item_name in self.rating_tax:
+                    content = self.dom.createElement(str(item_name))
+                    rating.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["check_date"]) > 1:
+            random_check = self.dom.createElement("random_check")
+            company.appendChild(random_check)
+            for i in range(1, len(item["check_date"])):
+                check = self.dom.createElement("check")
+                random_check.appendChild(check)
+                for item_name in self.random_check:
+                    content = self.dom.createElement(str(item_name))
+                    check.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["product_icon"]) > 1:
+            product_info = self.dom.createElement("product_info")
+            company.appendChild(product_info)
+            for i in range(1, len(item["product_icon"])):
+                product = self.dom.createElement("product")
+                product_info.appendChild(product)
+                for item_name in self.product_info:
+                    content = self.dom.createElement(str(item_name))
+                    product.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["device_name"]) > 1:
+            quality_cert = self.dom.createElement("quality_cert")
+            company.appendChild(quality_cert)
+            for i in range(1, len(item["device_name"])):
+                cert = self.dom.createElement("cert")
+                quality_cert.appendChild(cert)
+                for item_name in self.quality_cert:
+                    content = self.dom.createElement(str(item_name))
+                    cert.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["brand_date"]) > 1:
+            brand_info = self.dom.createElement("brand_info")
+            company.appendChild(brand_info)
+            for i in range(1, len(item["brand_date"])):
+                brand = self.dom.createElement("brand")
+                brand_info.appendChild(brand)
+                for item_name in self.brand_info:
+                    content = self.dom.createElement(str(item_name))
+                    brand.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
 
         self.root.appendChild(company)
         return item
