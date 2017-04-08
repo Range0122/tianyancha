@@ -64,6 +64,10 @@ class TianyanchaPipeline(object):
         self.product_info = ['product_icon', 'product_title', 'product_short', 'product_type', 'product_field', 'product_desc']
         self.quality_cert = ['device_name', 'cert_type', 'cert_start', 'cert_end', 'device_num', 'permit_num']
         self.brand_info = ['brand_date', 'brand_icon', 'brand_name', 'brand_num', 'brand_type', 'brand_cond']
+        self.patent_info = ['patent_id', 'patent_pic', 'app_num', 'patent_num', 'category_num', 'patent_name', 'patent_address', 'inventor', 'applicant',
+                       'apply_date', 'publish_date', 'agency', 'agent', 'abstracts']
+        self.copyright_info = ['full_name', 'simple_name', 'reg_num', 'cat_num', 'version', 'author_nationality', 'first_publish', 'reg_time']
+        self.website_filing = ['record_date', 'web_name', 'web_url', 'record_num', 'web_status', 'unit_nature']
 
     def process_item(self, item, spider):
         company = self.dom.createElement('company')
@@ -440,6 +444,42 @@ class TianyanchaPipeline(object):
                 for item_name in self.brand_info:
                     content = self.dom.createElement(str(item_name))
                     brand.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["patent_id"]) > 1:
+            patent_info = self.dom.createElement("patent_info")
+            company.appendChild(patent_info)
+            for i in range(1, len(item["patent_id"])):
+                patent = self.dom.createElement("patent")
+                patent_info.appendChild(patent)
+                for item_name in self.patent_info:
+                    content = self.dom.createElement(str(item_name))
+                    patent.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["full_name"]) > 1:
+            copyright_info = self.dom.createElement("copyright_info")
+            company.appendChild(copyright_info)
+            for i in range(1, len(item["full_name"])):
+                copyright = self.dom.createElement("copyright")
+                copyright_info.appendChild(copyright)
+                for item_name in self.copyright_info:
+                    content = self.dom.createElement(str(item_name))
+                    copyright.appendChild(content)
+                    data = self.dom.createTextNode(str(item[item_name][i]))
+                    content.appendChild(data)
+
+        if len(item["record_date"]) > 1:
+            website_filing = self.dom.createElement("website_filing")
+            company.appendChild(website_filing)
+            for i in range(1, len(item["record_date"])):
+                website = self.dom.createElement("website")
+                website_filing.appendChild(website)
+                for item_name in self.website_filing:
+                    content = self.dom.createElement(str(item_name))
+                    website.appendChild(content)
                     data = self.dom.createTextNode(str(item[item_name][i]))
                     content.appendChild(data)
 

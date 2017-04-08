@@ -307,9 +307,35 @@ class TianyanchaItem(scrapy.Item):
     brand_cond = scrapy.Field()
 
     # 知识产权-专利
-
+    patent_id = scrapy.Field()
+    patent_pic = scrapy.Field()
+    app_num = scrapy.Field()
+    patent_num = scrapy.Field()
+    category_num = scrapy.Field()
+    patent_name = scrapy.Field()
+    patent_address = scrapy.Field()
+    inventor = scrapy.Field()
+    applicant = scrapy.Field()
+    apply_date = scrapy.Field()
+    publish_date = scrapy.Field()
+    agency = scrapy.Field()
+    agent = scrapy.Field()
+    abstracts = scrapy.Field()
 
     # 知识产权-著作权
-
+    full_name = scrapy.Field()
+    simple_name = scrapy.Field()
+    reg_num = scrapy.Field()
+    cat_num = scrapy.Field()
+    version = scrapy.Field()
+    author_nationality = scrapy.Field()
+    first_publish = scrapy.Field()
+    reg_time = scrapy.Field()
 
     # 知识产权-网站备案
+    record_date = scrapy.Field()
+    web_name = scrapy.Field()
+    web_url = scrapy.Field()
+    record_num = scrapy.Field()
+    web_status = scrapy.Field()
+    unit_nature = scrapy.Field()

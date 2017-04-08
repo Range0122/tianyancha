@@ -1618,6 +1618,54 @@ class TianYanCha_Spider(CrawlSpider):
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_product_info)
             yield request
         else:
+            item["device_name"] = ['None']
+            item["cert_type"] = ['None']
+            item["cert_start"] = ['None']
+            item["cert_end"] = ['None']
+            item["device_num"] = ['None']
+            item["permit_num"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/expanse/qualification.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_brand_info)
+            yield request
+
+    def parse_quality_cert(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        device_name = item["device_name"]
+        cert_type = item["cert_type"]
+        cert_start = item["cert_start"]
+        cert_end = item["cert_end"]
+        device_num = item["device_num"]
+        permit_num = item["permit_num"]
+
+        if flag[30] == 1:
+            data = json.loads(response.body)
+            for dic in data["data"]["items"]:
+                device_name.append(dic["deviceName"])
+                cert_type.append(dic["licenceType"])
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["issueDate"])[:10])))
+                cert_start.append(date)
+                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["toDate"])[:10])))
+                cert_end.append(date)
+                device_num.append(dic["deviceType"])
+                permit_num.append(dic["licenceNum"])
+
+        item["device_name"] = device_name
+        item["cert_type"] = cert_type
+        item["cert_start"] = cert_start
+        item["cert_end"] = cert_end
+        item["device_num"] = device_num
+        item["permit_num"] = permit_num
+
+        if len(response.body) > 1000:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/expanse/qualification.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_product_info)
+            yield request
+        else:
             item["brand_date"] = ['None']
             item["brand_icon"] = ['None']
             item["brand_name"] = ['None']
@@ -1641,15 +1689,34 @@ class TianYanCha_Spider(CrawlSpider):
         brand_type = item["brand_type"]
         brand_cond = item["brand_cond"]
 
-        if flag[29] == 1:
+        if flag[31] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
-                brand_date.append(dic[""])
-                brand_icon.append(dic[""])
-                brand_name.append(dic[""])
-                brand_num.append(dic[""])
-                brand_type.append(dic[""])
-                brand_cond.append(dic[""])
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["appDate"])[:10])))
+                    brand_date.append(date)
+                except:
+                    brand_date.append(u'无')
+                try:
+                    brand_icon.append(dic["tmPic"] or u'无')
+                except:
+                    brand_icon.append(u'无')
+                try:
+                    brand_name.append(dic["tmName"] or u'无')
+                except:
+                    brand_name.append(u'无')
+                try:
+                    brand_num.append(dic["regNo"] or u'无')
+                except:
+                    brand_num.append(u'无')
+                try:
+                    brand_type.append(dic["intCls"] or u'无')
+                except:
+                    brand_type.append(u'无')
+                try:
+                    brand_cond.append(dic["category"] or u'无')
+                except:
+                    brand_cond.append(u'无')
 
         item["brand_date"] = brand_date
         item["brand_icon"] = brand_icon
@@ -1658,18 +1725,26 @@ class TianYanCha_Spider(CrawlSpider):
         item["brand_type"] = brand_type
         item["brand_cond"] = brand_cond
 
-        if len(response.body) > 3000:
+        if len(response.body) > 800:
             item["page"] += 1
             next_url = 'http://www.tianyancha.com/tm/getTmList.json?id=' + str(item["company_id"]) + '&ps=5&&pageNum=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_brand_info)
             yield request
         else:
-            item["product_icon"] = ['None']
-            item["product_title"] = ['None']
-            item["product_short"] = ['None']
-            item["product_type"] = ['None']
-            item["product_field"] = ['None']
-            item["product_desc"] = ['None']
+            item["patent_id"] = ['None']
+            item["patent_pic"] = ['None']
+            item["app_num"] = ['None']
+            item["patent_num"] = ['None']
+            item["category_num"] = ['None']
+            item["patent_name"] = ['None']
+            item["patent_address"] = ['None']
+            item["inventor"] = ['None']
+            item["applicant"] = ['None']
+            item["apply_date"] = ['None']
+            item["publish_date"] = ['None']
+            item["agency"] = ['None']
+            item["agent"] = ['None']
+            item["abstracts"] = ['None']
             item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/patent.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
@@ -1680,42 +1755,68 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
-        product_icon = item["product_icon"]
-        product_title = item["product_title"]
-        product_short = item["product_short"]
-        product_type = item["product_type"]
-        product_field = item["product_field"]
-        product_desc = item["product_desc"]
+        patent_id = item["patent_id"]
+        patent_pic = item["patent_pic"]
+        app_num = item["app_num"]
+        patent_num = item["patent_num"]
+        category_num = item["category_num"]
+        patent_name = item["patent_name"]
+        patent_address = item["patent_address"]
+        inventor = item["inventor"]
+        applicant = item["applicant"]
+        apply_date = item["apply_date"]
+        publish_date = item["publish_date"]
+        agency = item["agency"]
+        agent = item["agent"]
+        abstracts = item["abstracts"]
 
-        if flag[29] == 1:
+        if flag[32] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
-                product_icon.append(dic["icon"])
-                product_title.append(dic["name"])
-                product_short.append(dic["filterName"])
-                product_type.append(dic["type"])
-                product_field.append(dic["classes"])
-                product_desc.append(dic["brief"])
+                patent_id.append(dic["pid"])
+                patent_pic.append(dic["imgUrl"])
+                app_num.append(dic["applicationPublishNum"])
+                patent_num.append(dic["patentNum"])
+                category_num.append(dic["allCatNum"])
+                patent_name.append(dic["patentName"])
+                patent_address.append(dic["address"])
+                inventor.append(dic["inventor"])
+                applicant.append(dic["applicantName"])
+                apply_date.append(dic["applicationTime"])
+                publish_date.append(dic["applicationPublishTime"])
+                agency.append(dic["agency"])
+                agent.append(dic["agent"])
+                abstracts.append(dic["abstracts"])
 
-        item["product_icon"] = product_icon
-        item["product_title"] = product_title
-        item["product_short"] = product_short
-        item["product_type"] = product_type
-        item["product_field"] = product_field
-        item["product_desc"] = product_desc
+        item["patent_id"] = patent_id
+        item["patent_pic"] = patent_pic
+        item["app_num"] = app_num
+        item["patent_num"] = patent_num
+        item["category_num"] = category_num
+        item["patent_name"] = patent_name
+        item["patent_address"] = patent_address
+        item["inventor"] = inventor
+        item["applicant"] = applicant
+        item["apply_date"] = apply_date
+        item["publish_date"] = publish_date
+        item["agency"] = agency
+        item["agent"] = agent
+        item["abstracts"] = abstracts
 
-        if len(response.body) > 3000:
+        if len(response.body) > 5000:
             item["page"] += 1
             next_url = 'http://www.tianyancha.com/expanse/patent.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_patent)
             yield request
         else:
-            item["product_icon"] = ['None']
-            item["product_title"] = ['None']
-            item["product_short"] = ['None']
-            item["product_type"] = ['None']
-            item["product_field"] = ['None']
-            item["product_desc"] = ['None']
+            item["full_name"] = ['None']
+            item["simple_name"] = ['None']
+            item["reg_num"] = ['None']
+            item["cat_num"] = ['None']
+            item["version"] = ['None']
+            item["author_nationality"] = ['None']
+            item["first_publish"] = ['None']
+            item["reg_time"] = ['None']
             item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/copyReg.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
@@ -1726,44 +1827,42 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
-        product_icon = item["product_icon"]
-        product_title = item["product_title"]
-        product_short = item["product_short"]
-        product_type = item["product_type"]
-        product_field = item["product_field"]
-        product_desc = item["product_desc"]
+        full_name = item["full_name"]
+        simple_name = item["simple_name"]
+        reg_num = item["reg_num"]
+        cat_num = item["cat_num"]
+        version = item["version"]
+        author_nationality = item["author_nationality"]
+        first_publish = item["first_publish"]
+        reg_time = item["reg_time"]
 
-        if flag[29] == 1:
+        if flag[33] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
-                product_icon.append(dic["icon"])
-                product_title.append(dic["name"])
-                product_short.append(dic["filterName"])
-                product_type.append(dic["type"])
-                product_field.append(dic["classes"])
-                product_desc.append(dic["brief"])
+                full_name.append(dic["fullname"])
+                simple_name.append(dic["simplename"])
+                reg_num.append(dic["regnum"])
+                cat_num.append(dic["catnum"])
+                version.append(dic["version"])
+                author_nationality.append(dic["authorNationality"])
+                first_publish.append(dic["publishtime"])
+                reg_time.append(dic["regtime"])
 
-        item["product_icon"] = product_icon
-        item["product_title"] = product_title
-        item["product_short"] = product_short
-        item["product_type"] = product_type
-        item["product_field"] = product_field
-        item["product_desc"] = product_desc
+        item["full_name"] = full_name
+        item["simple_name"] = simple_name
+        item["reg_num"] = reg_num
+        item["cat_num"] = cat_num
+        item["version"] = version
+        item["author_nationality"] = author_nationality
+        item["first_publish"] = first_publish
+        item["reg_time"] = reg_time
 
-        if len(response.body) > 3000:
+        if len(response.body) > 1000:
             item["page"] += 1
             next_url = 'http://www.tianyancha.com/expanse/copyReg.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_copyright)
             yield request
         else:
-            item["product_icon"] = ['None']
-            item["product_title"] = ['None']
-            item["product_short"] = ['None']
-            item["product_type"] = ['None']
-            item["product_field"] = ['None']
-            item["product_desc"] = ['None']
-            item["page"] = 1
-
             next_url = 'http://www.tianyancha.com/v2/IcpList/' + str(item["company_id"]) + '.json'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_website_filing)
             yield request
@@ -1772,28 +1871,28 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
-        product_icon = item["product_icon"]
-        product_title = item["product_title"]
-        product_short = item["product_short"]
-        product_type = item["product_type"]
-        product_field = item["product_field"]
-        product_desc = item["product_desc"]
+        record_date = ['None']
+        web_name = ['None']
+        web_url = ['None']
+        record_num = ['None']
+        web_status = ['None']
+        unit_nature = ['None']
 
-        if flag[29] == 1:
+        if flag[34] == 1:
             data = json.loads(response.body)
-            for dic in data["data"]["items"]:
-                product_icon.append(dic["icon"])
-                product_title.append(dic["name"])
-                product_short.append(dic["filterName"])
-                product_type.append(dic["type"])
-                product_field.append(dic["classes"])
-                product_desc.append(dic["brief"])
+            for dic in data["data"]:
+                record_date.append(dic["examineDate"])
+                web_name.append(dic["webName"])
+                web_url.append(dic[""])
+                record_num.append(dic["liscense"])
+                web_status.append(dic["webSite"])
+                unit_nature.append(dic["companyType"])
 
-        item["product_icon"] = product_icon
-        item["product_title"] = product_title
-        item["product_short"] = product_short
-        item["product_type"] = product_type
-        item["product_field"] = product_field
-        item["product_desc"] = product_desc
+        item["record_date"] = record_date
+        item["web_name"] = web_name
+        item["web_url"] = web_url
+        item["record_num"] = record_num
+        item["web_status"] = web_status
+        item["unit_nature"] = unit_nature
 
         return item
