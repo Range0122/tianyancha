@@ -1627,7 +1627,7 @@ class TianYanCha_Spider(CrawlSpider):
             item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/qualification.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
-            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_brand_info)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_quality_cert)
             yield request
 
     def parse_quality_cert(self, response):
@@ -1663,7 +1663,7 @@ class TianYanCha_Spider(CrawlSpider):
         if len(response.body) > 1000:
             item["page"] += 1
             next_url = 'http://www.tianyancha.com/expanse/qualification.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
-            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_product_info)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_quality_cert)
             yield request
         else:
             item["brand_date"] = ['None']
@@ -1689,8 +1689,13 @@ class TianYanCha_Spider(CrawlSpider):
         brand_type = item["brand_type"]
         brand_cond = item["brand_cond"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[31] = 0
+
         if flag[31] == 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["appDate"])[:10])))
@@ -1748,10 +1753,10 @@ class TianYanCha_Spider(CrawlSpider):
             item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/patent.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
-            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_patent)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_patent_info)
             yield request
 
-    def parse_patent(self, response):
+    def parse_patent_info(self, response):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
@@ -1770,11 +1775,19 @@ class TianYanCha_Spider(CrawlSpider):
         agent = item["agent"]
         abstracts = item["abstracts"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[32] = 0
+
         if flag[32] == 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 patent_id.append(dic["pid"])
-                patent_pic.append(dic["imgUrl"])
+                try:
+                    patent_pic.append(dic["imgUrl"] or u'无')
+                except:
+                    patent_pic.append("u'无'")
                 app_num.append(dic["applicationPublishNum"])
                 patent_num.append(dic["patentNum"])
                 category_num.append(dic["allCatNum"])
@@ -1784,8 +1797,14 @@ class TianYanCha_Spider(CrawlSpider):
                 applicant.append(dic["applicantName"])
                 apply_date.append(dic["applicationTime"])
                 publish_date.append(dic["applicationPublishTime"])
-                agency.append(dic["agency"])
-                agent.append(dic["agent"])
+                try:
+                    agency.append(dic["agency"] or u'无')
+                except:
+                    agency.append(u'无')
+                try:
+                    agent.append(dic["agent"] or u'无')
+                except:
+                    agent.append(u'无')
                 abstracts.append(dic["abstracts"])
 
         item["patent_id"] = patent_id
@@ -1806,7 +1825,7 @@ class TianYanCha_Spider(CrawlSpider):
         if len(response.body) > 5000:
             item["page"] += 1
             next_url = 'http://www.tianyancha.com/expanse/patent.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
-            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_patent)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_patent_info)
             yield request
         else:
             item["full_name"] = ['None']
@@ -1820,10 +1839,10 @@ class TianYanCha_Spider(CrawlSpider):
             item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/copyReg.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
-            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_copyright)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_copyright_info)
             yield request
 
-    def parse_copyright(self, response):
+    def parse_copyright_info(self, response):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
@@ -1836,11 +1855,19 @@ class TianYanCha_Spider(CrawlSpider):
         first_publish = item["first_publish"]
         reg_time = item["reg_time"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[33] = 0
+
         if flag[33] == 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 full_name.append(dic["fullname"])
-                simple_name.append(dic["simplename"])
+                try:
+                    simple_name.append(dic["simplename"] or u'无')
+                except:
+                    simple_name.append(u'无')
                 reg_num.append(dic["regnum"])
                 cat_num.append(dic["catnum"])
                 version.append(dic["version"])
@@ -1860,7 +1887,7 @@ class TianYanCha_Spider(CrawlSpider):
         if len(response.body) > 1000:
             item["page"] += 1
             next_url = 'http://www.tianyancha.com/expanse/copyReg.json?id=' + str(item["company_id"]) + '&ps=5&pn=' + str(item["page"])
-            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_copyright)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_copyright_info)
             yield request
         else:
             next_url = 'http://www.tianyancha.com/v2/IcpList/' + str(item["company_id"]) + '.json'
@@ -1878,8 +1905,13 @@ class TianYanCha_Spider(CrawlSpider):
         web_status = ['None']
         unit_nature = ['None']
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[34] = 0
+
         if flag[34] == 1:
-            data = json.loads(response.body)
             for dic in data["data"]:
                 record_date.append(dic["examineDate"])
                 web_name.append(dic["webName"])
