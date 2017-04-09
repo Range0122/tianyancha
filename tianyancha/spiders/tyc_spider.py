@@ -133,8 +133,15 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[3] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["result"]:
-                shareholder_id.append(dic["id"])
-                shareholder_name.append(dic["name"])
+                try:
+                    shareholder_id.append(dic["id"] or u'无')
+                except:
+                    shareholder_id.append(u'无')
+
+                try:
+                    shareholder_name.append(dic["name"] or u'无')
+                except:
+                    shareholder_name.append(u'无')
 
                 try:
                     investment_proportion.append(dic["capital"][0]["percent"] or u'无')
@@ -199,8 +206,15 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[4] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["result"]:
-                invested_company_id.append(dic["id"])
-                invested_company_name.append(dic["name"])
+                try:
+                    invested_company_id.append(dic["id"] or u'无')
+                except:
+                    invested_company_id.append(u'无')
+
+                try:
+                    invested_company_name.append(dic["name"] or u'无')
+                except:
+                    invested_company_name.append(u'无')
 
                 try:
                     invested_representative.append(dic["legalPersonName"] or  u'无')
@@ -225,9 +239,16 @@ class TianYanCha_Spider(CrawlSpider):
                 except:
                     investment_prop.append(u'无')
 
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["estiblishTime"])[:10])))
-                registered_date.append(str(date))
-                condit.append(dic["regStatus"])
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["estiblishTime"])[:10])))
+                    registered_date.append(str(date))
+                except:
+                    registered_date.append(u'无')
+
+                try:
+                    condit.append(dic["regStatus"] or u'无')
+                except:
+                    condit.append(u'无')
 
         item["invested_company_id"] = invested_company_id
         item["invested_company_name"] = invested_company_name
@@ -274,8 +295,15 @@ class TianYanCha_Spider(CrawlSpider):
                     change_item.append(dic["changeItem"] or u'无')
                 except:
                     change_item.append(u'无')
-                before_change.append(dic["contentBefore"])
-                after_change.append(dic["contentAfter"])
+                try:
+                    before_change.append(dic["contentBefore"] or u'无')
+                except:
+                    before_change.append(u'无')
+
+                try:
+                    after_change.append(dic["contentAfter"] or u'无')
+                except:
+                    after_change.append(u'无')
 
         item["change_time"] = change_time
         item["change_item"] = change_item
@@ -302,9 +330,16 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[6] == 1:
             data = json.loads(response.body)
             for dic in data["data"]:
-                url = 'http://www.tianyancha.com/reportContent/' + str(item["company_id"]) + '/' + str(dic["reportYear"])
-                annual_year.append(dic["reportYear"])
-                annual_url.append(url)
+                try:
+                    url = 'http://www.tianyancha.com/reportContent/' + str(item["company_id"]) + '/' + str(dic["reportYear"])
+                    annual_url.append(url)
+                except:
+                    annual_url.append(u'无')
+                try:
+                    annual_year.append(dic["reportYear"] or u'无')
+                except:
+                    annual_year.append(u'无')
+
 
         item["annual_year"] = annual_year
         item["annual_url"] = annual_url
@@ -333,8 +368,15 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[7] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["result"]:
-                branch_id.append(dic["id"])
-                branch_name.append(dic["name"])
+                try:
+                    branch_id.append(dic["id"] or u'无')
+                except:
+                    branch_id.append(u'无')
+
+                try:
+                    branch_name.append(dic["name"] or u'无')
+                except:
+                    branch_name.append(u'无')
                 branch_legalrep.append(u'暂无')
                 branch_cond.append(u'暂无')
                 branch_regtime.append(u'暂无')
@@ -381,16 +423,25 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[8] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["page"]["rows"]:
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["date"])[:10])))
-                finance_date.append(str(date))
-                finance_round.append(dic["round"])
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["date"])[:10])))
+                    finance_date.append(str(date))
+                except:
+                    finance_date.append(u'无')
+                try:
+                    finance_round.append(dic["round"] or u'无')
+                except:
+                    finance_round.append(u'无')
 
                 try:
                     valuation.append(dic["value"] or u'无')
                 except:
                     valuation.append(u'无')
 
-                finance_amount.append(dic["money"])
+                try:
+                    finance_amount.append(dic["money"] or u'无')
+                except:
+                    finance_amount.append(u'无')
 
                 try:
                     finance_proportion.append(dic["share"] or u'无')
@@ -441,9 +492,20 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[9] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["page"]["rows"]:
-                member_name.append(dic["name"])
-                member_pos.append(dic["title"])
-                member_intro.append(dic["desc"])
+                try:
+                    member_name.append(dic["name"] or u'无')
+                except:
+                    member_name.append(u'无')
+
+                try:
+                    member_pos.append(dic["title"] or u'无')
+                except:
+                    member_pos.append(u'无')
+
+                try:
+                    member_intro.append(dic["desc"] or u'无')
+                except:
+                    member_intro.append(u'无')
 
                 try:
                     member_icon.append(dic["icon"] or u'无')
@@ -483,9 +545,20 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[10] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["page"]["rows"]:
-                product_name.append(dic["product"])
-                product_type.append(dic["hangye"])
-                product_short.append(dic["yewu"])
+                try:
+                    product_name.append(dic["product"] or u'无')
+                except:
+                    product_name.append(u'无')
+
+                try:
+                    product_type.append(dic["hangye"] or u'无')
+                except:
+                    product_type.append(u'无')
+
+                try:
+                    product_short.append(dic["yewu"] or u'无')
+                except:
+                    product_short.append(u'无')
 
                 try:
                     product_logo.append(dic["logo"] or u'无')
@@ -535,9 +608,15 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[11] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["page"]["rows"]:
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["tzdate"])[:10])))
-                invest_time.append(str(date))
-                invest_round.append(dic["lunci"])
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["tzdate"])[:10])))
+                    invest_time.append(str(date))
+                except:
+                    invest_time.append(u'无')
+                try:
+                    invest_round.append(dic["lunci"] or u'无')
+                except:
+                    invest_round.append(u'无')
                 try:
                     invest_amount.append(dic["money"] or u'无')
                 except:
@@ -547,7 +626,6 @@ class TianYanCha_Spider(CrawlSpider):
                 except:
                     invest_company.append(u'无')
 
-                invest_product.append(dic["product"])
                 try:
                     invest_pro_icon.append(dic["icon"] or u'无')
                 except:
@@ -556,9 +634,20 @@ class TianYanCha_Spider(CrawlSpider):
                     invest_area.append(dic["location"] or u'无')
                 except:
                     invest_area.append(u'无')
+                try:
+                    invest_product.append(dic["product"] or u'无')
+                except:
+                    invest_product.append(u'无')
 
-                invest_industry.append(dic["hangye1"])
-                invest_business.append(dic["yewu"])
+                try:
+                    invest_industry.append(dic["hangye1"] or u'无')
+                except:
+                    invest_industry.append(u'无')
+
+                try:
+                    invest_business.append(dic["yewu"] or u'无')
+                except:
+                    invest_business.append(u'无')
 
         item["invest_time"] = invest_time
         item["invest_round"] = invest_round
@@ -606,7 +695,10 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[12] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["page"]["rows"]:
-                product_name.append(dic["jingpinProduct"])
+                try:
+                    product_name.append(dic["jingpinProduct"] or u'无')
+                except:
+                    product_name.append(u'无')
                 try:
                     product_logo.append(dic["icon"] or u'无')
                 except:
@@ -670,7 +762,10 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[14] == 1:
             data = json.loads(response.body)
             for dic in data["courtAnnouncements"]:
-                announce_time.append(dic["publishdate"])
+                try:
+                    announce_time.append(dic["publishdate"] or u'无')
+                except:
+                    announce_time.append(u'无')
                 try:
                     appeal.append(dic["party1"] or u'无')
                 except:
@@ -679,9 +774,20 @@ class TianYanCha_Spider(CrawlSpider):
                     respondent.append(dic["party2"] or u'无')
                 except:
                     respondent.append(u'无')
-                announce_type.append(dic["bltntypename"])
-                court.append(dic["courtcode"])
-                announce_content.append(dic["content"])
+                try:
+                    announce_type.append(dic["bltntypename"] or u'无')
+                except:
+                    announce_type.append(u'无')
+
+                try:
+                    court.append(dic["courtcode"] or u'无')
+                except:
+                    court.append(u'无')
+
+                try:
+                    announce_content.append(dic["content"] or u'无')
+                except:
+                    announce_content.append(u'无')
 
         item["announce_time"] = announce_time
         item["appeal"] = appeal
@@ -714,20 +820,62 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[15] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
-                dis_company.append(dic["iname"])
-                dic_legalrepre.append(dic["businessentity"])
-                dis_code.append(dic["cardnum"])
-                execute_number.append(dic["casecode"])
-                case_number.append(dic["gistid"])
-                execute_unite.append(dic["gistunit"])
-                legal_obligation.append(dic["duty"])
-                performance.append(dic["performance"])
-                execute_court.append(dic["courtname"])
-                province.append(dic["areaname"])
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["regdate"])[:10])))
-                filing_time.append(date)
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishdate"])[:10])))
-                pub_time.append(date)
+                try:
+                    dis_company.append(dic["iname"] or u'无')
+                except:
+                    dis_company.append(u'无')
+
+                try:
+                    dic_legalrepre.append(dic["businessentity"] or u'无')
+                except:
+                    dic_legalrepre.append(u'无')
+
+                try:
+                    dis_code.append(dic["cardnum"] or u'无')
+                except:
+                    dis_code.append(u'无')
+                try:
+                    execute_number.append(dic["casecode"] or u'无')
+                except:
+                    execute_number.append(u'无')
+
+                try:
+                    case_number.append(dic["gistid"] or u'无')
+                except:
+                    case_number.append(u'无')
+
+                try:
+                    execute_unite.append(dic["gistunit"] or u'无')
+                except:
+                    execute_unite.append(u'无')
+                try:
+                    legal_obligation.append(dic["duty"] or u'无')
+                except:
+                    legal_obligation.append(u'无')
+
+                try:
+                    performance.append(dic["performance"] or u'无')
+                except:
+                    performance.append(u'无')
+
+                try:
+                    execute_court.append(dic["courtname"] or u'无')
+                except:
+                    execute_court.append(u'无')
+                try:
+                    province.append(dic["areaname"] or u'无')
+                except:
+                    province.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["regdate"])[:10])))
+                    filing_time.append(date)
+                except:
+                    filing_time.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishdate"])[:10])))
+                    pub_time.append(date)
+                except:
+                    pub_time.append(u'无')
 
         item["dis_company"] = dis_company
         item["dic_legalrepre"] = dic_legalrepre
@@ -763,11 +911,25 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[16] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["caseCreateTime"])[:10])))
-                filing_date.append(date)
-                executed_target.append(dic["execMoney"])
-                case_code.append(dic["caseCode"])
-                executed_court.append(dic["execCourtName"])
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["caseCreateTime"])[:10])))
+                    filing_date.append(date)
+                except:
+                    filing_date.append(u'无')
+                try:
+                    executed_target.append(dic["execMoney"] or u'无')
+                except:
+                    executed_target.append(u'无')
+
+                try:
+                    case_code.append(dic["caseCode"] or u'无')
+                except:
+                    case_code.append(u'无')
+
+                try:
+                    executed_court.append(dic["execCourtName"] or u'无')
+                except:
+                    executed_court.append(u'无')
 
         item["filing_date"] = filing_date
         item["executed_target"] = executed_target
@@ -799,9 +961,20 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[17] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["result"]:
-                include_date.append(dic["putDate"])
-                include_reason.append(dic["putReason"])
-                include_authority.append(dic["putDepartment"])
+                try:
+                    include_date.append(dic["putDate"] or u'无')
+                except:
+                    include_date.append(u'无')
+
+                try:
+                    include_reason.append(dic["putReason"] or u'无')
+                except:
+                    include_reason.append(u'无')
+
+                try:
+                    include_authority.append(dic["putDepartment"] or u'无')
+                except:
+                    include_authority.append(u'无')
 
         item["include_date"] = include_date
         item["include_reason"] = include_reason
@@ -839,15 +1012,33 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[18] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
-                pub_code.append(dic["punishNumber"])
-                pub_type.append(dic["type"])
+                try:
+                    pub_code.append(dic["punishNumber"] or u'无')
+                except:
+                    pub_code.append(u'无')
+
+                try:
+                    pub_type.append(dic["type"] or u'无')
+                except:
+                    pub_type.append(u'无')
                 try:
                     pub_content.append(dic["content"] or u'未公示')
                 except:
                     pub_content.append(u'未公示')
-                pub_date.append(dic["decisionDate"])
-                pub_authority.append(dic["departmentName"])
-                pub_people.append(dic["legalPersonName"])
+                try:
+                    pub_date.append(dic["decisionDate"] or u'无')
+                except:
+                    pub_date.append(u'无')
+
+                try:
+                    pub_authority.append(dic["departmentName"] or u'无')
+                except:
+                    pub_authority.append(u'无')
+
+                try:
+                    pub_people.append(dic["legalPersonName"] or u'无')
+                except:
+                    pub_people.append(u'无')
 
         item["pub_code"] = pub_code
         item["pub_type"] = pub_type
@@ -936,15 +1127,43 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[20] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["regDate"])[:10])))
-                regist_date.append(date)
-                regist_num.append(dic["regNumber"])
-                regist_cond.append(dic["state"])
-                pledged_amount.append(dic["equityAmount"])
-                pledgor.append(dic["pledgor"])
-                pledged_code.append(dic["certifNumber"])
-                pledgee.append(dic["pledgee"])
-                pledgee_code.append(dic["certifNumberR"])
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["regDate"])[:10])))
+                    regist_date.append(date)
+                except:
+                    regist_date.append(u'无')
+                try:
+                    regist_num.append(dic["regNumber"] or u'无')
+                except:
+                    regist_num.append(u'无')
+
+                try:
+                    regist_cond.append(dic["state"] or u'无')
+                except:
+                    regist_cond.append(u'无')
+
+                try:
+                    pledged_amount.append(dic["equityAmount"] or u'无')
+                except:
+                    pledged_amount.append(u'无')
+                try:
+                    pledgor.append(dic["pledgor"] or u'无')
+                except:
+                    pledgor.append(u'无')
+
+                try:
+                    pledged_code.append(dic["certifNumber"] or u'无')
+                except:
+                    pledged_code.append(u'无')
+
+                try:
+                    pledgee.append(dic["pledgee"] or u'无')
+                except:
+                    pledgee.append(u'无')
+                try:
+                    pledgee_code.append(dic["certifNumberR"] or u'无')
+                except:
+                    pledgee_code.append(u'无')
 
         item["regist_date"] = regist_date
         item["regist_num"] = regist_num
@@ -1008,14 +1227,45 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             data = json.loads(data["data"])
             for dic in data["items"]:
-                registed_num.append(dic["baseInfo"]["regNum"])
-                registed_depart.append(dic["baseInfo"]["regDepartment"])
-                registed_date.append(dic["baseInfo"]["regDate"])
-                registed_cond.append(dic["baseInfo"]["status"])
-                vouched_type.append(dic["baseInfo"]["type"])
-                vouched_amount.append(dic["baseInfo"]["amount"])
-                debt_deadline.append(dic["baseInfo"]["term"])
-                vouched_range.append(dic["baseInfo"]["scope"])
+                try:
+                    registed_num.append(dic["baseInfo"]["regNum"] or u'无')
+                except:
+                    registed_num.append(u'无')
+
+                try:
+                    registed_depart.append(dic["baseInfo"]["regDepartment"] or u'无')
+                except:
+                    registed_depart.append(u'无')
+
+                try:
+                    registed_date.append(dic["baseInfo"]["regDate"] or u'无')
+                except:
+                    registed_date.append(u'无')
+
+                try:
+                    registed_cond.append(dic["baseInfo"]["status"] or u'无')
+                except:
+                    registed_cond.append(u'无')
+
+                try:
+                    vouched_type.append(dic["baseInfo"]["type"] or u'无')
+                except:
+                    vouched_type.append(u'无')
+
+                try:
+                    vouched_amount.append(dic["baseInfo"]["amount"] or u'无')
+                except:
+                    vouched_amount.append(u'无')
+
+                try:
+                    debt_deadline.append(dic["baseInfo"]["term"] or u'无')
+                except:
+                    debt_deadline.append(u'无')
+
+                try:
+                    vouched_range.append(dic["baseInfo"]["scope"] or u'无')
+                except:
+                    vouched_range.append(u'无')
                 try:
                     cancel_date.append(dic["baseInfo"]["cancelDate"])
                     cancel_reason.append(dic["baseInfo"]["cancelReason"])
@@ -1026,9 +1276,20 @@ class TianYanCha_Spider(CrawlSpider):
                 mortgagee_type_list = []
                 id_number_list = []
                 for sub_dic in dic["peopleInfo"]:
-                    mortgagee_name_list.append(sub_dic["peopleName"])
-                    mortgagee_type_list.append(sub_dic["liceseType"])
-                    id_number_list.append(sub_dic["licenseNum"])
+                    try:
+                        mortgagee_name_list.append(sub_dic["peopleName"] or u'无')
+                    except:
+                        mortgagee_name_list.append(u'无')
+
+                    try:
+                        mortgagee_type_list.append(sub_dic["liceseType"] or u'无')
+                    except:
+                        mortgagee_type_list.append(u'无')
+
+                    try:
+                        id_number_list.append(sub_dic["licenseNum"] or u'无')
+                    except:
+                        id_number_list.append(u'无')
                 mortgagee_name.append(mortgagee_name_list)
                 mortgagee_type.append(mortgagee_type_list)
                 id_number.append(id_number_list)
@@ -1036,9 +1297,20 @@ class TianYanCha_Spider(CrawlSpider):
                 pawn_belong_list = []
                 pawn_condition_list = []
                 for sub_dic in dic["pawnInfoList"]:
-                    pawn_name_list.append(sub_dic["pawnName"])
-                    pawn_belong_list.append(sub_dic["ownership"])
-                    pawn_condition_list.append(sub_dic["detail"])
+                    try:
+                        pawn_name_list.append(sub_dic["pawnName"] or u'无')
+                    except:
+                        pawn_name_list.append(u'无')
+
+                    try:
+                        pawn_belong_list.append(sub_dic["ownership"] or u'无')
+                    except:
+                        pawn_belong_list.append(u'无')
+
+                    try:
+                        pawn_condition_list.append(sub_dic["detail"] or u'无')
+                    except:
+                        pawn_condition_list.append(u'无')
                 pawn_name.append(pawn_name_list)
                 pawn_belong.append(pawn_belong_list)
                 pawn_condition.append(pawn_condition_list)
@@ -1160,13 +1432,30 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[23] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
-                url = 'http://www.tianyancha.com/bid/' + str(dic["uuid"])
-                bid_url.append(url)
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishTime"])[:10])))
-                bid_time.append(date)
-                bid_title.append(dic["title"])
-                bid_purchaser.append(dic["purchaser"])
-                bid_content.append(dic["content"])
+                try:
+                    url = 'http://www.tianyancha.com/bid/' + str(dic["uuid"])
+                    bid_url.append(url)
+                except:
+                    bid_url.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishTime"])[:10])))
+                    bid_time.append(date)
+                except:
+                    bid_time.append(u'无')
+                try:
+                    bid_title.append(dic["title"] or u'无')
+                except:
+                    bid_title.append(u'无')
+
+                try:
+                    bid_purchaser.append(dic["purchaser"] or u'无')
+                except:
+                    bid_purchaser.append(u'无')
+
+                try:
+                    bid_content.append(dic["content"] or u'无')
+                except:
+                    bid_content.append(u'无')
 
         item["bid_url"] = bid_url
         item["bid_time"] = bid_time
@@ -1243,18 +1532,53 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[24] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["bondList"]:
-                bond_name.append(dic["bondName"])
-                bond_code.append(dic["bondNum"])
-                bond_publisher.append(dic["publisherName"])
-                bond_type.append(dic["bondType"])
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishTime"])[:10])))
-                bond_start.append(date)
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishExpireTime"])[:10])))
-                bond_end.append(date)
-                bond_duration.append(dic["bondTimeLimit"])
-                trading_day.append(dic["bondTradeTime"])
-                interest_mode.append(dic["calInterestType"])
-                bond_delisting.append(dic["bondStopTime"])
+                try:
+                    bond_name.append(dic["bondName"] or u'无')
+                except:
+                    bond_name.append(u'无')
+
+                try:
+                    bond_code.append(dic["bondNum"] or u'无')
+                except:
+                    bond_code.append(u'无')
+
+                try:
+                    bond_publisher.append(dic["publisherName"] or u'无')
+                except:
+                    bond_publisher.append(u'无')
+                try:
+                    bond_type.append(dic["bondType"] or u'无')
+                except:
+                    bond_type.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishTime"])[:10])))
+                    bond_start.append(date)
+                except:
+                    bond_start.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishExpireTime"])[:10])))
+                    bond_end.append(date)
+                except:
+                    bond_end.append(u'无')
+                try:
+                    bond_duration.append(dic["bondTimeLimit"] or u'无')
+                except:
+                    bond_duration.append(u'无')
+
+                try:
+                    trading_day.append(dic["bondTradeTime"] or u'无')
+                except:
+                    trading_day.append(u'无')
+
+                try:
+                    interest_mode.append(dic["calInterestType"] or u'无')
+                except:
+                    interest_mode.append(u'无')
+
+                try:
+                    bond_delisting.append(dic["bondStopTime"] or u'无')
+                except:
+                    bond_delisting.append(u'无')
                 try:
                     credit_agency.append(dic["creditRatingGov"] or u'未公示')
                 except:
@@ -1263,21 +1587,58 @@ class TianYanCha_Spider(CrawlSpider):
                     bond_rating.append(dic["debtRating"] or u'未公示')
                 except:
                     bond_rating.append(u'未公示')
-                face_value.append(dic["faceValue"])
+                try:
+                    face_value.append(dic["faceValue"] or u'无')
+                except:
+                    face_value.append(u'无')
+
                 try:
                     reference_rate.append(dic["refInterestRate"] or u'未公示')
                 except:
                     reference_rate.append(u'未公示')
-                coupon_rate.append(dic["faceInterestRate"])
-                actual_circulation.append(dic["realIssuedQuantity"])
-                planned_circulation.append(dic["planIssuedQuantity"])
-                issue_price.append(dic["issuedPrice"])
+                try:
+                    coupon_rate.append(dic["faceInterestRate"] or u'无')
+                except:
+                    coupon_rate.append(u'无')
+
+                try:
+                    actual_circulation.append(dic["realIssuedQuantity"] or u'无')
+                except:
+                    actual_circulation.append(u'无')
+
+                try:
+                    planned_circulation.append(dic["planIssuedQuantity"] or u'无')
+                except:
+                    planned_circulation.append(u'无')
+
+                try:
+                    issue_price.append(dic["issuedPrice"] or u'无')
+                except:
+                    issue_price.append(u'无')
+
                 try:
                     spread.append(dic["interestDiff"] or u'未公示')
                 except:
                     spread.append(u'未公示')
-                frequency.append(dic["payInterestHZ"])
-                bond_date.append(dic["startCalInterestTime"])
+                try:
+                    frequency.append(dic["payInterestHZ"] or u'无')
+                except:
+                    frequency.append(u'无')
+
+                try:
+                    bond_date.append(dic["startCalInterestTime"] or u'无')
+                except:
+                    bond_date.append(u'无')
+
+                try:
+                    trustee.append(dic["escrowAgent"] or u'无')
+                except:
+                    trustee.append(u'无')
+
+                try:
+                    circulation_scope.append(dic["flowRange"] or u'无')
+                except:
+                    circulation_scope.append(u'无')
                 try:
                     exercise_type.append(dic["exeRightType"] or u'未公示')
                 except:
@@ -1286,8 +1647,6 @@ class TianYanCha_Spider(CrawlSpider):
                     exercise_date.append(dic["exeRightTime"] or u'未公示')
                 except:
                     exercise_date.append(u'未公示')
-                trustee.append(dic["escrowAgent"])
-                circulation_scope.append(dic["flowRange"])
 
         item["bond_name"] = bond_name
         item["bond_code"] = bond_code
@@ -1367,25 +1726,83 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[25] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["companyPurchaseLandList"]:
-                admini_region.append(dic["adminRegion"])
-                supervision_num.append(dic["elecSupervisorNo"])
-                pruchase_trustee.append(dic["assignee"])
-                trasaction_price.append(dic["dealPrice"])
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["signedDate"])[:10])))
-                signed_date.append(date)
-                total_area.append(dic["totalArea"])
-                parcel_location.append(dic["location"])
-                purchase_assignee.append(dic["assignee"])
-                superior_company.append(dic["parentCompany"])
-                land_use.append(dic["purpose"])
-                supply_mode.append(dic["supplyWay"])
-                max_volume.append(dic["maxVolume"])
-                min_volume.append(dic["minVolume"])
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["startTime"])[:10])))
-                start_time.append(date)
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["endTime"])[:10])))
-                end_time.append(date)
-                link_url.append(dic["linkUrl"])
+                try:
+                    admini_region.append(dic["adminRegion"] or u'无')
+                except:
+                    admini_region.append(u'无')
+
+                try:
+                    supervision_num.append(dic["elecSupervisorNo"] or u'无')
+                except:
+                    supervision_num.append(u'无')
+
+                try:
+                    pruchase_trustee.append(dic["assignee"] or u'无')
+                except:
+                    pruchase_trustee.append(u'无')
+
+                try:
+                    trasaction_price.append(dic["dealPrice"] or u'无')
+                except:
+                    trasaction_price.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["signedDate"])[:10])))
+                    signed_date.append(date)
+                except:
+                    signed_date.append(u'无')
+                try:
+                    total_area.append(dic["totalArea"] or u'无')
+                except:
+                    total_area.append(u'无')
+
+                try:
+                    parcel_location.append(dic["location"] or u'无')
+                except:
+                    parcel_location.append(u'无')
+
+                try:
+                    purchase_assignee.append(dic["assignee"] or u'无')
+                except:
+                    purchase_assignee.append(u'无')
+
+                try:
+                    superior_company.append(dic["parentCompany"] or u'无')
+                except:
+                    superior_company.append(u'无')
+
+                try:
+                    land_use.append(dic["purpose"] or u'无')
+                except:
+                    land_use.append(u'无')
+
+                try:
+                    supply_mode.append(dic["supplyWay"] or u'无')
+                except:
+                    supply_mode.append(u'无')
+
+                try:
+                    max_volume.append(dic["maxVolume"] or u'无')
+                except:
+                    max_volume.append(u'无')
+
+                try:
+                    min_volume.append(dic["minVolume"] or u'无')
+                except:
+                    min_volume.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["startTime"])[:10])))
+                    start_time.append(date)
+                except:
+                    start_time.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["endTime"])[:10])))
+                    end_time.append(date)
+                except:
+                    end_time.append(u'无')
+                try:
+                    link_url.append(dic["linkUrl"] or u'无')
+                except:
+                    link_url.append(u'无')
 
         item["admini_region"] = admini_region
         item["supervision_num"] = supervision_num
@@ -1450,21 +1867,69 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[26] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["companyEmploymentList"]:
-                employ_position.append(dic["title"])
-                employ_city.append(dic["city"])
-                employ_area.append(dic["district"])
-                employ_company.append(dic["companyName"])
-                wage.append(dic["oriSalary"])
-                experience.append(dic["experience"])
-                source.append(dic["source"])
-                source_url.append(dic["urlPath"])
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["startdate"])[:10])))
-                start_date.append(date)
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["enddate"])[:10])))
-                end_date.append(date)
-                education.append(dic["education"])
-                employ_num.append(dic["employerNumber"])
-                position_desc.append(dic["description"])
+                try:
+                    employ_position.append(dic["title"] or u'无')
+                except:
+                    employ_position.append(u'无')
+
+                try:
+                    employ_city.append(dic["city"] or u'无')
+                except:
+                    employ_city.append(u'无')
+
+                try:
+                    employ_area.append(dic["district"] or u'无')
+                except:
+                    employ_area.append(u'无')
+
+                try:
+                    employ_company.append(dic["companyName"] or u'无')
+                except:
+                    employ_company.append(u'无')
+
+                try:
+                    wage.append(dic["oriSalary"] or u'无')
+                except:
+                    wage.append(u'无')
+
+                try:
+                    experience.append(dic["experience"] or u'无')
+                except:
+                    experience.append(u'无')
+
+                try:
+                    source.append(dic["source"] or u'无')
+                except:
+                    source.append(u'无')
+
+                try:
+                    source_url.append(dic["urlPath"] or u'无')
+                except:
+                    source_url.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["startdate"])[:10])))
+                    start_date.append(date)
+                except:
+                    start_date.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["enddate"])[:10])))
+                    end_date.append(date)
+                except:
+                    end_date.append(u'无')
+                try:
+                    education.append(dic["education"] or u'无')
+                except:
+                    education.append(u'无')
+
+                try:
+                    employ_num.append(dic["employerNumber"] or u'无')
+                except:
+                    employ_num.append(u'无')
+
+                try:
+                    position_desc.append(dic["description"] or u'无')
+                except:
+                    position_desc.append(u'无')
 
         item["employ_position"] = employ_position
         item["employ_city"] = employ_city
@@ -1510,11 +1975,30 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[27] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
-                rating_year.append(dic["year"])
-                rating_level.append(dic["grade"])
-                rating_type.append(dic["type"])
-                rating_num.append(dic["idNumber"])
-                rating_office.append(dic["evalDepartment"])
+                try:
+                    rating_year.append(dic["year"] or u'无')
+                except:
+                    rating_year.append(u'无')
+
+                try:
+                    rating_level.append(dic["grade"] or u'无')
+                except:
+                    rating_level.append(u'无')
+
+                try:
+                    rating_type.append(dic["type"] or u'无')
+                except:
+                    rating_type.append(u'无')
+
+                try:
+                    rating_num.append(dic["idNumber"] or u'无')
+                except:
+                    rating_num.append(u'无')
+
+                try:
+                    rating_office.append(dic["evalDepartment"] or u'无')
+                except:
+                    rating_office.append(u'无')
 
         if len(response.body) > 500:
             item["page"] += 1
@@ -1598,12 +2082,35 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[29] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
-                product_icon.append(dic["icon"])
-                product_title.append(dic["name"])
-                product_short.append(dic["filterName"])
-                product_type.append(dic["type"])
-                product_field.append(dic["classes"])
-                product_desc.append(dic["brief"])
+                try:
+                    product_icon.append(dic["icon"] or u'无')
+                except:
+                    product_icon.append(u'无')
+
+                try:
+                    product_title.append(dic["name"] or u'无')
+                except:
+                    product_title.append(u'无')
+
+                try:
+                    product_short.append(dic["filterName"] or u'无')
+                except:
+                    product_short.append(u'无')
+
+                try:
+                    product_type.append(dic["type"] or u'无')
+                except:
+                    product_type.append(u'无')
+
+                try:
+                    product_field.append(dic["classes"] or u'无')
+                except:
+                    product_field.append(u'无')
+
+                try:
+                    product_desc.append(dic["brief"] or u'无')
+                except:
+                    product_desc.append(u'无')
 
         item["product_icon"] = product_icon
         item["product_title"] = product_title
@@ -1644,14 +2151,36 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[30] == 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
-                device_name.append(dic["deviceName"])
-                cert_type.append(dic["licenceType"])
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["issueDate"])[:10])))
-                cert_start.append(date)
-                date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["toDate"])[:10])))
-                cert_end.append(date)
-                device_num.append(dic["deviceType"])
-                permit_num.append(dic["licenceNum"])
+                try:
+                    device_num.append(dic["deviceType"] or u'无')
+                except:
+                    device_num.append(u'无')
+
+                try:
+                    permit_num.append(dic["licenceNum"] or u'无')
+                except:
+                    permit_num.append(u'无')
+
+                try:
+                    device_name.append(dic["deviceName"] or u'无')
+                except:
+                    device_name.append(u'无')
+
+                try:
+                    cert_type.append(dic["licenceType"] or u'无')
+                except:
+                    cert_type.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["issueDate"])[:10])))
+                    cert_start.append(date)
+                except:
+                    cert_start.append(u'无')
+                try:
+                    date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["toDate"])[:10])))
+                    cert_end.append(date)
+                except:
+                    cert_end.append(u'无')
+
 
         item["device_name"] = device_name
         item["cert_type"] = cert_type
@@ -1783,20 +2312,59 @@ class TianYanCha_Spider(CrawlSpider):
 
         if flag[32] == 1:
             for dic in data["data"]["items"]:
-                patent_id.append(dic["pid"])
                 try:
                     patent_pic.append(dic["imgUrl"] or u'无')
                 except:
                     patent_pic.append("u'无'")
-                app_num.append(dic["applicationPublishNum"])
-                patent_num.append(dic["patentNum"])
-                category_num.append(dic["allCatNum"])
-                patent_name.append(dic["patentName"])
-                patent_address.append(dic["address"])
-                inventor.append(dic["inventor"])
-                applicant.append(dic["applicantName"])
-                apply_date.append(dic["applicationTime"])
-                publish_date.append(dic["applicationPublishTime"])
+                try:
+                    app_num.append(dic["applicationPublishNum"] or u'无')
+                except:
+                    app_num.append(u'无')
+
+                try:
+                    patent_num.append(dic["patentNum"] or u'无')
+                except:
+                    patent_num.append(u'无')
+
+                try:
+                    category_num.append(dic["allCatNum"] or u'无')
+                except:
+                    category_num.append(u'无')
+
+                try:
+                    patent_name.append(dic["patentName"] or u'无')
+                except:
+                    patent_name.append(u'无')
+
+                try:
+                    patent_address.append(dic["address"] or u'无')
+                except:
+                    patent_address.append(u'无')
+
+                try:
+                    inventor.append(dic["inventor"] or u'无')
+                except:
+                    inventor.append(u'无')
+
+                try:
+                    applicant.append(dic["applicantName"] or u'无')
+                except:
+                    applicant.append(u'无')
+
+                try:
+                    apply_date.append(dic["applicationTime"] or u'无')
+                except:
+                    apply_date.append(u'无')
+
+                try:
+                    publish_date.append(dic["applicationPublishTime"] or u'无')
+                except:
+                    publish_date.append(u'无')
+
+                try:
+                    patent_id.append(dic["pid"] or u'无')
+                except:
+                    patent_id.append(u'无')
                 try:
                     agency.append(dic["agency"] or u'无')
                 except:
@@ -1805,7 +2373,10 @@ class TianYanCha_Spider(CrawlSpider):
                     agent.append(dic["agent"] or u'无')
                 except:
                     agent.append(u'无')
-                abstracts.append(dic["abstracts"])
+                try:
+                    abstracts.append(dic["abstracts"] or u'无')
+                except:
+                    abstracts.append(u'无')
 
         item["patent_id"] = patent_id
         item["patent_pic"] = patent_pic
@@ -1863,17 +2434,44 @@ class TianYanCha_Spider(CrawlSpider):
 
         if flag[33] == 1:
             for dic in data["data"]["items"]:
-                full_name.append(dic["fullname"])
                 try:
                     simple_name.append(dic["simplename"] or u'无')
                 except:
                     simple_name.append(u'无')
-                reg_num.append(dic["regnum"])
-                cat_num.append(dic["catnum"])
-                version.append(dic["version"])
-                author_nationality.append(dic["authorNationality"])
-                first_publish.append(dic["publishtime"])
-                reg_time.append(dic["regtime"])
+                try:
+                    reg_num.append(dic["regnum"] or u'无')
+                except:
+                    reg_num.append(u'无')
+
+                try:
+                    cat_num.append(dic["catnum"] or u'无')
+                except:
+                    cat_num.append(u'无')
+
+                try:
+                    version.append(dic["version"] or u'无')
+                except:
+                    version.append(u'无')
+
+                try:
+                    author_nationality.append(dic["authorNationality"] or u'无')
+                except:
+                    author_nationality.append(u'无')
+
+                try:
+                    first_publish.append(dic["publishtime"] or u'无')
+                except:
+                    first_publish.append(u'无')
+
+                try:
+                    reg_time.append(dic["regtime"] or u'无')
+                except:
+                    reg_time.append(u'无')
+
+                try:
+                    full_name.append(dic["fullname"] or u'无')
+                except:
+                    full_name.append(u'无')
 
         item["full_name"] = full_name
         item["simple_name"] = simple_name
@@ -1913,12 +2511,35 @@ class TianYanCha_Spider(CrawlSpider):
 
         if flag[34] == 1:
             for dic in data["data"]:
-                record_date.append(dic["examineDate"])
-                web_name.append(dic["webName"])
-                web_url.append(dic[""])
-                record_num.append(dic["liscense"])
-                web_status.append(dic["webSite"])
-                unit_nature.append(dic["companyType"])
+                try:
+                    record_date.append(dic["examineDate"] or u'无')
+                except:
+                    record_date.append(u'无')
+
+                try:
+                    web_name.append(dic["webName"] or u'无')
+                except:
+                    web_name.append(u'无')
+
+                try:
+                    record_num.append(dic["liscense"] or u'无')
+                except:
+                    record_num.append(u'无')
+
+                try:
+                    web_status.append(dic["webSite"] or u'无')
+                except:
+                    web_status.append(u'无')
+
+                try:
+                    unit_nature.append(dic["companyType"] or u'无')
+                except:
+                    unit_nature.append(u'无')
+                try:
+                    web = '，'.join(dic["webSite"])
+                    web_url.append(web)
+                except:
+                    web_url.append(u'无')
 
         item["record_date"] = record_date
         item["web_name"] = web_name
