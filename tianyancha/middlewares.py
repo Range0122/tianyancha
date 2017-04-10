@@ -127,3 +127,17 @@ class RotateUserAgentMiddleware(object):
         "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2",
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.36 Safari/535.7",
     ]
+
+
+def safe_append(list, dic, key):
+    try:
+        list.append(str(dic[key]) or u'无')
+    except:
+        list.append(u'无')
+
+def safe_append_date(list, dic, key):
+    try:
+        date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic[key])[:10])))
+        list.append(str(date))
+    except:
+        list.append(u'无')
