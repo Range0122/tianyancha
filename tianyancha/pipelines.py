@@ -14,13 +14,14 @@ class TianyanchaPipeline(object):
         self.dom = self.impl.createDocument(None, 'root', None)
         self.root = self.dom.documentElement
 
-        self.basic_info = ['company_name', 'company_id', 'legal_representative', 'registered_capital', 'registered_time',
-                           'condition', 'registered_number', 'organization_number', 'credit_number', 'enterprise_type',
-                           'industry', 'operating_period', 'approved_date', 'registration_authority', 'registered_address',
-                           'business_scope', 'telephone', 'email', 'website', 'logo_location', 'address', 'score', 'former_name']
+        self.basic_info = ['company_name', 'company_id', 'legal_representative', 'registered_capital',
+                           'registered_time', 'condition', 'registered_number', 'organization_number', 'credit_number',
+                           'enterprise_type', 'industry', 'operating_period', 'approved_date', 'registration_authority',
+                           'registered_address', 'business_scope', 'telephone', 'email', 'website', 'logo_location',
+                           'address', 'score', 'former_name']
         self.main_person = ['person_id', 'person_name', 'position']
-        self.shareholder_info = ['shareholder_id', 'shareholder_name', 'investment_proportion', 'subscribed_contribution',
-                                 'subscribed_contribution_time', 'really_contribution']
+        self.shareholder_info = ['shareholder_id', 'shareholder_name', 'investment_proportion',
+                                 'subscribed_contribution', 'subscribed_contribution_time', 'really_contribution']
         self.investment = ['invested_company_id', 'invested_company_name', 'invested_representative', 'registered_cap',
                            'investment_amount', 'investment_prop', 'registered_date', 'condit']
         self.change_record = ['change_time', 'change_item', 'before_change', 'after_change']
@@ -34,9 +35,11 @@ class TianyanchaPipeline(object):
                                  'invest_pro_icon', 'invest_area', 'invest_industry', 'invest_business']
         self.competing_product = ['product_name', 'product_logo', 'product_area', 'product_round', 'product_industry',
                                   'product_business', 'setup_date', 'product_valuation']
-        self.court_announcement = ['announce_time', 'appeal', 'respondent', 'announce_type', 'court', 'announce_content']
-        self.the_dishonest = ['dis_company', 'dic_legalrepre', 'dis_code', 'execute_number', 'case_number', 'execute_unite',
-                             'legal_obligation', 'performance', 'execute_court', 'province', 'filing_time', 'pub_time']
+        self.court_announcement = ['announce_time', 'appeal', 'respondent', 'announce_type', 'court',
+                                   'announce_content']
+        self.the_dishonest = ['dis_company', 'dic_legalrepre', 'dis_code', 'execute_number', 'case_number',
+                              'execute_unite', 'legal_obligation', 'performance', 'execute_court', 'province',
+                              'filing_time', 'pub_time']
         self.the_executed = ['filing_date', 'executed_target', 'case_code', 'executed_court']
         self.abnormal_management = ['include_date', 'include_reason', 'include_authority']
         self.adminis_pubnish = ['pub_code', 'pub_type', 'pub_content', 'pub_date', 'pub_authority', 'pub_people']
@@ -52,21 +55,26 @@ class TianyanchaPipeline(object):
         self.bond_information = ['bond_name', 'bond_code', 'bond_publisher', 'bond_type', 'bond_start', 'bond_end',
                                 'bond_duration', 'trading_day', 'interest_mode', 'bond_delisting', 'credit_agency',
                                 'bond_rating', 'face_value', 'reference_rate', 'coupon_rate', 'actual_circulation',
-                                'planned_circulation', 'issue_price', 'spread', 'frequency', 'bond_date', 'exercise_type',
-                                'exercise_date', 'trustee', 'circulation_scope']
-        self.purchase_island = ['admini_region', 'supervision_num', 'pruchase_trustee', 'trasaction_price', 'signed_date',
-                                'total_area', 'parcel_location', 'purchase_assignee', 'superior_company', 'land_use',
-                                'supply_mode', 'max_volume', 'min_volume', 'start_time', 'end_time', 'link_url']
-        self.the_employ = ['employ_position', 'employ_city', 'employ_area', 'employ_company', 'wage', 'experience', 'source',
+                                'planned_circulation', 'issue_price', 'spread', 'frequency', 'bond_date',
+                                 'exercise_type', 'exercise_date', 'trustee', 'circulation_scope']
+        self.purchase_island = ['admini_region', 'supervision_num', 'pruchase_trustee', 'trasaction_price',
+                                'signed_date', 'total_area', 'parcel_location', 'purchase_assignee', 'superior_company',
+                                'land_use', 'supply_mode', 'max_volume', 'min_volume', 'start_time', 'end_time',
+                                'link_url']
+        self.the_employ = ['employ_position', 'employ_city', 'employ_area', 'employ_company', 'wage', 'experience',
+                           'source',
                            'start_date', 'end_date', 'education', 'employ_num', 'position_desc']
         self.rating_tax = ['rating_year', 'rating_level', 'rating_type', 'rating_num', 'rating_office']
         self.random_check = ['check_date', 'check_type', 'check_result', 'check_office']
-        self.product_info = ['product_icon', 'product_title', 'product_short', 'product_type', 'product_field', 'product_desc']
+        self.product_info = ['product_icon', 'product_title', 'product_short', 'product_type', 'product_field',
+                             'product_desc']
         self.quality_cert = ['device_name', 'cert_type', 'cert_start', 'cert_end', 'device_num', 'permit_num']
         self.brand_info = ['brand_date', 'brand_icon', 'brand_name', 'brand_num', 'brand_type', 'brand_cond']
-        self.patent_info = ['patent_id', 'patent_pic', 'app_num', 'patent_num', 'category_num', 'patent_name', 'patent_address', 'inventor', 'applicant',
+        self.patent_info = ['patent_id', 'patent_pic', 'app_num', 'patent_num', 'category_num', 'patent_name',
+                            'patent_address', 'inventor', 'applicant',
                        'apply_date', 'publish_date', 'agency', 'agent', 'abstracts']
-        self.copyright_info = ['full_name', 'simple_name', 'reg_num', 'cat_num', 'version', 'author_nationality', 'first_publish', 'reg_time']
+        self.copyright_info = ['full_name', 'simple_name', 'reg_num', 'cat_num', 'version', 'author_nationality',
+                               'first_publish', 'reg_time']
         self.website_filing = ['record_date', 'web_name', 'web_url', 'record_num', 'web_status', 'unit_nature']
 
     def process_item(self, item, spider):

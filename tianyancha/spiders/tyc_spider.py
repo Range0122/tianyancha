@@ -29,12 +29,12 @@ class TianYanCha_Spider(CrawlSpider):
     def parse_basic_info(self, response):
         item = TianyanchaItem()
         company_id = response.url[34:]
-        company_name = response.selector.xpath('//div[@class="company_info_text"]/div[1]/text()').extract()[0]
-        legal_representative = response.selector.xpath(u'//div[text()="法定代表人"]/following-sibling::div[1]/a/text()').extract_first(default=u'未公开')
-        registered_capital = response.selector.xpath(u'//div[text()="注册资本"]/following-sibling::div[1]/text()').extract_first(default=u'未公开')
-        registered_time = response.selector.xpath(u'//div[text()="注册时间"]/following-sibling::div[1]/text()').extract_first(default=u'未公开')
-        condition = response.selector.xpath(u'//div[text()="状态"]/following-sibling::div[1]/text()').extract_first(default=u'未公开')
-        temp_items = response.selector.xpath('//td[@class="basic-td"]/div[1]/span/text()').extract()
+        company_name = response.selector.xpath('//div[@class="company_header_width"]/div[1]/span/text()').extract_first(default=u'未公开')
+        legal_representative = response.selector.xpath('//a[@ng-if="company.legalPersonName"]/text()').extract_first(default=u'未公开')
+        registered_capital = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[2]/div/text()').extract_first(default=u'未公开')
+        registered_time = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[3]/div/text()').extract_first(default=u'未公开')
+        condition = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[4]/div/text()').extract_first(default=u'未公开')
+        temp_items = response.selector.xpath('//div[@class="row b-c-white company-content base2017"]/table/tbody/tr/td/div/span/text() | //div[@class="row b-c-white company-content base2017"]/table/tbody/tr/td/div/span/span/text()').extract()
         registered_number = temp_items[0]
         organization_number = temp_items[1]
         credit_number = temp_items[2]
@@ -43,19 +43,19 @@ class TianYanCha_Spider(CrawlSpider):
         operating_period = temp_items[5]
         approved_date = temp_items[6]
         registration_authority = temp_items[7]
-        registered_address = response.selector.xpath('//td[@class="basic-td ng-scope"]/div/span/text()').extract_first(default=u'暂无')
-        business_scope = response.selector.xpath('//td[@class="basic-td ng-scope"]/div/span/span/text()').extract_first(default=u'暂无')
-        telephone = response.selector.xpath('//div[@class="company_info_text"]/span[1]/text()').extract_first(default=u'暂无')
-        email = response.selector.xpath('//div[@class="company_info_text"]/span[2]/text()').extract_first(default=u'暂无')
-        address = response.selector.xpath('//div[@class="company_info_text"]/span[4]/text()').extract_first(default=u'暂无')
-        website = response.selector.xpath('//div[@class="company_info_text"]/span[3]/a/text()').extract_first(default=u'暂无')
+        registered_address = temp_items[8]
+        business_scope = temp_items[9]
+        telephone = response.selector.xpath(u'//span[text()="电话："]/following-sibling::span[1]/text()').extract_first(default=u'暂无')
+        email = response.selector.xpath(u'//span[text()="邮箱："]/following-sibling::span[1]/text()').extract_first(default=u'暂无')
+        address = response.selector.xpath(u'//span[text()="地址："]/following-sibling::span[1]/text()').extract_first(default=u'暂无')
+        website = response.selector.xpath(u'//span[text()="网址："]/following-sibling::a[1]/text()').extract_first(default=u'暂无')
         score = response.selector.xpath('//td[@class="td-score position-rel"]/img/@ng-alt | //img[@class="td-score-img"]/@ng-alt').extract()[0][-2:]
-        logo_location = response.selector.xpath('//div[@class="company_info"]/div[1]/img/@src').extract()[0]
-        former_name = response.selector.xpath(u'//span[text()="曾用名"]/following-sibling::span[2]/text()').extract_first(default=u'无')
+        logo_location = response.selector.xpath(u'//img[@alt="公司图标"]/@src').extract_first(default=u'暂无')
+        former_name = response.selector.xpath('//dic[@ng-if="company.historyNames"]/div/text()').extract_first(default=u'无')
 
-        flag = response.selector.xpath('//div[@class="company_container"]/div/div/div/@class').extract()
+        flag = response.selector.xpath('//div[@class="navigation new-border new-c3"]/div/div/div/div/@class').extract()
         for i in range(0, len(flag)):
-            if flag[i][-7:] is u'disable':
+            if flag[i][-7:] == 'disable':
                 flag[i] = 0
             else:
                 flag[i] = 1
@@ -216,10 +216,6 @@ class TianYanCha_Spider(CrawlSpider):
 
                 safe_append_date(registered_date, dic, 'estiblishTime')
                 safe_append(condit, dic, 'regStatus')
-
-
-
-
 
 
         item["invested_company_id"] = invested_company_id
