@@ -1,15 +1,21 @@
-[INFO  - 2017-04-12T03:54:37.123Z] GhostDriver - Main - running on port 55505
-[INFO  - 2017-04-12T03:54:40.488Z] Session [c14b4c20-1f33-11e7-a305-f96587b89ecd] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.0.249.0 Safari/532.5","webSecurityEnabled":true}
-[INFO  - 2017-04-12T03:54:40.488Z] Session [c14b4c20-1f33-11e7-a305-f96587b89ecd] - page.customHeaders:  - {}
-[INFO  - 2017-04-12T03:54:40.488Z] Session [c14b4c20-1f33-11e7-a305-f96587b89ecd] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"},"phantomjs.page.settings.loadImages":false,"phantomjs.page.settings.userAgent":"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.0.249.0 Safari/532.5"}
-[INFO  - 2017-04-12T03:54:40.488Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: c14b4c20-1f33-11e7-a305-f96587b89ecd
-[ERROR - 2017-04-12T03:54:41.757Z] Session [c14b4c20-1f33-11e7-a305-f96587b89ecd] - page.onError - msg: TypeError: Attempting to configurable attribute of unconfigurable property.
+[INFO  - 2017-04-12T06:17:55.455Z] GhostDriver - Main - running on port 64028
+[INFO  - 2017-04-12T06:17:58.765Z] Session [c6443f70-1f47-11e7-bffd-2f6047b670ee] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.27 (KHTML, like Gecko) Chrome/12.0.712.0 Safari/534.27","webSecurityEnabled":true}
+[INFO  - 2017-04-12T06:17:58.765Z] Session [c6443f70-1f47-11e7-bffd-2f6047b670ee] - page.customHeaders:  - {}
+[INFO  - 2017-04-12T06:17:58.766Z] Session [c6443f70-1f47-11e7-bffd-2f6047b670ee] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"},"phantomjs.page.settings.loadImages":false,"phantomjs.page.settings.userAgent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.27 (KHTML, like Gecko) Chrome/12.0.712.0 Safari/534.27"}
+[INFO  - 2017-04-12T06:17:58.766Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: c6443f70-1f47-11e7-bffd-2f6047b670ee
+[ERROR - 2017-04-12T06:17:59.849Z] Session [c6443f70-1f47-11e7-bffd-2f6047b670ee] - page.onError - msg: TypeError: Attempting to configurable attribute of unconfigurable property.
 
   phantomjs://platform/console++.js:263 in error
-[ERROR - 2017-04-12T03:54:41.757Z] Session [c14b4c20-1f33-11e7-a305-f96587b89ecd] - page.onError - stack:
+[ERROR - 2017-04-12T06:17:59.850Z] Session [c6443f70-1f47-11e7-bffd-2f6047b670ee] - page.onError - stack:
   defineProperty (http://dn-growing.qbox.me/vds.js:2)
   registerHistoryHandler (http://dn-growing.qbox.me/vds.js:2)
   domLoadedHandler (http://dn-growing.qbox.me/vds.js:2)
+  observe (http://dn-growing.qbox.me/vds.js:2)
+  s (http://dn-growing.qbox.me/vds.js:2)
+  connect (http://dn-growing.qbox.me/vds.js:2)
+  connect (http://dn-growing.qbox.me/vds.js:4)
   (anonymous function) (http://dn-growing.qbox.me/vds.js:2)
+  i (http://dn-growing.qbox.me/vds.js:1)
+  t (http://dn-growing.qbox.me/vds.js:1)
 
   phantomjs://platform/console++.js:263 in error

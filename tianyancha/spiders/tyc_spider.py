@@ -31,9 +31,9 @@ class TianYanCha_Spider(CrawlSpider):
         company_id = response.url[34:]
         company_name = response.selector.xpath('//div[@class="company_header_width"]/div[1]/span/text()').extract_first(default=u'未公开')
         legal_representative = response.selector.xpath('//a[@ng-if="company.legalPersonName"]/text()').extract_first(default=u'未公开')
-        registered_capital = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[2]/div/text()').extract_first(default=u'未公开')
-        registered_time = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[3]/div/text()').extract_first(default=u'未公开')
-        condition = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[4]/div/text()').extract_first(default=u'未公开')
+        registered_capital = response.selector.xpath('//dic[@class="baseInfo_model2017"]/table/tbody/tr/td[2]/div/text()').extract_first(default=u'未公开')
+        registered_time = response.selector.xpath('//dic[@class="baseInfo_model2017"]/table/tbody/tr/td[3]/div/text()').extract_first(default=u'未公开')
+        condition = response.selector.xpath('//dic[@class="baseInfo_model2017"]/table/tbody/tr/td[4]/div/text()').extract_first(default=u'未公开')
         temp_items = response.selector.xpath('//div[@class="row b-c-white company-content base2017"]/table/tbody/tr/td/div/span/text() | //div[@class="row b-c-white company-content base2017"]/table/tbody/tr/td/div/span/span/text()').extract()
         registered_number = temp_items[0]
         organization_number = temp_items[1]
@@ -131,8 +131,13 @@ class TianYanCha_Spider(CrawlSpider):
         subscribed_contribution_time = item["subscribed_contribution_time"]
         really_contribution = item["really_contribution"]
 
+        data = json.loads(response.body)
+        try:
+            temp = data["data"]["result"]
+        except:
+            flag[3] = 0
+
         if flag[3] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["result"]:
                 try:
                     shareholder_id.append(dic["id"] or u'无')
@@ -204,8 +209,13 @@ class TianYanCha_Spider(CrawlSpider):
         registered_date = item["registered_date"]
         condit = item["condit"]
 
+        data = json.loads(response.body)
+        try:
+            temp = data["data"]["result"]
+        except:
+            flag[4] = 0
+
         if flag[4] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["result"]:
                 safe_append(invested_company_id, dic, 'id')
                 safe_append(invested_company_name, dic, 'name')
@@ -252,8 +262,13 @@ class TianYanCha_Spider(CrawlSpider):
         before_change = item["before_change"]
         after_change = item["after_change"]
 
+        data = json.loads(response.body)
+        try:
+            temp = data["data"]["result"]
+        except:
+            flag[5] = 0
+
         if flag[5] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["result"]:
                 try:
                     change_time.append(dic["changeTime"] or u'无')
@@ -295,8 +310,13 @@ class TianYanCha_Spider(CrawlSpider):
         annual_year = ['None']
         annual_url = ['None']
 
+        data = json.loads(response.body)
+        try:
+            temp = data["data"]
+        except:
+            flag[6] = 0
+
         if flag[6] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]:
                 try:
                     url = 'http://www.tianyancha.com/reportContent/' + str(item["company_id"]) + '/' + str(dic["reportYear"])
@@ -333,8 +353,13 @@ class TianYanCha_Spider(CrawlSpider):
         branch_cond = item["branch_cond"]
         branch_regtime = item["branch_regtime"]
 
+        data = json.loads(response.body)
+        try:
+            temp = data["data"]["result"]
+        except:
+            flag[7] = 0
+
         if flag[7] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["result"]:
                 try:
                     branch_id.append(dic["id"] or u'无')
@@ -388,8 +413,13 @@ class TianYanCha_Spider(CrawlSpider):
         news_title = item["news_title"]
         news_url = item["news_url"]
 
+        data = json.loads(response.body)
+        try:
+            temp = data["data"]["page"]["rows"]
+        except:
+            flag[8] = 0
+
         if flag[8] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["page"]["rows"]:
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["date"])[:10])))
@@ -457,8 +487,13 @@ class TianYanCha_Spider(CrawlSpider):
         member_intro = item["member_intro"]
         member_icon = item["member_icon"]
 
+        data = json.loads(response.body)
+        try:
+            temp = data["data"]["page"]["rows"]
+        except:
+            flag[9] = 0
+
         if flag[9] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["page"]["rows"]:
                 try:
                     member_name.append(dic["name"] or u'无')
@@ -510,8 +545,13 @@ class TianYanCha_Spider(CrawlSpider):
         product_short = item["business_intro"]
         product_logo = item["business_logo"]
 
+        data = json.loads(response.body)
+        try:
+            temp = data["data"]["page"]["rows"]
+        except:
+            flag[10] = 0
+
         if flag[10] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["page"]["rows"]:
                 try:
                     product_name.append(dic["product"] or u'无')
