@@ -120,6 +120,9 @@ class TianyanchaItem(scrapy.Item):
     setup_date = scrapy.Field()
     product_valuation = scrapy.Field()
 
+    # 司法风险-法律诉讼
+    
+
     # 司法风险-法院公告
     announce_time = scrapy.Field()
     appeal = scrapy.Field()
@@ -207,7 +210,6 @@ class TianyanchaItem(scrapy.Item):
     bid_time = scrapy.Field()
     bid_title = scrapy.Field()
     bid_purchaser = scrapy.Field()
-    bid_content = scrapy.Field()
 
     # 经营状况-债券信息
     bond_name = scrapy.Field()

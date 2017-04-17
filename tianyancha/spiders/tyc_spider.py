@@ -31,9 +31,9 @@ class TianYanCha_Spider(CrawlSpider):
         company_id = response.url[34:]
         company_name = response.selector.xpath('//div[@class="company_header_width"]/div[1]/span/text()').extract_first(default=u'未公开')
         legal_representative = response.selector.xpath('//a[@ng-if="company.legalPersonName"]/text()').extract_first(default=u'未公开')
-        registered_capital = response.selector.xpath('//dic[@class="baseInfo_model2017"]/table/tbody/tr/td[2]/div/text()').extract_first(default=u'未公开')
-        registered_time = response.selector.xpath('//dic[@class="baseInfo_model2017"]/table/tbody/tr/td[3]/div/text()').extract_first(default=u'未公开')
-        condition = response.selector.xpath('//dic[@class="baseInfo_model2017"]/table/tbody/tr/td[4]/div/text()').extract_first(default=u'未公开')
+        registered_capital = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[2]/div/text()').extract_first(default=u'未公开')
+        registered_time = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[3]/div/text()').extract_first(default=u'未公开')
+        condition = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[4]/div/text()').extract_first(default=u'未公开')
         temp_items = response.selector.xpath('//div[@class="row b-c-white company-content base2017"]/table/tbody/tr/td/div/span/text() | //div[@class="row b-c-white company-content base2017"]/table/tbody/tr/td/div/span/span/text()').extract()
         registered_number = temp_items[0]
         organization_number = temp_items[1]
@@ -51,7 +51,7 @@ class TianYanCha_Spider(CrawlSpider):
         website = response.selector.xpath(u'//span[text()="网址："]/following-sibling::a[1]/text()').extract_first(default=u'暂无')
         score = response.selector.xpath('//td[@class="td-score position-rel"]/img/@ng-alt | //img[@class="td-score-img"]/@ng-alt').extract()[0][-2:]
         logo_location = response.selector.xpath(u'//img[@alt="公司图标"]/@src').extract_first(default=u'暂无')
-        former_name = response.selector.xpath('//dic[@ng-if="company.historyNames"]/div/text()').extract_first(default=u'无')
+        former_name = response.selector.xpath('//div[@ng-if="company.historyNames"]/div/text()').extract_first(default=u'无')
 
         flag = response.selector.xpath('//div[@class="navigation new-border new-c3"]/div/div/div/div/@class').extract()
         for i in range(0, len(flag)):
@@ -312,14 +312,14 @@ class TianYanCha_Spider(CrawlSpider):
 
         data = json.loads(response.body)
         try:
-            temp = data["data"]
+            temp = data["data"]["company_id"]
         except:
             flag[6] = 0
 
         if flag[6] is 1:
             for dic in data["data"]:
                 try:
-                    url = 'http://www.tianyancha.com/reportContent/' + str(item["company_id"]) + '/' + str(dic["reportYear"])
+                    url = 'http://www.tianyancha.com/annualreport/newReport.json?id=' + str(item["company_id"]) + '&year=' + str(dic["reportYear"])
                     annual_url.append(url)
                 except:
                     annual_url.append(u'无')
@@ -327,7 +327,6 @@ class TianYanCha_Spider(CrawlSpider):
                     annual_year.append(dic["reportYear"] or u'无')
                 except:
                     annual_year.append(u'无')
-
 
         item["annual_year"] = annual_year
         item["annual_url"] = annual_url
@@ -1429,7 +1428,6 @@ class TianYanCha_Spider(CrawlSpider):
         bid_time = item["bid_time"]
         bid_title = item["bid_title"]
         bid_purchaser = item["bid_purchaser"]
-        bid_content = item["bid_content"]
 
         try:
             data = json.loads(response.body)
@@ -1459,11 +1457,6 @@ class TianYanCha_Spider(CrawlSpider):
                     bid_purchaser.append(dic["purchaser"] or u'无')
                 except:
                     bid_purchaser.append(u'无')
-
-                try:
-                    bid_content.append(dic["content"] or u'无')
-                except:
-                    bid_content.append(u'无')
 
         item["bid_url"] = bid_url
         item["bid_time"] = bid_time
@@ -2189,7 +2182,6 @@ class TianYanCha_Spider(CrawlSpider):
                 except:
                     cert_end.append(u'无')
 
-
         item["device_name"] = device_name
         item["cert_type"] = cert_type
         item["cert_start"] = cert_start
@@ -2513,7 +2505,7 @@ class TianYanCha_Spider(CrawlSpider):
 
         data = json.loads(response.body)
         try:
-            test = data["data"]["items"]
+            test = data["data"]
         except:
             flag[34] = 0
 
