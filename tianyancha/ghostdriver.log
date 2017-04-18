@@ -1,12 +1,12 @@
-[INFO  - 2017-04-18T07:43:26.804Z] GhostDriver - Main - running on port 58804
-[INFO  - 2017-04-18T07:43:27.879Z] Session [b5ef6f10-240a-11e7-a106-0b853304a9b4] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.24 Safari/535.1","webSecurityEnabled":true}
-[INFO  - 2017-04-18T07:43:27.879Z] Session [b5ef6f10-240a-11e7-a106-0b853304a9b4] - page.customHeaders:  - {}
-[INFO  - 2017-04-18T07:43:27.879Z] Session [b5ef6f10-240a-11e7-a106-0b853304a9b4] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"},"phantomjs.page.settings.loadImages":false,"phantomjs.page.settings.userAgent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.24 Safari/535.1"}
-[INFO  - 2017-04-18T07:43:27.880Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: b5ef6f10-240a-11e7-a106-0b853304a9b4
-[ERROR - 2017-04-18T07:43:29.092Z] Session [b5ef6f10-240a-11e7-a106-0b853304a9b4] - page.onError - msg: TypeError: Attempting to configurable attribute of unconfigurable property.
+[INFO  - 2017-04-18T08:55:37.714Z] GhostDriver - Main - running on port 62725
+[INFO  - 2017-04-18T08:55:38.776Z] Session [cb5a0630-2414-11e7-9c03-f7507d3b483c] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11","webSecurityEnabled":true}
+[INFO  - 2017-04-18T08:55:38.776Z] Session [cb5a0630-2414-11e7-9c03-f7507d3b483c] - page.customHeaders:  - {}
+[INFO  - 2017-04-18T08:55:38.776Z] Session [cb5a0630-2414-11e7-9c03-f7507d3b483c] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"},"phantomjs.page.settings.loadImages":false,"phantomjs.page.settings.userAgent":"Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11"}
+[INFO  - 2017-04-18T08:55:38.776Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: cb5a0630-2414-11e7-9c03-f7507d3b483c
+[ERROR - 2017-04-18T08:55:39.574Z] Session [cb5a0630-2414-11e7-9c03-f7507d3b483c] - page.onError - msg: TypeError: Attempting to configurable attribute of unconfigurable property.
 
   phantomjs://platform/console++.js:263 in error
-[ERROR - 2017-04-18T07:43:29.092Z] Session [b5ef6f10-240a-11e7-a106-0b853304a9b4] - page.onError - stack:
+[ERROR - 2017-04-18T08:55:39.574Z] Session [cb5a0630-2414-11e7-9c03-f7507d3b483c] - page.onError - stack:
   defineProperty (http://dn-growing.qbox.me/vds.js:2)
   registerHistoryHandler (http://dn-growing.qbox.me/vds.js:2)
   domLoadedHandler (http://dn-growing.qbox.me/vds.js:2)

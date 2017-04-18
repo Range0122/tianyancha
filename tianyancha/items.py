@@ -234,6 +234,8 @@ class TianyanchaItem(scrapy.Item):
     bid_time = scrapy.Field()
     bid_title = scrapy.Field()
     bid_purchaser = scrapy.Field()
+    bid_content = scrapy.Field()
+    bid_related = scrapy.Field()
 
     # 经营状况-债券信息
     bond_name = scrapy.Field()

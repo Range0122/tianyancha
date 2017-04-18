@@ -135,6 +135,12 @@ def safe_append(list, dic, key):
     except:
         list.append(u'无')
 
+def safe_appends(list, dic, key1, key2):
+    try:
+        list.append(str(dic[key1][key2]) or u'无')
+    except:
+        list.append(u'无')
+
 def safe_append_date(list, dic, key):
     try:
         date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic[key])[:10])))
