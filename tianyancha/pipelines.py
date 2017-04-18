@@ -14,27 +14,65 @@ class TianyanchaPipeline(object):
         self.dom = self.impl.createDocument(None, 'root', None)
         self.root = self.dom.documentElement
 
-        self.basic_info = ['company_name', 'company_id', 'legal_representative', 'registered_capital',
-                           'registered_time', 'condition', 'registered_number', 'organization_number', 'credit_number',
-                           'enterprise_type', 'industry', 'operating_period', 'approved_date', 'registration_authority',
-                           'registered_address', 'business_scope', 'telephone', 'email', 'website', 'logo_location',
-                           'address', 'score', 'former_name']
-        self.main_person = ['person_id', 'person_name', 'position']
-        self.shareholder_info = ['shareholder_id', 'shareholder_name', 'investment_proportion',
+        #企业信息表
+        self.basic_info = ['company_id', 'company_name', 'legal_representative', 'registered_number',
+                           'organization_number', 'credit_number',  'enterprise_type', 'industry', 'registered_capital',
+                           'registered_time', 'registered_address', 'business_scope', 'operating_start',
+                           'operating_end', 'operating_start', 'condition', 'approved_date', 'registration_authority',
+                           'telephone', 'website', 'email', 'address', 'logo_location', 'score', 'former_name']
+        # 自然人信息表
+        ['自增', 'person_id', 'person_name']
+
+        # 企业人员关系表
+        self.main_person = ['自增', 'company_id', 'person_id', 'position']
+
+        # 入股信息表
+        self.shareholder_info = ['自增', 'shareholder_id', 'shareholder_name', 'investment_proportion',
                                  'subscribed_contribution', 'subscribed_contribution_time', 'really_contribution']
-        self.investment = ['invested_company_id', 'invested_company_name', 'invested_representative', 'registered_cap',
-                           'investment_amount', 'investment_prop', 'registered_date', 'condit']
-        self.change_record = ['change_time', 'change_item', 'before_change', 'after_change']
-        self.annual_reports = ['annual_year', 'annual_url']
-        self.branches = ['branch_id', 'branch_name', 'branch_legalrep', 'branch_cond', 'branch_regtime']
-        self.finance_history = ['finance_date', 'finance_round', 'valuation', 'finance_amount', 'finance_proportion',
-                                'investor', 'news_title', 'news_url']
-        self.core_team = ['member_name', 'member_pos', 'member_intro', 'member_icon']
-        self.enterprise_business = ['business_name', 'business_type', 'business_intro', 'business_logo']
-        self.investment_event = ['invest_time', 'invest_round', 'invest_amount', 'invest_company', 'invest_product',
+
+        # 对外投资
+        self.investment = ['自增', 'invested_company_id', 'company_id', 'investment_amount',
+                           'investment_prop', 'invested_company_name', 'invested_representative',
+                            'registered_cap', 'registered_date', 'condit']
+
+        # 变更记录
+        self.change_record = ['自增', 'company_id', 'change_time', 'change_item', 'before_change', 'after_change']
+
+        # 企业年报
+        self.annual_reports = ['自增', 'company_id', 'annual_year', 'annual_url']
+
+        # 详细年报
+        ['自增', 'company_id', 'total_assets', 'total_sales', 'mainbusiness_income', 'total_tax', 'total_ownersequity',
+         'total_profit', 'retained_profits', 'total_liabilities']
+
+        # 修改事项（添加，年报中的内容）
+        ['自增', 'company_id', 'amend_date', 'amend_event', 'before_amend', 'after_amend']
+
+        # 融资历史
+        self.finance_history = ['自增', 'company_id', 'finance_date', 'finance_round', 'valuation', 'finance_amount',
+                                'investor', 'finance_proportion', 'news_title', 'news_url']
+
+        # 分支机构
+        self.branches = ['自增', 'company_id', 'branch_id', 'branch_name', 'branch_legalrep', 'branch_cond', 'branch_regtime']
+
+        # 核心团队表
+        self.core_team = ['自增', 'company_id', 'member_icon', 'member_name', 'member_pos', 'member_intro']
+
+        # 业务信息表
+        self.enterprise_business = ['自增', 'company_id', 'business_name', 'business_type', 'business_intro', 'business_logo']
+
+        # 投资事件表
+        self.investment_event = ['自增', 'invest_time', 'invest_round', 'invest_amount', 'invest_company', 'invest_product',
                                  'invest_pro_icon', 'invest_area', 'invest_industry', 'invest_business']
-        self.competing_product = ['product_name', 'product_logo', 'product_area', 'product_round', 'product_industry',
+
+        # 竞品信息
+        self.competing_product = ['自增', 'company_id', 'product_name', 'product_logo', 'product_area', 'product_round', 'product_industry',
                                   'product_business', 'setup_date', 'product_valuation']
+
+        # 法律诉讼表
+        self.lawsuit=['自增', 'company_id', 'lawsuit_date', 'judgement_id', 'case_type']
+
+
         self.court_announcement = ['announce_time', 'appeal', 'respondent', 'announce_type', 'court',
                                    'announce_content']
         self.the_dishonest = ['dis_company', 'dic_legalrepre', 'dis_code', 'execute_number', 'case_number',

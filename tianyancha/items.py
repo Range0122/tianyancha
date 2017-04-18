@@ -24,7 +24,8 @@ class TianyanchaItem(scrapy.Item):
     credit_number = scrapy.Field()
     enterprise_type = scrapy.Field()
     industry = scrapy.Field()
-    operating_period = scrapy.Field()
+    operating_start = scrapy.Field()
+    operating_end = scrapy.Field()
     approved_date = scrapy.Field()
     registration_authority = scrapy.Field()
     registered_address = scrapy.Field()
@@ -135,9 +136,16 @@ class TianyanchaItem(scrapy.Item):
     product_valuation = scrapy.Field()
 
     # 司法风险-法律诉讼
+    judgement_name = scrapy.Field()
     lawsuit_date = scrapy.Field()
     judgement_id = scrapy.Field()
     case_type = scrapy.Field()
+
+    # 司法风险-裁判文书表
+    relative_comp = scrapy.Field()
+    judgement_title = scrapy.Field()
+    case_num = scrapy.Field()
+    judgement_content = scrapy.Field()
 
     # 司法风险-法院公告
     announce_time = scrapy.Field()

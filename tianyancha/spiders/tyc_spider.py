@@ -41,7 +41,8 @@ class TianYanCha_Spider(CrawlSpider):
         credit_number = temp_items[2]
         enterprise_type = temp_items[3]
         industry = temp_items[4]
-        operating_period = temp_items[5]
+        operating_start = [item[:10] for item in temp_items[5]]
+        operating_end = [item[-10:] for item in temp_items[5]]
         approved_date = temp_items[6]
         registration_authority = temp_items[7]
         registered_address = temp_items[8]
@@ -72,7 +73,8 @@ class TianYanCha_Spider(CrawlSpider):
         item["credit_number"] = credit_number
         item["enterprise_type"] = enterprise_type
         item["industry"] = industry
-        item["operating_period"] = operating_period
+        item["operating_start"] = operating_start
+        item["operating_start"] = operating_end
         item["approved_date"] = approved_date
         item["registration_authority"] = registration_authority
         item["registered_address"] = registered_address
@@ -411,9 +413,6 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
-
-        return item
-
         branch_id = item["branch_id"]
         branch_name = item["branch_name"]
         branch_legalrep = item["branch_legalrep"]
@@ -451,21 +450,21 @@ class TianYanCha_Spider(CrawlSpider):
             item["page"] += 1
             next_url = 'http://www.tianyancha.com/expanse/branch.json?id=' + str(item["company_id"]) + '&ps=10&pn=' + str(item["page"])
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_branch)
-        #     yield request
-        # else:
-        #     item["finance_date"] = ['None']
-        #     item["finance_round"] = ['None']
-        #     item["valuation"] = ['None']
-        #     item["finance_amount"] = ['None']
-        #     item["finance_proportion"] = ['None']
-        #     item["investor"] = ['None']
-        #     item["news_title"] = ['None']
-        #     item["news_url"] = ['None']
-        #     item["page"] = 1
-        #
-        #     next_url = 'http://www.tianyancha.com/expanse/findHistoryRongzi.json?name=' + str(item["company_name"]) + '&ps=10&pn=1'
-        #     request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_finance_history)
-        #     yield request
+            yield request
+        else:
+            item["finance_date"] = ['None']
+            item["finance_round"] = ['None']
+            item["valuation"] = ['None']
+            item["finance_amount"] = ['None']
+            item["finance_proportion"] = ['None']
+            item["investor"] = ['None']
+            item["news_title"] = ['None']
+            item["news_url"] = ['None']
+            item["page"] = 1
+
+            next_url = 'http://www.tianyancha.com/expanse/findHistoryRongzi.json?name=' + str(item["company_name"]) + '&ps=10&pn=1'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_finance_history)
+            yield request
 
     def parse_finance_history(self, response):
         flag = response.meta["flag"]
@@ -819,6 +818,7 @@ class TianYanCha_Spider(CrawlSpider):
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_competing_product)
             yield request
         else:
+            item["judgement_name"] = ['None']
             item["lawsuit_date"] = ['None']
             item["judgement_id"] = ['None']
             item["case_type"] = ['None']
@@ -831,16 +831,23 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
+        judgement_name = item["judgement_name"]
         lawsuit_date = item["lawsuit_date"]
         judgement_id = item["judgement_id"]
         case_type = item["case_type"]
 
+
         if flag[12] is 1:
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
+                safe_append(judgement_name, dic, 'title')
                 safe_append_date(lawsuit_date, dic, 'submittime')
                 safe_append(judgement_id, dic, 'uuid')
                 safe_append(case_type, dic, 'casetype')
+
+        item["lawsuit_date"] = lawsuit_date
+        item["judgement_id"] = judgement_id
+        item["case_type"] = case_type
 
         if len(response.body) > 3000:
             item["page"] += 1
@@ -848,13 +855,65 @@ class TianYanCha_Spider(CrawlSpider):
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_law_suit)
             yield request
         else:
+            if len(item["judgement_id"]) > 1:
+                item["relative_comp"] = ['None']
+                item["judgement_title"] = ['None']
+                item["case_num"] = ['None']
+                item["judgement_content"] = ['None']
+
+                item["page"] = 1
+                next_url = 'http://www.tianyancha.com/lawsuit/detail/' + item["judgement_id"][item["page"]] + '.json'
+                request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag},
+                                         callback=self.parse_lawsuit_detail)
+                yield request
+            else:
+                next_url = 'http://www.tianyancha.com/v2/court/' + str(item["company_name"]) + '.json?'
+                request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag},
+                                         callback=self.parse_court_announcement)
+                yield request
+
+    def parse_lawsuit_detail(self, response):
+        flag = response.meta["flag"]
+        item = response.meta["item"]
+
+        relative_comp = item["relative_comp"]
+        judgement_title = item["judgement_title"]
+        case_num = item["case_num"]
+        judgement_content = item["judgement_content"]
+
+        data = json.loads(response.body)
+
+        for dic in data["data"]:
+            relative_comp.append(list(set(re.findall(r'http://www.tianyancha.com/company/(\d*)', response.body))))
+            safe_append(judgement_title, dic, 'title')
+            safe_append(case_num, dic, 'caseno')
+            safe_append(judgement_content, dic, 'plaintext')
+
+        item["relative_comp"] = relative_comp
+        item["judgement_title"] = judgement_title
+        item["case_num"] = case_num
+        item["judgement_content"] = judgement_content
+
+        if item["page"] == len(item["judgement_id"]):
             next_url = 'http://www.tianyancha.com/v2/court/' + str(item["company_name"]) + '.json?'
-            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_court_announcement)
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag},
+                                     callback=self.parse_court_announcement)
+            yield request
+        else:
+            item["page"] += 1
+            next_url = 'http://www.tianyancha.com/lawsuit/detail/' + item["judgement_id"][item["page"]] + '.json'
+            request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag},
+                                     callback=self.parse_lawsuit_detail)
             yield request
 
     def parse_court_announcement(self, response):
         flag = response.meta["flag"]
         item = response.meta["item"]
+
+        print item["relative_comp"]
+        print item["judgement_title"]
+        print item["case_num"]
+        print item["judgement_content"]
 
         announce_time = ['None']
         appeal = ['None']
@@ -1240,12 +1299,10 @@ class TianYanCha_Spider(CrawlSpider):
                     regist_num.append(dic["regNumber"] or u'无')
                 except:
                     regist_num.append(u'无')
-
                 try:
                     regist_cond.append(dic["state"] or u'无')
                 except:
                     regist_cond.append(u'无')
-
                 try:
                     pledged_amount.append(dic["equityAmount"] or u'无')
                 except:
