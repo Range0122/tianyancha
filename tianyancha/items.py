@@ -79,6 +79,11 @@ class TianyanchaItem(scrapy.Item):
     retained_profits = scrapy.Field()
     total_liabilities = scrapy.Field()
 
+    amend_date = scrapy.Field()
+    amend_event = scrapy.Field()
+    before_amend = scrapy.Field()
+    after_amend = scrapy.Field()
+
     # 企业背景-分支机构
     branch_id = scrapy.Field()
     branch_name = scrapy.Field()
