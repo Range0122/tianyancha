@@ -7,6 +7,7 @@
 
 import time
 import random
+import codecs
 from scrapy import signals
 from selenium import webdriver
 from scrapy.http import HtmlResponse
@@ -110,6 +111,15 @@ class RotateUserAgentMiddleware(object):
         ua = random.choice(self.user_agent_list)
         request.headers.setdefault('User-Agent', ua)
 
+        # with codecs.open('F:\PycharmProjects\\tianyancha\ip_list.txt', 'r') as f:
+        #     ip_list = f.readlines()
+        #     for i in range(len(ip_list)):
+        #         ip_list[i] = 'http://' + ip_list[i].replace('\r\n', '')
+        #
+        # proxy_ip = random.choice(ip_list)
+        # print proxy_ip
+        # request.meta['proxy'] = proxy_ip
+
     user_agent_list = [
         'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
         'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
@@ -135,11 +145,13 @@ def safe_append(list, dic, key):
     except:
         list.append(u'无')
 
+
 def safe_appends(list, dic, key1, key2):
     try:
         list.append(str(dic[key1][key2]) or u'无')
     except:
         list.append(u'无')
+
 
 def safe_append_date(list, dic, key):
     try:

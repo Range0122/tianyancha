@@ -4,537 +4,1022 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-import xml.dom.minidom
-import codecs
-
-
+import MySQLdb
+import traceback
 class TianyanchaPipeline(object):
+    # def date_insert(self, item, db_name, selfcol):
+    #     memory = []
+    #     value = ',%s'
+    #     for i in xrange(len(selfcol)):
+    #         memory.append(item[selfcol[i]])
+    #     value_number = len(memory)
+    #     while (value_number > 0):
+    #         value += value
+    #         value_number = value_number - 1
+    #     for i in xrange(0, len(memory[0])):
+    #         try:
+    #             self.cursor.execute("INSERT INTO " + db_name + " "
+    #                                                            "VALUES(NULL," + item["company_id"]+value + ")",
+    #                                 tuple(str(x[i]) for x in memory))
+    #         except Exception,e:
+    #             print (tuple(str(x[i]) for x in memory) + "insert not success")
+    #             pass
+
     def __init__(self):
-        self.impl = xml.dom.minidom.getDOMImplementation()
-        self.dom = self.impl.createDocument(None, 'root', None)
-        self.root = self.dom.documentElement
+        self.conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="123456", db="Kbase", port=3306,
+                                    charset="utf8")
+        self.cursor = self.conn.cursor()
 
-        #企业信息表
-        self.basic_info = ['company_id', 'company_name', 'legal_representative', 'registered_number',
-                           'organization_number', 'credit_number',  'enterprise_type', 'industry', 'registered_capital',
-                           'registered_time', 'registered_address', 'business_scope', 'operating_start',
-                           'operating_end', 'operating_start', 'condition', 'approved_date', 'registration_authority',
-                           'telephone', 'website', 'email', 'address', 'logo_location', 'score', 'former_name']
-        # 自然人信息表
-        ['自增', 'person_id', 'person_name']
+        self.company = ['company_id',
+                        'company_name',
+                        'legal_representative',
+                        'registered_number',
+                        'organization_number',
+                        'credit_number',
+                        'enterprise_type',
+                        'industry',
+                        'registered_capital',
+                        'registered_time',
+                        'registered_address',
+                        'business_scope',
+                        'operating_start',
+                        'operating_end',
+                        'condition',
+                        'approved_date',
+                        'registration_authority',
+                        'telephone',
+                        'website',
+                        'email',
+                        'address',
+                        'logo_location',
+                        'score',
+                        'former_name']
+        self.person = ['person_id',
+                       'person_name']
+        self.main_person = ['person_id',
+                            'position']
+        self.shareholder_info = [
+            'investment_proportion',
+            'subscribed_contribution',
+            'subscribed_contribution_time',
+            'really_contribution']
+        self.investment = [
+            'invested_company_id',
+            'investment_amount',
+            'investment_prop',
+            'invested_company_name',
+            'invested_representative',
+            'registered_cap',
+            'registered_date',
+            'condit']
+        self.change_record = ['change_time',
+                              'change_item',
+                              'before_change',
+                              'after_change']
+        self.annual_reports = ['annual_year',
+                               'annual_url']
+        self.detailed_report = ['total_assets',
+                                'total_sales',
+                                'mainbusiness_income',
+                                'total_tax',
+                                'total_ownersequity',
+                                'total_profit',
+                                'retained_profits',
+                                'total_liabilities']
+        self.amendment = ['amend_date',
+                          'amend_event',
+                          'before_amend',
+                          'after_amend', ]
+        self.branches = ['branch_id',
+                         'branch_name',
+                         'branch_legalrep',
+                         'branch_cond',
+                         'branch_regtime']
+        self.finance_history = [
+            'finance_date',
+            'finance_round',
+            'valuation',
+            'finance_amount',
+            'investor',
+            'finance_proportion',
+            'news_url',]
+        self.core_team = ['member_icon',
+                          'member_name',
+                          'member_pos',
+                          'member_intro']
+        self.enterprise_business = ['business_name',
+                                    'business_type',
+                                    'business_intro',
+                                    'business_logo']
+        self.investment_event = ['invest_time',
+                                 'invest_round',
+                                 'invest_amount',
+                                 'invest_company',
+                                 'invest_product',
+                                 'invest_pro_icon',
+                                 'invest_area',
+                                 'invest_industry',
+                                 'invest_business']
+        self.competing_product = ['product_name',
+                                  'product_logo',
+                                  'product_area',
+                                  'product_round',
+                                  'product_industry',
+                                  'product_business',
+                                  'setup_date',
+                                  'product_valuation']
+        # 法律诉讼表  item->
+        self.law_suit = [
+            'lawsuit_date',
+            'judgement_id ',
+            'case_type']
 
-        # 企业人员关系表
-        self.main_person = ['自增', 'company_id', 'person_id', 'position']
+        # 裁判文书表   item->
+        self.judgement = [
+            'relative_comp',
+            'judgement_title',
+            'case_num',
+            'judgement_name',
+            'judgement_content']
 
-        # 入股信息表
-        self.shareholder_info = ['自增', 'shareholder_id', 'shareholder_name', 'investment_proportion',
-                                 'subscribed_contribution', 'subscribed_contribution_time', 'really_contribution']
-
-        # 对外投资
-        self.investment = ['自增', 'invested_company_id', 'company_id', 'investment_amount',
-                           'investment_prop', 'invested_company_name', 'invested_representative',
-                            'registered_cap', 'registered_date', 'condit']
-
-        # 变更记录
-        self.change_record = ['自增', 'company_id', 'change_time', 'change_item', 'before_change', 'after_change']
-
-        # 企业年报
-        self.annual_reports = ['自增', 'company_id', 'annual_year', 'annual_url']
-
-        # 详细年报
-        ['自增', 'company_id', 'total_assets', 'total_sales', 'mainbusiness_income', 'total_tax', 'total_ownersequity',
-         'total_profit', 'retained_profits', 'total_liabilities']
-
-        # 修改事项（添加，年报中的内容）
-        ['自增', 'company_id', 'amend_date', 'amend_event', 'before_amend', 'after_amend']
-
-        # 融资历史
-        self.finance_history = ['自增', 'company_id', 'finance_date', 'finance_round', 'valuation', 'finance_amount',
-                                'investor', 'finance_proportion', 'news_title', 'news_url']
-
-        # 分支机构
-        self.branches = ['自增', 'company_id', 'branch_id', 'branch_name', 'branch_legalrep', 'branch_cond', 'branch_regtime']
-
-        # 核心团队表
-        self.core_team = ['自增', 'company_id', 'member_icon', 'member_name', 'member_pos', 'member_intro']
-
-        # 业务信息表
-        self.enterprise_business = ['自增', 'company_id', 'business_name', 'business_type', 'business_intro', 'business_logo']
-
-        # 投资事件表
-        self.investment_event = ['自增', 'invest_time', 'invest_round', 'invest_amount', 'invest_company', 'invest_product',
-                                 'invest_pro_icon', 'invest_area', 'invest_industry', 'invest_business']
-
-        # 竞品信息
-        self.competing_product = ['自增', 'company_id', 'product_name', 'product_logo', 'product_area', 'product_round', 'product_industry',
-                                  'product_business', 'setup_date', 'product_valuation']
-
-        # 法律诉讼表
-        self.lawsuit=['自增', 'company_id', 'lawsuit_date', 'judgement_id', 'case_type']
-
-
-        self.court_announcement = ['announce_time', 'appeal', 'respondent', 'announce_type', 'court',
+        self.court_announcement = ['announce_time',
+                                   'appeal',
+                                   'respondent',
+                                   'announce_type',
+                                   'court',
                                    'announce_content']
-        self.the_dishonest = ['dis_company', 'dic_legalrepre', 'dis_code', 'execute_number', 'case_number',
-                              'execute_unite', 'legal_obligation', 'performance', 'execute_court', 'province',
-                              'filing_time', 'pub_time']
-        self.the_executed = ['filing_date', 'executed_target', 'case_code', 'executed_court']
-        self.abnormal_management = ['include_date', 'include_reason', 'include_authority']
-        self.adminis_pubnish = ['pub_code', 'pub_type', 'pub_content', 'pub_date', 'pub_authority', 'pub_people']
-        self.seriously_illegal = ['set_time', 'set_reason', 'set_department']
-        self.equity_pledge = ['regist_date', 'regist_num', 'regist_cond', 'pledged_amount', 'pledgor', 'pledged_code',
-                              'pledgee', 'pledgee_code']
-        self.chattel_mortgage = ['registed_num', 'registed_depart', 'registed_date', 'registed_cond', 'vouched_type',
-                                 'vouched_amount', 'debt_deadline', 'vouched_range', 'cancel_date', 'cancel_reason']
-        self.sub_chattel_mortgage1 = ['mortgagee_name', 'mortgagee_type', 'id_number']
-        self.sub_chattel_mortgage2 = ['pawn_name', 'pawn_belong', 'pawn_condition']
-        self.owe_tax = ['tax_date', 'tax_num', 'tax_type', 'tax_current', 'tax_balance', 'tax_depart']
-        self.bidding = ['bid_url', 'bid_time', 'bid_title', 'bid_purchaser']
-        self.bond_information = ['bond_name', 'bond_code', 'bond_publisher', 'bond_type', 'bond_start', 'bond_end',
-                                'bond_duration', 'trading_day', 'interest_mode', 'bond_delisting', 'credit_agency',
-                                'bond_rating', 'face_value', 'reference_rate', 'coupon_rate', 'actual_circulation',
-                                'planned_circulation', 'issue_price', 'spread', 'frequency', 'bond_date',
-                                 'exercise_type', 'exercise_date', 'trustee', 'circulation_scope']
-        self.purchase_island = ['admini_region', 'supervision_num', 'pruchase_trustee', 'trasaction_price',
-                                'signed_date', 'total_area', 'parcel_location', 'purchase_assignee', 'superior_company',
-                                'land_use', 'supply_mode', 'max_volume', 'min_volume', 'start_time', 'end_time',
-                                'link_url']
-        self.the_employ = ['employ_position', 'employ_city', 'employ_area', 'employ_company', 'wage', 'experience',
+        self.the_dishonest = ['execute_number',
+                              'case_number',
+                              'execute_unite',
+                              'legal_obligation',
+                              'performance',
+                              'execute_court',
+                              'province',
+                              'filing_time',
+                              'pub_time']
+        self.the_executed = ['filing_date',
+                             'executed_target',
+                             'case_code',
+                             'executed_court']
+        self.adminis_pubnish = ['pub_date',
+                                'pub_code',
+                                'pub_type',
+                                'pub_authority',
+                                'pub_content',
+                                ]
+        self.seriously_illegal = ['set_time',
+                                  'set_reason',
+                                  'set_department']
+        self.equity_pledge = ['regist_date',
+                              'regist_num',
+                              'pledgor',
+                              'pledgee',
+                              'regist_cond',
+                              'regist_date',
+                              'pledged_amount',
+                              'pledged_code',
+                              'pledgee_code',
+                              'pledge_remark']
+        self.chattel_mortgage = ['registed_num',
+                                 'registed_depart',
+                                 'registed_date',
+                                 'mortgagee_info',
+                                 'registed_cond',
+                                 'vouched_type',
+                                 'vouched_amount',
+                                 'debt_start',
+                                 'debt_end',
+                                 'vouched_range',
+                                 'pawn_remark',
+                                 'pawn_info']
+        self.owe_tax = ['tax_date',
+                        'tax_num',
+                        'tax_type',
+                        'tax_current',
+                        'tax_balance',
+                        'tax_depart']
+        self.bidding = [
+            'bid_time',
+            'rfp_id',
+            'bid_purchaser']
+        self.RFP = [
+            'bid_title',
+            'bid_time',
+            'bid_related',
+            'bid_content'
+        ]
+
+        self.bond_information = ['bond_name',
+                                 'bond_publisher',
+                                 'bond_start',
+                                 'bond_start',
+                                 'bond_duration',
+                                 'interest_mode',
+                                 'credit_agency',
+                                 'face_value',
+                                 'coupon_rate',
+                                 'planned_circulation',
+                                 'spread',
+                                 'bond_date',
+                                 'exercise_date',
+                                 'circulation_scope',
+                                 'bond_code',
+                                 'bond_type',
+                                 'bond_end',
+                                 'trading_day',
+                                 'bond_delisting',
+                                 'bond_rating',
+                                 'reference_rate',
+                                 'actual_circulation',
+                                 'issue_price',
+                                 'frequency',
+                                 'exercise_type',
+                                 'trustee',
+                                 ]
+        self.purchase_island = ['admini_region',
+                                'pruchase_trustee',
+                                'signed_date',
+                                'parcel_location',
+                                'purchase_assignee',
+                                'land_use',
+                                'min_volume',
+                                'trasaction_price',
+                                'start_time',
+                                'supervision_num',
+                                'total_area',
+                                'superior_company',
+                                'supply_mode',
+                                'max_volume',
+                                'end_time',
+                                ]
+        self.the_employ = ['start_date',
+                           'employ_position',
+                           'wage',
+                           'experience',
+                           'employ_num',
+                           'employ_city',
+                           'employ_area',
                            'source',
-                           'start_date', 'end_date', 'education', 'employ_num', 'position_desc']
-        self.rating_tax = ['rating_year', 'rating_level', 'rating_type', 'rating_num', 'rating_office']
-        self.random_check = ['check_date', 'check_type', 'check_result', 'check_office']
-        self.product_info = ['product_icon', 'product_title', 'product_short', 'product_type', 'product_field',
+                           'start_date',
+                           'end_date',
+                           'education',
+                           'position_desc']
+        self.rating_tax = ['rating_year',
+                           'rating_level',
+                           'rating_type',
+                           'rating_num',
+                           'rating_office']
+        self.random_check = ['check_date',
+                             'check_type',
+                             'check_result',
+                             'check_office']
+        self.product_info = ['product_icon',
+                             'product_title',
+                             'product_short',
+                             'product_type',
+                             'product_field',
                              'product_desc']
-        self.quality_cert = ['device_name', 'cert_type', 'cert_start', 'cert_end', 'device_num', 'permit_num']
-        self.brand_info = ['brand_date', 'brand_icon', 'brand_name', 'brand_num', 'brand_type', 'brand_cond']
-        self.patent_info = ['patent_id', 'patent_pic', 'app_num', 'patent_num', 'category_num', 'patent_name',
-                            'patent_address', 'inventor', 'applicant',
-                       'apply_date', 'publish_date', 'agency', 'agent', 'abstracts']
-        self.copyright_info = ['full_name', 'simple_name', 'reg_num', 'cat_num', 'version', 'author_nationality',
-                               'first_publish', 'reg_time']
-        self.website_filing = ['record_date', 'web_name', 'web_url', 'record_num', 'web_status', 'unit_nature']
+        self.quality_cert = ['device_name',
+                             'cert_type',
+                             'cert_start',
+                             'cert_end',
+                             'device_num',
+                             'permit_num']
+        self.brand_info = ['brand_date',
+                           'brand_icon',
+                           'brand_name',
+                           'brand_num',
+                           'brand_type',
+                           'brand_cond']
+        self.abnormal_operation = ['include_date',
+                                   'include_reason ',
+                                   'include_authority',
+                                   'remove_date',
+                                   'remove_reason',
+                                   'remove_authority']
+        self.patent_info = ['publish_date',
+                            'patent_pic',
+                            'patent_id',
+                            'app_num',
+                            'category_num',
+                            'patent_name',
+                            'patent_address',
+                            'inventor',
+                            'applicant',
+                            'apply_date',
+                            'agency',
+                            'agent',
+                            'abstracts']
+        self.copyright_info = ['reg_time',
+                               'full_name',
+                               'simple_name',
+                               'cat_num',
+                               'reg_num',
+                               'version',
+                               'reg_time'
+                               'author_nationality',
+                               'first_publish',
+                               ]
+        self.website_filing = ['record_date',
+                               'web_name',
+                               'web_url',
+                               'record_num',
+                               'web_status',
+                               'unit_nature']
 
     def process_item(self, item, spider):
+        memory = []
+        """ company"""
+        memory = []
+        for i in xrange(len(self.company)):
+            memory.append(item[self.company[i]])
+        try:
+            self.cursor.execute(
+                "INSERT INTO company VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ",
+                tuple(memory))
+        except Exception,e:
+            print traceback.print_exc()
+            try:
+                self.cursor.execute(
+                "UPDATE company SET tyqycid='%s',comp_name='%s',legalperson='%s',regist_No='%s',organization_code='%s',credit_code='%s',"
+                "comp_type='%s',industry='%s',regist_captial='%s',regist_time='%s',regist_addr='%s',scope='%s',business_start='%s',business_end='%s',"
+                " status='%s',approval_date='%s',reigst_authority='%s',comp_tel='%s',comp_net='%s',comp_email='%s',comp_addr='%s',logo='%s',score='%s',"
+                "comp_usedname='%s' where tyqycid="+item["company_id"],
+                tuple(memory)
+            )
+            except Exception,e:
+                print traceback.print_exc()
+            # self.date_insert(item,"company",self.company)
+        self.conn.commit()
+        self.cursor.execute("SELECT companyid FROM company WHERE tyqycid='%s'" % item["company_id"])
+        item["company_id"] = str(int(self.cursor.fetchone()[0]))
 
-        if spider.name == 'tyc_spider':
+        """ person"""
+        memory = []
+        person_fk = []
+        for i in xrange(len(self.person)):
+            memory.append(item[self.person[i]])
+        if len(memory[0])>0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute(
+                    "INSERT INTO person "
+                    "VALUES(NULL,%s,%s)",
+                    tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+            finally:
+                self.conn.commit()
+                self.cursor.execute("SELECT personid From person where tychmid='%s'" % memory[0][i])
+                person_fk.append(str(int(self.cursor.fetchone()[0])))
 
-            company = self.dom.createElement('company')
-            basic_info = self.dom.createElement('basic_info')
-            company.appendChild(basic_info)
-            for item_name in self.basic_info:
-                content = self.dom.createElement(str(item_name))
-                data = self.dom.createTextNode(str(item[item_name]))
-                content.appendChild(data)
-                basic_info.appendChild(content)
+        # self.date_insert(item,"comp_person_rel",self.main_person)
 
-            if len(item["person_id"]) > 1:
-                main_person = self.dom.createElement('main_person')
-                company.appendChild(main_person)
-                for i in range(1, len(item["person_id"])):
-                    person = self.dom.createElement('person')
-                    main_person.appendChild(person)
-                    for item_name in self.main_person:
-                        content = self.dom.createElement(str(item_name))
-                        person.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
 
-            if len(item["shareholder_id"]) > 1:
-                shareholder_info = self.dom.createElement('shareholder_info')
-                company.appendChild(shareholder_info)
-                for i in range(1, len(item["shareholder_id"])):
-                    shareholder = self.dom.createElement('shareholder')
-                    shareholder_info.appendChild(shareholder)
-                    for item_name in self.shareholder_info:
-                        content = self.dom.createElement(str(item_name))
-                        shareholder.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """ comp_person_rel"""
+        memory = []
+        item['person_id'] = person_fk
+        for i in xrange(len(self.main_person)):
+            memory.append(item[self.main_person[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute(
+                    "INSERT INTO comp_person_rel "
+                    "VALUES(NULL," + item["company_id"] + ","
+                                                          "%s,%s)",
+                    tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        self.conn.commit()
+        # self.date_insert(item,"comp_person_rel",self.main_person)
 
-            if len(item["invested_company_id"]) > 1:
-                investment = self.dom.createElement('investment')
-                company.appendChild(investment)
-                for i in range(1, len(item["invested_company_id"])):
-                    investment_company = self.dom.createElement('investment_company')
-                    investment.appendChild(investment_company)
-                    for item_name in self.investment:
-                        content = self.dom.createElement(str(item_name))
-                        investment_company.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        # """ shareInfo"""
+        # memory = []
+        # for i in xrange(len(self.shareholder_info)):
+        #     memory.append(item[self.shareholder_info[i]])
+        # for (x,y,i) in zip(item["shareholder_name"],item["shareholder_id"],xrange(len(memory[0]))):
+        #     if len(x)>4 and y.find(u'公司'):
+        #             selec_result=self.cursor.execute("SELECT companyid FROM company WHERE tyqycid='%s'" % y)
+        #             if selec_result==0:
+        #                 self.cursor.execute("INSERT INTO company(tyqycid,comp_name) VALUES (%s,%s)", (y,x))
+        #                 self.conn.commit()
+        #                 self.cursor.execute("SELECT companyid FROM company WHERE tyqycid='%s'" % y)
+        #             share_company_fk=int(self.cursor.fetchone()[0])
+        #             self.cursor.execute("INSERT INTO shareinfo VALUES (NULL,NULL,"+share_company_fk+','
+        #                                 "%s,%s,%s,%s)",tuple(str(x[i]) for x in memory))
+        #     else:
+        #         selec_result = self.cursor.execute("SELECT personid FROM person WHERE tychmid='%s'" % y)
+        #         if selec_result == 0:
+        #             self.cursor.execute("INSERT INTO person(tychmid,person_name) VALUES (%s,%s)", (y, x))
+        #             self.conn.commit()
+        #             self.cursor.execute("SELECT personid FROM person WHERE tychmid='%s'" % y)
+        #         share_person_fk = int(self.cursor.fetchone()[0])
+        #         self.cursor.execute("INSERT INTO shareinfo VALUES (NULL," + share_person_fk + ",NULL,"
+        #                             "%s,%s,%s,%s)",
+        #                             tuple(str(x[i]) for x in memory))
+        #     self.conn.commit()
+        """ shareInfo"""
+        memory = []
+        for i in xrange(len(self.shareholder_info)):
+            memory.append(item[self.shareholder_info[i]])
+        share_list=[]
+        if len(memory[0]) > 0:
+          for (x, y, i) in zip(item["shareholder_name"], item["shareholder_id"], xrange(len(memory[0]))):
+           try:
+            if len(x) > 4 and y.find(u'公司'):
+                selec_result = self.cursor.execute("SELECT companyid FROM company WHERE tyqycid='%s'" % y)
 
-            if len(item["change_time"]) > 1:
-                change_record = self.dom.createElement('change_record')
-                company.appendChild(change_record)
-                for i in range(1, len(item["change_time"])):
-                    change = self.dom.createElement('change')
-                    change_record.appendChild(change)
-                    for item_name in self.change_record:
-                        content = self.dom.createElement(str(item_name))
-                        change.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+                if selec_result == 0:
+                    self.cursor.execute("INSERT INTO company(tyqycid,comp_name) VALUES (%s,%s)", (y, x))
+                    share_company_fk = int(self.cursor.lastrowid)
+                else:
+                    share_company_fk = int(self.cursor.fetchone()[0])
+                self.cursor.execute("INSERT INTO share_info VALUES (NULL,NULL," + str(share_company_fk) + ','
+                                                                                                    "%s,%s,%s,%s)",
+                                    tuple(str(x[i]) for x in memory))
+            else:
+                selec_result = self.cursor.execute("SELECT personid FROM person WHERE tychmid='%s'" % y)
+                if selec_result == 0:
+                    self.cursor.execute("INSERT INTO person(tychmid,person_name) VALUES (%s,%s)", (y, x))
+                    share_person_fk = int(self.cursor.lastrowid)
+                else:
+                    share_person_fk = int(self.cursor.fetchone()[0])
+                self.cursor.execute("INSERT INTO share_info VALUES (NULL," + str(share_person_fk) + ",NULL,"
+                                                                                              "%s,%s,%s,%s)",
+                                   tuple(str(x[i]) for x in memory))
+           except Exception,e:
+              print tuple(str(x[i]) for x in memory)
+              print traceback.print_exc()
+        self.conn.commit()
+        # for i in xrange(len(self.shareholder_info)):
+        #     memory.append(item[self.shareholder_info[i]])
+        # for i in xrange(0, len(memory[0])):
+        #     self.cursor.execute( "INSERT INTO  "
+        #                          "VALUES(NULL,%s,%s,%s,%s,%s,%s)",
+        #                 tuple(str(x[i]) for x in memory))
 
-            if len(item["annual_year"]) > 1:
-                annual_reports = self.dom.createElement('annual_reports')
-                company.appendChild(annual_reports)
-                for i in range(1, len(item["annual_year"])):
-                    annual = self.dom.createElement('annual')
-                    annual_reports.appendChild(annual)
-                    for item_name in self.annual_reports:
-                        content = self.dom.createElement(str(item_name))
-                        annual.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
 
-            if len(item["branch_id"]) > 1:
-                branches = self.dom.createElement('branches')
-                company.appendChild(branches)
-                for i in range(1, len(item["branch_id"])):
-                    branch = self.dom.createElement('branch')
-                    branches.appendChild(branch)
-                    for item_name in self.branches:
-                        content = self.dom.createElement(str(item_name))
-                        branch.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """ report"""
+        memory = []
+        for i in xrange(len(self.annual_reports)):
+            memory.append(item[self.annual_reports[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+             self.cursor.execute("INSERT INTO report "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "report", self.annual_reports)
 
-            if len(item["finance_date"]) > 1:
-                finance_history = self.dom.createElement('finance_history')
-                company.appendChild(finance_history)
-                for i in range(1, len(item["finance_date"])):
-                    finance = self.dom.createElement('finance')
-                    finance_history.appendChild(finance)
-                    for item_name in self.finance_history:
-                        content = self.dom.createElement(str(item_name))
-                        finance.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """ Financing"""
+        memory = []
+        for i in xrange(len(self.finance_history)):
+            memory.append(item[self.finance_history[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+             self.cursor.execute("INSERT INTO financing "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "financing", self.finance_history)
 
-            if len(item["member_name"]) > 1:
-                core_team = self.dom.createElement("core_team")
-                company.appendChild(core_team)
-                for i in range(1, len(item["member_name"])):
-                    member = self.dom.createElement('member')
-                    core_team.appendChild(member)
-                    for item_name in self.core_team:
-                        content = self.dom.createElement(str(item_name))
-                        member.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """investmentinfo"""
+        invested_fk = []
+        for i in xrange(len(self.investment)):
+            memory.append(item[self.investment[i]])
+        if len(memory[0]) > 0:
+         for (x, y) in zip(item["invested_company_name"], item["invested_company_id"]):
+            selec_result = self.cursor.execute("SELECT companyid FROM company WHERE tyqycid='%s'" % y)
+            try:
+             if selec_result == 0:
+                self.cursor.execute("INSERT INTO company(tyqycid,comp_name) VALUES (%s,%s)", (y, x))
+                invested_fk.append(str(int(self.cursor.lastrowid)))
+             else:
+                invested_fk.append(str(int(self.cursor.fetchone()[0])))
+            except Exception,e:
+                print traceback.print_exc()
+         self.conn.commit()
+         item["invested_company_id"] = invested_fk
+         memory = []
 
-            if len(item["business_name"]) > 1:
-                enterprise_business = self.dom.createElement("enterprise_business")
-                company.appendChild(enterprise_business)
-                for i in range(1, len(item["business_name"])):
-                    business = self.dom.createElement("business")
-                    enterprise_business.appendChild(business)
-                    for item_name in self.enterprise_business:
-                        content = self.dom.createElement(str(item_name))
-                        business.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+         for i in xrange(0, len(memory[0])):
+            try:
+             self.cursor.execute("INSERT INTO investment_info "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+             print traceback.print_exc()
+         # self.date_insert(item, "investment", self.investment)
 
-            if len(item["invest_time"]) > 1:
-                investment_event = self.dom.createElement("investment_event")
-                company.appendChild(investment_event)
-                for i in range(1, len(item["invest_time"])):
-                    invest = self.dom.createElement("invest")
-                    investment_event.appendChild(invest)
-                    for item_name in self.investment_event:
-                        content = self.dom.createElement(str(item_name))
-                        invest.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """change_record"""
+        memory = []
+        for i in xrange(len(self.change_record)):
+            memory.append(item[self.change_record[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+             self.cursor.execute("INSERT INTO change_record "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "change_record", self.change_record)
 
-            if len(item["product_name"]) > 1:
-                competing_product = self.dom.createElement("competing_product")
-                company.appendChild(competing_product)
-                for i in range(1, len(item["product_name"])):
-                    products = self.dom.createElement("products")
-                    competing_product.appendChild(products)
-                    for item_name in self.competing_product:
-                        content = self.dom.createElement(str(item_name))
-                        products.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """coreteam"""
+        memory = []
+        for i in xrange(len(self.core_team)):
+            memory.append(item[self.core_team[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO core_team "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "core_team", self.core_team)
 
-            if len(item["announce_time"]) > 1:
-                court_announcement = self.dom.createElement("court_announcement")
-                company.appendChild(court_announcement)
-                for i in range(1, len(item["announce_time"])):
-                    announce = self.dom.createElement("announce")
-                    court_announcement.appendChild(announce)
-                    for item_name in self.court_announcement:
-                        content = self.dom.createElement(str(item_name))
-                        announce.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """businessInfo"""
+        memory = []
+        for i in xrange(len(self.enterprise_business)):
+            memory.append(item[self.enterprise_business[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO business_info "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "business_info", self.enterprise_business)
 
-            if len(item["dis_company"]) > 1:
-                the_dishonest = self.dom.createElement("the_dishonest")
-                company.appendChild(the_dishonest)
-                for i in range(1, len(item["dis_company"])):
-                    dishonest = self.dom.createElement("dishonest")
-                    the_dishonest.appendChild(dishonest)
-                    for item_name in self.the_dishonest:
-                        content = self.dom.createElement(str(item_name))
-                        dishonest.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """invest_event"""
+        memory = []
+        for i in xrange(len(self.investment_event)):
+            memory.append(item[self.investment_event[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO investment_event "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "investment_event", self.investment_event)
 
-            if len(item["filing_date"]) > 1:
-                the_executed = self.dom.createElement("the_executed")
-                company.appendChild(the_executed)
-                for i in range(1, len(item["filing_date"])):
-                    executed = self.dom.createElement("executed")
-                    the_executed.appendChild(executed)
-                    for item_name in self.the_executed:
-                        content = self.dom.createElement(str(item_name))
-                        executed.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """competing_product"""
+        memory = []
+        for i in xrange(len(self.competing_product)):
+            memory.append(item[self.competing_product[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO competing_product "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "competing_product", self.competing_product)
 
-            if len(item["include_date"]) > 1:
-                abnormal_management = self.dom.createElement("abnormal_management")
-                company.appendChild(abnormal_management)
-                for i in range(1, len(item["include_date"])):
-                    abnormal = self.dom.createElement("abnormal")
-                    abnormal_management.appendChild(abnormal)
-                    for item_name in self.abnormal_management:
-                        content = self.dom.createElement(str(item_name))
-                        abnormal.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """judgement"""
+        memory = []
+        judge_fk = []
+        for i in xrange(len(self.judgement)):
+            memory.append(item[self.judgement[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO judgement "
+                                "VALUES(NULL,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+                judge_fk.append(str(int(self.cursor.lastrowid)))
+            except Exception,e:
+                print tuple(str(x[i]) for x in memory)
+                print traceback.print_exc()
+        # self.date_insert(item, "judgement", self.)
+        self.conn.commit()
 
-            if len(item["pub_code"]) > 1:
-                adminis_pubnish = self.dom.createElement("adminis_pubnish")
-                company.appendChild(adminis_pubnish)
-                for i in range(1, len(item["pub_code"])):
-                    pubnish = self.dom.createElement("pubnish")
-                    adminis_pubnish.appendChild(pubnish)
-                    for item_name in self.adminis_pubnish:
-                        content = self.dom.createElement(str(item_name))
-                        pubnish.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """lawsuit"""
+        item["judgement_id"] = []
+        item["judgement_id"]=judge_fk
+        memory = []
+        for i in xrange(len(self.law_suit)):
+            memory.append(item[self.law_suit[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO law_suit "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "lawsuit", self.)
 
-            if len(item["set_time"]) > 1:
-                seriously_illegal = self.dom.createElement("seriously_illegal")
-                company.appendChild(seriously_illegal)
-                for i in range(1, len(item["set_time"])):
-                    illegal = self.dom.createElement("illegal")
-                    seriously_illegal.appendChild(illegal)
-                    for item_name in self.seriously_illegal:
-                        content = self.dom.createElement(str(item_name))
-                        illegal.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
 
-            if len(item["regist_date"]) > 1:
-                equity_pledge = self.dom.createElement("equity_pledge")
-                company.appendChild(equity_pledge)
-                for i in range(1, len(item["regist_date"])):
-                    equity = self.dom.createElement("equity")
-                    equity_pledge.appendChild(equity)
-                    for item_name in self.equity_pledge:
-                        content = self.dom.createElement(str(item_name))
-                        equity.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """court_announcement"""
+        memory = []
+        for i in xrange(len(self.court_announcement)):
+            memory.append(item[self.court_announcement[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO court_announcement "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "court_announcement", self.court_announcement)
 
-            if len(item["registed_num"]) > 1:
-                chattel_mortgage = self.dom.createElement("chattel_mortgage")
-                company.appendChild(chattel_mortgage)
-                for i in range(1, len(item["registed_num"])):
-                    mortgage = self.dom.createElement("mortgage")
-                    chattel_mortgage.appendChild(mortgage)
-                    for item_name in self.chattel_mortgage:
-                        content = self.dom.createElement(str(item_name))
-                        mortgage.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
-                    mortgagee = self.dom.createElement("mortgagee")
-                    mortgage.appendChild(mortgagee)
-                    for j in range(0, len(item["mortgagee_name"][i])):
-                        sub_mortgagee = self.dom.createElement("sub_mortgagee")
-                        mortgagee.appendChild(sub_mortgagee)
-                        for item_name in self.sub_chattel_mortgage1:
-                            content = self.dom.createElement(str(item_name))
-                            sub_mortgagee.appendChild(content)
-                            data = self.dom.createTextNode(str(item[item_name][i][j]))
-                            content.appendChild(data)
-                    pawn = self.dom.createElement("pawn")
-                    mortgage.appendChild(pawn)
-                    for k in range(0, len(item["pawn_name"][i])):
-                        sub_pawn = self.dom.createElement("sub_pawn")
-                        pawn.appendChild(sub_pawn)
-                        for item_name in self.sub_chattel_mortgage2:
-                            content = self.dom.createElement(str(item_name))
-                            sub_pawn.appendChild(content)
-                            data = self.dom.createTextNode(str(item[item_name][i][k]))
-                            content.appendChild(data)
+        """executed_people"""
+        memory = []
+        for i in xrange(len(self.the_executed)):
+            memory.append(item[self.the_executed[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO executed_people "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "executed_people", self.the_executed)
 
-            if len(item["tax_date"]) > 1:
-                owe_tax = self.dom.createElement("owe_tax")
-                company.appendChild(owe_tax)
-                for i in range(1, len(item["tax_date"])):
-                    tax = self.dom.createElement("tax")
-                    owe_tax.appendChild(tax)
-                    for item_name in self.owe_tax:
-                        content = self.dom.createElement(str(item_name))
-                        tax.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """administrative_penalty"""
+        memory = []
+        for i in xrange(len(self.adminis_pubnish)):
+            memory.append(item[self.adminis_pubnish[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO administrative_penalty "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "administrative_penalty", self.adminis_pubnish)
 
-            if len(item["bid_url"]) > 1:
-                bidding = self.dom.createElement("bidding")
-                company.appendChild(bidding)
-                for i in range(1, len(item["bid_url"])):
-                    bid = self.dom.createElement("bid")
-                    bidding.appendChild(bid)
-                    for item_name in self.bidding:
-                        content = self.dom.createElement(str(item_name))
-                        bid.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """equity_pledged"""
+        memory = []
+        item["pledge_remark"]=[]
+        for i in xrange(len(item["regist_num"])):
+            item["pledge_remark"].append('所报材料真实合法，一切责任由当事人自负')
+        for i in xrange(len(self.equity_pledge)):
+            memory.append(item[self.equity_pledge[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO equity_pledged "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "equity_pledged", self.equity_pledge)
 
-            if len(item["bond_name"]) > 1:
-                bond_information = self.dom.createElement("bond_information")
-                company.appendChild(bond_information)
-                for i in range(1, len(item["bond_name"])):
-                    bond = self.dom.createElement("bond")
-                    bond_information.appendChild(bond)
-                    for item_name in self.bond_information:
-                        content = self.dom.createElement(str(item_name))
-                        bond.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """RFP"""
+        memory = []
+        rfp_fk = []
+        for i in xrange(len(self.RFP)):
+            memory.append(item[self.RFP[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO RFP "
+                                "VALUES(NULL,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+                rfp_fk.append(str(int(self.cursor.lastrowid)))
+            except Exception,e:
+                print traceback.print_exc()
+        self.conn.commit()
+        # self.date_insert(item, "RFP", self.)
 
-            if len(item["admini_region"]) > 1:
-                purchase_island = self.dom.createElement("purchase_island")
-                company.appendChild(purchase_island)
-                for i in range(1, len(item["admini_region"])):
-                    purchase = self.dom.createElement("purchase")
-                    purchase_island.appendChild(purchase)
-                    for item_name in self.purchase_island:
-                        content = self.dom.createElement(str(item_name))
-                        purchase.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """tendering"""
+        memory = []
+        item["rfp_id"] = rfp_fk
+        for i in xrange(len(self.bidding)):
+            memory.append(item[self.bidding[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO tendering "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "tendering", self.)
 
-            if len(item["employ_position"]) > 1:
-                the_employ = self.dom.createElement("the_employ")
-                company.appendChild(the_employ)
-                for i in range(1, len(item["employ_position"])):
-                    employ = self.dom.createElement("employ")
-                    the_employ.appendChild(employ)
-                    for item_name in self.the_employ:
-                        content = self.dom.createElement(str(item_name))
-                        employ.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """recruitment"""
+        memory = []
+        for i in xrange(len(self.the_employ)):
+            memory.append(item[self.the_employ[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO recruitment "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "recruitment", self.the_employ)
 
-            if len(item["rating_year"]) > 1:
-                rating_tax = self.dom.createElement("rating_tax")
-                company.appendChild(rating_tax)
-                for i in range(1, len(item["rating_year"])):
-                    rating = self.dom.createElement("rating")
-                    rating_tax.appendChild(rating)
-                    for item_name in self.rating_tax:
-                        content = self.dom.createElement(str(item_name))
-                        rating.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """tax_level"""
+        memory = []
+        for i in xrange(len(self.rating_tax)):
+            memory.append(item[self.rating_tastr(x[i])])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO tax_level "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "tax_level", self.rating_tax)
 
-            if len(item["check_date"]) > 1:
-                random_check = self.dom.createElement("random_check")
-                company.appendChild(random_check)
-                for i in range(1, len(item["check_date"])):
-                    check = self.dom.createElement("check")
-                    random_check.appendChild(check)
-                    for item_name in self.random_check:
-                        content = self.dom.createElement(str(item_name))
-                        check.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """random_check"""
+        memory = []
+        for i in xrange(len(self.random_check)):
+            memory.append(item[self.random_check[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO random_check "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "random_check", self.random_check)
 
-            if len(item["product_icon"]) > 1:
-                product_info = self.dom.createElement("product_info")
-                company.appendChild(product_info)
-                for i in range(1, len(item["product_icon"])):
-                    product = self.dom.createElement("product")
-                    product_info.appendChild(product)
-                    for item_name in self.product_info:
-                        content = self.dom.createElement(str(item_name))
-                        product.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """product_info"""
+        memory = []
+        for i in xrange(len(self.product_info)):
+            memory.append(item[self.product_info[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO product_info "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "product_info", self.product_info)
 
-            if len(item["device_name"]) > 1:
-                quality_cert = self.dom.createElement("quality_cert")
-                company.appendChild(quality_cert)
-                for i in range(1, len(item["device_name"])):
-                    cert = self.dom.createElement("cert")
-                    quality_cert.appendChild(cert)
-                    for item_name in self.quality_cert:
-                        content = self.dom.createElement(str(item_name))
-                        cert.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """tradmark_infomation"""
+        memory = []
+        for i in xrange(len(self.brand_info)):
+            memory.append(item[self.brand_info[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO tradmark_infomation "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "tradmark_infomation", self.brand_info)
 
-            if len(item["brand_date"]) > 1:
-                brand_info = self.dom.createElement("brand_info")
-                company.appendChild(brand_info)
-                for i in range(1, len(item["brand_date"])):
-                    brand = self.dom.createElement("brand")
-                    brand_info.appendChild(brand)
-                    for item_name in self.brand_info:
-                        content = self.dom.createElement(str(item_name))
-                        brand.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """patent"""
+        memory = []
+        for i in xrange(len(self.patent_info)):
+            memory.append(item[self.patent_info[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO patent "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "patent", self.patent_info)
 
-            if len(item["patent_id"]) > 1:
-                patent_info = self.dom.createElement("patent_info")
-                company.appendChild(patent_info)
-                for i in range(1, len(item["patent_id"])):
-                    patent = self.dom.createElement("patent")
-                    patent_info.appendChild(patent)
-                    for item_name in self.patent_info:
-                        content = self.dom.createElement(str(item_name))
-                        patent.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """copyright"""
+        memory = []
+        for i in xrange(len(self.copyright_info)):
+            memory.append(item[self.copyright_info[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO copyright "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "copyright", self.copyright_info)
 
-            if len(item["full_name"]) > 1:
-                copyright_info = self.dom.createElement("copyright_info")
-                company.appendChild(copyright_info)
-                for i in range(1, len(item["full_name"])):
-                    copyright = self.dom.createElement("copyright")
-                    copyright_info.appendChild(copyright)
-                    for item_name in self.copyright_info:
-                        content = self.dom.createElement(str(item_name))
-                        copyright.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """website_record"""
+        memory = []
+        for i in xrange(len(self.website_filing)):
+            memory.append(item[self.website_filing[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO website_record "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "website_record", self.website_filing)
 
-            if len(item["record_date"]) > 1:
-                website_filing = self.dom.createElement("website_filing")
-                company.appendChild(website_filing)
-                for i in range(1, len(item["record_date"])):
-                    website = self.dom.createElement("website")
-                    website_filing.appendChild(website)
-                    for item_name in self.website_filing:
-                        content = self.dom.createElement(str(item_name))
-                        website.appendChild(content)
-                        data = self.dom.createTextNode(str(item[item_name][i]))
-                        content.appendChild(data)
+        """qualification"""
+        memory = []
+        for i in xrange(len(self.quality_cert)):
+            memory.append(item[self.quality_cert[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO qualification "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "qualification", self.quality_cert)
 
-            self.root.appendChild(company)
-            return item
+        """bond_info"""
+        memory = []
+        for i in xrange(len(self.bond_information)):
+            memory.append(item[self.bond_information[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO bond_info "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "bond_info", self.bond_information)
 
-    def close_spider(self, spider):
-        with open('..\\data.xml', 'a') as f:
-            self.dom.writexml(f, addindent='  ', newl='\n', encoding='utf-8')
+        """land_purchase"""
+        memory = []
+        for i in xrange(len(self.purchase_island)):
+            memory.append(item[self.purchase_island[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO land_purchase "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+            # self.date_insert(item, "land_purchase", self.purchase_island)
+
+        """tax_announcement"""
+        memory = []
+        for i in xrange(len(self.owe_tax)):
+            memory.append(item[self.owe_tastr(x[i])])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO tax_announcement "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+            # self.date_insert(item, "tax_announcement", self.owe_tax)
+
+        """chattel_mortgage"""
+        memory = []
+        item["pawn_remark"] = []
+        for i in xrange(len(item["registed_num"])):
+            item["pawn_remark"].append('--备注都是一样的有什么好备注的个备注个备注啊')
+        for i in xrange(len(self.chattel_mortgage)):
+            memory.append(item[self.chattel_mortgage[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO detailed_report "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+         # self.date_insert(item, "detailed_report", self.)
+
+        """serious_offense"""
+        memory = []
+        for i in xrange(len(self.seriously_illegal)):
+            memory.append(item[self.seriously_illegal[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO serious_offense "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "serious_offense", self.seriously_illegal)
+
+        """经营异常"""
+        memory = []
+        for i in xrange(len(self.abnormal_operation)):
+            memory.append(item[self.abnormal_operation[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO abnormal_operation"
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "", self.)
+
+        """dishonest_people"""
+        memory = []
+        for i in xrange(len(self.the_dishonest)):
+            memory.append(item[self.the_dishonest[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO dishonest_people "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "dishonest_people", self.the_dishonest)
+
+        """branch"""
+        memory = []
+        for i in xrange(len(self.branches)):
+            memory.append(item[self.branches[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO branch "
+                                "VALUES(NULL," + item["company_id"] + ","
+                                                                      "%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "branch", self.branches)
+
+        """detailed_report"""
+        memory = []
+        for i in xrange(len(self.detailed_report)):
+            memory.append(item[self.detailed_report[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO detailed_report "
+                                "VALUES(NULL," + item["company_id"] + ','
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+        # self.date_insert(item, "detailed_report", self.detailed_report)
+
+        """amendment"""
+        memory = []
+        for i in xrange(len(self.amendment)):
+            memory.append(item[self.amendment[i]])
+        if len(memory[0]) > 0:
+         for i in xrange(0, len(memory[0])):
+            try:
+                self.cursor.execute("INSERT INTO amendment "
+                                "VALUES(NULL," + item["company_id"] + ','
+                                                                      "%s,%s,%s,%s)",
+                                tuple(str(x[i]) for x in memory))
+            except Exception,e:
+                print traceback.print_exc()
+            # self.date_insert(item, "amendment", self.)
+
+        self.conn.commit()
+        return item
+
+    def spider_closed(self, spider):
+        # with open('..\\data.xml', 'a') as f:
+        #     self.dom.writexml(f, addindent='  ', newl='\n', encoding='utf-8')
+        self.conn.commit()
+        self.cursor.close()
+        self.conn.close()

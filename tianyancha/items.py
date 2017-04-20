@@ -179,6 +179,9 @@ class TianyanchaItem(scrapy.Item):
     include_date = scrapy.Field()
     include_reason = scrapy.Field()
     include_authority = scrapy.Field()
+    remove_date = scrapy.Field()
+    remove_reason = scrapy.Field()
+    remove_authority = scrapy.Field()
 
     # 经营风险-行政处罚
     pub_code = scrapy.Field()
@@ -202,6 +205,7 @@ class TianyanchaItem(scrapy.Item):
     pledged_code = scrapy.Field()
     pledgee = scrapy.Field()
     pledgee_code = scrapy.Field()
+    pledge_remark = scrapy.Field()
 
     # 经营风险-动产抵押
     registed_num = scrapy.Field()
@@ -210,16 +214,14 @@ class TianyanchaItem(scrapy.Item):
     registed_cond = scrapy.Field()
     vouched_type = scrapy.Field()
     vouched_amount = scrapy.Field()
-    debt_deadline = scrapy.Field()
+    debt_start = scrapy.Field()
+    debt_end = scrapy.Field()
     vouched_range = scrapy.Field()
-    mortgagee_name = scrapy.Field()
-    mortgagee_type = scrapy.Field()
-    id_number = scrapy.Field()
+    pawn_remark = scrapy.Field()
     cancel_date = scrapy.Field()
     cancel_reason = scrapy.Field()
-    pawn_name = scrapy.Field()
-    pawn_belong = scrapy.Field()
-    pawn_condition = scrapy.Field()
+    mortgagee_info = scrapy.Field()
+    pawn_info = scrapy.Field()
 
     # 经营风险-欠税公告
     tax_date = scrapy.Field()
@@ -236,6 +238,7 @@ class TianyanchaItem(scrapy.Item):
     bid_purchaser = scrapy.Field()
     bid_content = scrapy.Field()
     bid_related = scrapy.Field()
+    rfp_id = scrapy.Field()
 
     # 经营状况-债券信息
     bond_name = scrapy.Field()
