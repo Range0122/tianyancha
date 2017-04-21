@@ -152,7 +152,7 @@ class TianYanCha_Spider(CrawlSpider):
                     shareholder_name.append(u'无')
 
                 try:
-                    investment_proportion.append(dic["capital"][0]["percent"] or u'无')
+                    investment_proportion.append(dic["capital"][0]["percent"][:-1] or u'无')
                 except:
                     investment_proportion.append(u'无')
 

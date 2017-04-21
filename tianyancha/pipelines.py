@@ -342,10 +342,10 @@ class TianyanchaPipeline(object):
             try:
                 self.cursor.execute(
                 "UPDATE company SET tyqycid='%s',comp_name='%s',legalperson='%s',regist_No='%s',organization_code='%s',credit_code='%s',"
-                "comp_type='%s',industry='%s',regist_captial='%s',regist_time='%s',regist_addr='%s',scope='%s',business_start='%s',business_end='%s',"
+                "comp_type='%s',industry='%s',regist_capital='%s',regist_time='%s',regist_addr='%s',scope='%s',business_start='%s',business_end='%s',"
                 " status='%s',approval_date='%s',reigst_authority='%s',comp_tel='%s',comp_net='%s',comp_email='%s',comp_addr='%s',logo='%s',score='%s',"
-                "comp_usedname='%s' where tyqycid="+item["company_id"],
-                tuple(memory)
+                "comp_username='%s' where tyqycid="+item["company_namev"],
+                tuple(str(x) for x in memory)
             )
             except Exception,e:
                 print traceback.print_exc()
@@ -613,11 +613,12 @@ class TianyanchaPipeline(object):
         self.conn.commit()
 
         """lawsuit"""
-        item["judgement_id"] = []
-        item["judgement_id"]=judge_fk
         memory = []
         for i in xrange(len(self.law_suit)):
-            memory.append(item[self.law_suit[i]])
+            if self.law_suit[i]=='judgement_id':
+                memory.append(judge_fk)
+            else:
+                memory.append(item[self.law_suit[i]])
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
