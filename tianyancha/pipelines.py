@@ -131,7 +131,7 @@ class TianyanchaPipeline(object):
         # 法律诉讼表  item->
         self.law_suit = [
             'lawsuit_date',
-            'judgement_id ',
+            'judgement_id',
             'case_type']
 
         # 裁判文书表   item->
@@ -292,7 +292,7 @@ class TianyanchaPipeline(object):
                            'brand_type',
                            'brand_cond']
         self.abnormal_operation = ['include_date',
-                                   'include_reason ',
+                                   'include_reason',
                                    'include_authority',
                                    'remove_date',
                                    'remove_reason',
@@ -316,7 +316,7 @@ class TianyanchaPipeline(object):
                                'cat_num',
                                'reg_num',
                                'version',
-                               'reg_time'
+                               'reg_time',
                                'author_nationality',
                                'first_publish',
                                ]
@@ -344,7 +344,7 @@ class TianyanchaPipeline(object):
                 "UPDATE company SET tyqycid='%s',comp_name='%s',legalperson='%s',regist_No='%s',organization_code='%s',credit_code='%s',"
                 "comp_type='%s',industry='%s',regist_capital='%s',regist_time='%s',regist_addr='%s',scope='%s',business_start='%s',business_end='%s',"
                 " status='%s',approval_date='%s',reigst_authority='%s',comp_tel='%s',comp_net='%s',comp_email='%s',comp_addr='%s',logo='%s',score='%s',"
-                "comp_username='%s' where tyqycid="+item["company_namev"],
+                "comp_username='%s' where tyqycid="+item["company_name"],
                 tuple(str(x) for x in memory)
             )
             except Exception,e:
@@ -615,7 +615,7 @@ class TianyanchaPipeline(object):
         """lawsuit"""
         memory = []
         for i in xrange(len(self.law_suit)):
-            if self.law_suit[i]=='judgement_id':
+            if self.law_suit[i] == "judgement_id":
                 memory.append(judge_fk)
             else:
                 memory.append(item[self.law_suit[i]])
@@ -745,7 +745,7 @@ class TianyanchaPipeline(object):
         """tax_level"""
         memory = []
         for i in xrange(len(self.rating_tax)):
-            memory.append(item[self.rating_tastr(x[i])])
+            memory.append(item[self.rating_tax[i]])
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
@@ -895,7 +895,7 @@ class TianyanchaPipeline(object):
         """tax_announcement"""
         memory = []
         for i in xrange(len(self.owe_tax)):
-            memory.append(item[self.owe_tastr(x[i])])
+            memory.append(item[self.owe_tax[i]])
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
@@ -917,9 +917,9 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
-                self.cursor.execute("INSERT INTO detailed_report "
+                self.cursor.execute("INSERT INTO chattel_mortgage "
                                 "VALUES(NULL," + item["company_id"] + ","
-                                                                      "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                                                                      "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                                 tuple(str(x[i]) for x in memory))
             except Exception,e:
                 print traceback.print_exc()
