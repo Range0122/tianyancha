@@ -1440,7 +1440,11 @@ class TianYanCha_Spider(CrawlSpider):
                     cancel_reason.append(u'')
 
                 safe_append(mortgagee_info, dic, 'peopleInfo')
-                safe_append(pawn_info, dic, 'pawnInfoList')
+
+                try:
+                    pawn_info.append(str(dic["pawnInfoList"]).decode("unicode-escape"))
+                except:
+                    pawn_info.append(u'')
 
         item["registed_num"] = registed_num
         item["registed_depart"] = registed_depart
