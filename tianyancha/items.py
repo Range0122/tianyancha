@@ -370,4 +370,5 @@ class TianyanchaItem(scrapy.Item):
     record_num = scrapy.Field()
     web_status = scrapy.Field()
     unit_nature = scrapy.Field()
+    domain_name = scrapy.Field()
 

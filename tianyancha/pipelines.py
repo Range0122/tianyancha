@@ -6,6 +6,12 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import MySQLdb
 import traceback
+
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 class TianyanchaPipeline(object):
     # def date_insert(self, item, db_name, selfcol):
     #     memory = []

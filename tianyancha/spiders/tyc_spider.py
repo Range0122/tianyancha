@@ -2683,6 +2683,7 @@ class TianYanCha_Spider(CrawlSpider):
         record_num = []
         web_status = []
         unit_nature = []
+        domain_name = []
 
         data = json.loads(response.body)
         try:
@@ -2692,6 +2693,10 @@ class TianYanCha_Spider(CrawlSpider):
 
         if flag[34] is 1:
             for dic in data["data"]:
+                try:
+                    domain_name.append(dic["ym"] or u'')
+                except:
+                    domain_name.append(u'')
                 try:
                     record_date.append(dic["examineDate"] or u'')
                 except:
@@ -2707,10 +2712,7 @@ class TianYanCha_Spider(CrawlSpider):
                 except:
                     record_num.append(u'')
 
-                try:
-                    web_status.append(dic["webSite"] or u'')
-                except:
-                    web_status.append(u'')
+                web_status.append(u'正常')
 
                 try:
                     unit_nature.append(dic["companyType"] or u'')
@@ -2728,5 +2730,6 @@ class TianYanCha_Spider(CrawlSpider):
         item["record_num"] = record_num
         item["web_status"] = web_status
         item["unit_nature"] = unit_nature
+        item["domain_name"] = domain_name
 
         return item

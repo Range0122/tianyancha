@@ -1,12 +1,12 @@
-[INFO  - 2017-04-21T08:26:05.369Z] GhostDriver - Main - running on port 58785
-[INFO  - 2017-04-21T08:26:08.407Z] Session [2b5dcae0-266c-11e7-b842-9f3b95a47cb2] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) AppleWebKit/534.14 (KHTML, like Gecko) Chrome/9.0.601.0 Safari/534.14","webSecurityEnabled":true}
-[INFO  - 2017-04-21T08:26:08.407Z] Session [2b5dcae0-266c-11e7-b842-9f3b95a47cb2] - page.customHeaders:  - {}
-[INFO  - 2017-04-21T08:26:08.407Z] Session [2b5dcae0-266c-11e7-b842-9f3b95a47cb2] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"},"phantomjs.page.settings.loadImages":false,"phantomjs.page.settings.userAgent":"Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) AppleWebKit/534.14 (KHTML, like Gecko) Chrome/9.0.601.0 Safari/534.14"}
-[INFO  - 2017-04-21T08:26:08.407Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 2b5dcae0-266c-11e7-b842-9f3b95a47cb2
-[ERROR - 2017-04-21T08:26:09.486Z] Session [2b5dcae0-266c-11e7-b842-9f3b95a47cb2] - page.onError - msg: TypeError: Attempting to configurable attribute of unconfigurable property.
+[INFO  - 2017-04-21T14:24:44.935Z] GhostDriver - Main - running on port 65400
+[INFO  - 2017-04-21T14:24:48.126Z] Session [461e5250-269e-11e7-af49-d776179688e0] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.310.0 Safari/532.9","webSecurityEnabled":true}
+[INFO  - 2017-04-21T14:24:48.126Z] Session [461e5250-269e-11e7-af49-d776179688e0] - page.customHeaders:  - {}
+[INFO  - 2017-04-21T14:24:48.126Z] Session [461e5250-269e-11e7-af49-d776179688e0] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"},"phantomjs.page.settings.loadImages":false,"phantomjs.page.settings.userAgent":"Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.310.0 Safari/532.9"}
+[INFO  - 2017-04-21T14:24:48.126Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 461e5250-269e-11e7-af49-d776179688e0
+[ERROR - 2017-04-21T14:24:50.091Z] Session [461e5250-269e-11e7-af49-d776179688e0] - page.onError - msg: TypeError: Attempting to configurable attribute of unconfigurable property.
 
   phantomjs://platform/console++.js:263 in error
-[ERROR - 2017-04-21T08:26:09.487Z] Session [2b5dcae0-266c-11e7-b842-9f3b95a47cb2] - page.onError - stack:
+[ERROR - 2017-04-21T14:24:50.092Z] Session [461e5250-269e-11e7-af49-d776179688e0] - page.onError - stack:
   defineProperty (http://dn-growing.qbox.me/vds.js:2)
   registerHistoryHandler (http://dn-growing.qbox.me/vds.js:2)
   domLoadedHandler (http://dn-growing.qbox.me/vds.js:2)
