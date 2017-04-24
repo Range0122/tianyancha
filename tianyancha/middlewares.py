@@ -141,16 +141,16 @@ class RotateUserAgentMiddleware(object):
 
 def safe_append(list, dic, key):
     try:
-        list.append(str(dic[key]) or u'')
+        list.append(str(dic[key]) or None)
     except:
-        list.append(u'')
+        list.append(None)
 
 
 def safe_appends(list, dic, key1, key2):
     try:
-        list.append(str(dic[key1][key2]) or u'')
+        list.append(str(dic[key1][key2]) or None)
     except:
-        list.append(u'')
+        list.append(None)
 
 
 def safe_append_date(list, dic, key):
@@ -158,4 +158,4 @@ def safe_append_date(list, dic, key):
         date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic[key])[:10])))
         list.append(str(date))
     except:
-        list.append(u'')
+        list.append(None)

@@ -30,6 +30,8 @@ class TianYanCha_Spider(CrawlSpider):
         item = TianyanchaItem()
         company_id = response.url[34:]
         company_name = response.selector.xpath('//div[@class="company_header_width"]/div[1]/span/text()').extract_first(default=u'未公开')
+        print company_name
+        print 'COMPANY_NAME HAS PRINTED!!!!!!!!!!!!'
         legal_representative = response.selector.xpath('//a[@ng-if="company.legalPersonName"]/text()').extract_first(default=u'未公开')
         registered_capital = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[2]/div/text()').extract_first(default=u'未公开')
         registered_time = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[3]/div/text()').extract_first(default=u'未公开')
@@ -44,15 +46,21 @@ class TianYanCha_Spider(CrawlSpider):
         operating_end = temp_items[5][-10:]
         approved_date = temp_items[6]
         registration_authority = temp_items[7]
-        registered_address = temp_items[8]
-        business_scope = temp_items[9]
+        try:
+            registered_address = temp_items[8]
+        except:
+            registered_address = u'未公开'
+        try:
+            business_scope = temp_items[9]
+        except:
+            business_scope = u'未公开'
         telephone = response.selector.xpath(u'//span[text()="电话："]/following-sibling::span[1]/text()').extract_first(default=u'暂')
         email = response.selector.xpath(u'//span[text()="邮箱："]/following-sibling::span[1]/text()').extract_first(default=u'暂')
         address = response.selector.xpath(u'//span[text()="地址："]/following-sibling::span[1]/text()').extract_first(default=u'暂')
         website = response.selector.xpath(u'//span[text()="网址："]/following-sibling::a[1]/text()').extract_first(default=u'暂')
         score = response.selector.xpath('//td[@class="td-score position-rel"]/img/@ng-alt | //img[@class="td-score-img"]/@ng-alt').extract()[0][-2:]
         logo_location = response.selector.xpath(u'//img[@alt="公司图标"]/@src').extract_first(default=u'暂')
-        former_name = response.selector.xpath('//div[@ng-if="company.historyNames"]/div/text()').extract_first(default=u'')
+        former_name = response.selector.xpath('//div[@ng-if="company.historyNames"]/div/text()').extract_first(default=None)
 
         flag = response.selector.xpath('//div[@class="navigation new-border new-c3"]/div/div/div/div/@class').extract()
         for i in range(0, len(flag)):
@@ -142,34 +150,34 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[3] is 1:
             for dic in data["data"]["result"]:
                 try:
-                    shareholder_id.append(dic["id"] or u'')
+                    shareholder_id.append(dic["id"] or None)
                 except:
-                    shareholder_id.append(u'')
+                    shareholder_id.append(None)
 
                 try:
-                    shareholder_name.append(dic["name"] or u'')
+                    shareholder_name.append(dic["name"] or None)
                 except:
-                    shareholder_name.append(u'')
+                    shareholder_name.append(None)
 
                 try:
-                    investment_proportion.append(dic["capital"][0]["percent"][:-1] or u'')
+                    investment_proportion.append(dic["capital"][0]["percent"][:-1] or None)
                 except:
-                    investment_proportion.append(u'')
+                    investment_proportion.append(None)
 
                 try:
-                    subscribed_contribution.append(dic["capital"][0]["amomon"] or u'')
+                    subscribed_contribution.append(dic["capital"][0]["amomon"] or None)
                 except:
-                    subscribed_contribution.append(u'')
+                    subscribed_contribution.append(None)
 
                 try:
-                    subscribed_contribution_time.append(dic["capital"][0]["time"] or u'')
+                    subscribed_contribution_time.append(dic["capital"][0]["time"] or None)
                 except:
-                    subscribed_contribution_time.append(u'')
+                    subscribed_contribution_time.append(None)
 
                 try:
-                    really_contribution.append(dic["capitalActl"][0]["amomon"] or u'')
+                    really_contribution.append(dic["capitalActl"][0]["amomon"] or None)
                 except:
-                    really_contribution.append(u'')
+                    really_contribution.append(None)
 
         item["shareholder_id"] = shareholder_id
         item["shareholder_name"] = shareholder_name
@@ -224,7 +232,10 @@ class TianYanCha_Spider(CrawlSpider):
                 safe_append(invested_representative, dic, 'legalPersonName')
                 safe_append(registered_cap, dic, 'regCapital')
                 safe_append(investment_amount, dic, 'amount')
-                safe_append(investment_prop, dic, 'percent')
+                try:
+                    investment_prop.append(dic["percent"][:-1])
+                except:
+                    investment_prop.append(None)
 
                 safe_append_date(registered_date, dic, 'estiblishTime')
                 safe_append(condit, dic, 'regStatus')
@@ -272,22 +283,22 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[5] is 1:
             for dic in data["data"]["result"]:
                 try:
-                    change_time.append(dic["changeTime"] or u'')
+                    change_time.append(dic["changeTime"] or None)
                 except:
-                    change_time.append(u'')
+                    change_time.append(None)
                 try:
-                    change_item.append(dic["changeItem"] or u'')
+                    change_item.append(dic["changeItem"] or None)
                 except:
-                    change_item.append(u'')
+                    change_item.append(None)
                 try:
-                    before_change.append(dic["contentBefore"] or u'')
+                    before_change.append(dic["contentBefore"] or None)
                 except:
-                    before_change.append(u'')
+                    before_change.append(None)
 
                 try:
-                    after_change.append(dic["contentAfter"] or u'')
+                    after_change.append(dic["contentAfter"] or None)
                 except:
-                    after_change.append(u'')
+                    after_change.append(None)
 
         item["change_time"] = change_time
         item["change_item"] = change_item
@@ -322,9 +333,9 @@ class TianYanCha_Spider(CrawlSpider):
                 url = 'http://www.tianyancha.com/annualreport/newReport.json?id=' + str(item["company_id"]) + '&year=' + str(dic["reportYear"])
                 annual_url.append(url)
                 try:
-                    annual_year.append(dic["reportYear"] or u'')
+                    annual_year.append(dic["reportYear"] or None)
                 except:
-                    annual_year.append(u'')
+                    annual_year.append(None)
 
         item["annual_year"] = annual_year
         item["annual_url"] = annual_url
@@ -422,14 +433,14 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[7] is 1:
             for dic in data["data"]["result"]:
                 try:
-                    branch_id.append(dic["id"] or u'')
+                    branch_id.append(dic["id"] or None)
                 except:
-                    branch_id.append(u'')
+                    branch_id.append(None)
 
                 try:
-                    branch_name.append(dic["name"] or u'')
+                    branch_name.append(dic["name"] or None)
                 except:
-                    branch_name.append(u'')
+                    branch_name.append(None)
                 branch_legalrep.append(u'暂')
                 branch_cond.append(u'暂')
                 branch_regtime.append(u'暂')
@@ -485,41 +496,41 @@ class TianYanCha_Spider(CrawlSpider):
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["date"])[:10])))
                     finance_date.append(str(date))
                 except:
-                    finance_date.append(u'')
+                    finance_date.append(None)
                 try:
-                    finance_round.append(dic["round"] or u'')
+                    finance_round.append(dic["round"] or None)
                 except:
-                    finance_round.append(u'')
+                    finance_round.append(None)
 
                 try:
-                    valuation.append(dic["value"] or u'')
+                    valuation.append(dic["value"] or None)
                 except:
-                    valuation.append(u'')
+                    valuation.append(None)
 
                 try:
-                    finance_amount.append(dic["money"] or u'')
+                    finance_amount.append(dic["money"] or None)
                 except:
-                    finance_amount.append(u'')
+                    finance_amount.append(None)
 
                 try:
-                    finance_proportion.append(dic["share"] or u'')
+                    finance_proportion.append(dic["share"] or None)
                 except:
-                    finance_proportion.append(u'')
+                    finance_proportion.append(None)
 
                 try:
-                    investor.append(("，".join(re.findall(r'[\{|\,](.*?)\:', dic["rongziMap"]))) or u'')
+                    investor.append(("，".join(re.findall(r'[\{|\,](.*?)\:', dic["rongziMap"]))) or None)
                 except:
-                    investor.append(u'')
+                    investor.append(None)
 
                 try:
-                    news_title.append(dic["newsTitle"] or u'')
+                    news_title.append(dic["newsTitle"] or None)
                 except:
-                    news_title.append(u'')
+                    news_title.append(None)
 
                 try:
-                    news_url.append(dic["newsUrl"] or u'')
+                    news_url.append(dic["newsUrl"] or None)
                 except:
-                    news_url.append(u'')
+                    news_url.append(None)
 
         if len(response.body) > 6000:
             item["page"] += 1
@@ -556,24 +567,24 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[9] is 1:
             for dic in data["data"]["page"]["rows"]:
                 try:
-                    member_name.append(dic["name"] or u'')
+                    member_name.append(dic["name"] or None)
                 except:
-                    member_name.append(u'')
+                    member_name.append(None)
 
                 try:
-                    member_pos.append(dic["title"] or u'')
+                    member_pos.append(dic["title"] or None)
                 except:
-                    member_pos.append(u'')
+                    member_pos.append(None)
 
                 try:
-                    member_intro.append(dic["desc"] or u'')
+                    member_intro.append(dic["desc"] or None)
                 except:
-                    member_intro.append(u'')
+                    member_intro.append(None)
 
                 try:
-                    member_icon.append(dic["icon"] or u'')
+                    member_icon.append(dic["icon"] or None)
                 except:
-                    member_icon.append(u'')
+                    member_icon.append(None)
 
         item["member_name"] = member_name
         item["member_pos"] = member_pos
@@ -614,24 +625,24 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[10] is 1:
             for dic in data["data"]["page"]["rows"]:
                 try:
-                    product_name.append(dic["product"] or u'')
+                    product_name.append(dic["product"] or None)
                 except:
-                    product_name.append(u'')
+                    product_name.append(None)
 
                 try:
-                    product_type.append(dic["hangye"] or u'')
+                    product_type.append(dic["hangye"] or None)
                 except:
-                    product_type.append(u'')
+                    product_type.append(None)
 
                 try:
-                    product_short.append(dic["yewu"] or u'')
+                    product_short.append(dic["yewu"] or None)
                 except:
-                    product_short.append(u'')
+                    product_short.append(None)
 
                 try:
-                    product_logo.append(dic["logo"] or u'')
+                    product_logo.append(dic["logo"] or None)
                 except:
-                    product_logo.append(u'')
+                    product_logo.append(None)
 
         item["business_name"] = product_name
         item["business_type"] = product_type
@@ -680,42 +691,42 @@ class TianYanCha_Spider(CrawlSpider):
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["tzdate"])[:10])))
                     invest_time.append(str(date))
                 except:
-                    invest_time.append(u'')
+                    invest_time.append(None)
                 try:
-                    invest_round.append(dic["lunci"] or u'')
+                    invest_round.append(dic["lunci"] or None)
                 except:
-                    invest_round.append(u'')
+                    invest_round.append(None)
                 try:
-                    invest_amount.append(dic["money"] or u'')
+                    invest_amount.append(dic["money"] or None)
                 except:
-                    invest_amount.append(u'')
+                    invest_amount.append(None)
                 try:
-                    invest_company.append(("，".join(re.findall(r'[\{|\,](.*?)\:', dic["rongzi_map"])) or u''))
+                    invest_company.append(("，".join(re.findall(r'[\{|\,](.*?)\:', dic["rongzi_map"])) or None))
                 except:
-                    invest_company.append(u'')
+                    invest_company.append(None)
 
                 try:
-                    invest_pro_icon.append(dic["icon"] or u'')
+                    invest_pro_icon.append(dic["icon"] or None)
                 except:
-                    invest_pro_icon.append(u'')
+                    invest_pro_icon.append(None)
                 try:
-                    invest_area.append(dic["location"] or u'')
+                    invest_area.append(dic["location"] or None)
                 except:
-                    invest_area.append(u'')
+                    invest_area.append(None)
                 try:
-                    invest_product.append(dic["product"] or u'')
+                    invest_product.append(dic["product"] or None)
                 except:
-                    invest_product.append(u'')
+                    invest_product.append(None)
 
                 try:
-                    invest_industry.append(dic["hangye1"] or u'')
+                    invest_industry.append(dic["hangye1"] or None)
                 except:
-                    invest_industry.append(u'')
+                    invest_industry.append(None)
 
                 try:
-                    invest_business.append(dic["yewu"] or u'')
+                    invest_business.append(dic["yewu"] or None)
                 except:
-                    invest_business.append(u'')
+                    invest_business.append(None)
 
         item["invest_time"] = invest_time
         item["invest_round"] = invest_round
@@ -764,38 +775,38 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             for dic in data["data"]["page"]["rows"]:
                 try:
-                    product_name.append(dic["jingpinProduct"] or u'')
+                    product_name.append(dic["jingpinProduct"] or None)
                 except:
-                    product_name.append(u'')
+                    product_name.append(None)
                 try:
-                    product_logo.append(dic["icon"] or u'')
+                    product_logo.append(dic["icon"] or None)
                 except:
-                    product_logo.append(u'')
+                    product_logo.append(None)
                 try:
-                    product_area.append(dic["location"] or u'')
+                    product_area.append(dic["location"] or None)
                 except:
-                    product_area.append(u'')
+                    product_area.append(None)
                 try:
-                    product_round.append(dic["round"] or u'')
+                    product_round.append(dic["round"] or None)
                 except:
-                    product_round.append(u'')
+                    product_round.append(None)
                 try:
-                    product_industry.append(dic["hangye"] or u'')
+                    product_industry.append(dic["hangye"] or None)
                 except:
-                    product_industry.append(u'')
+                    product_industry.append(None)
                 try:
-                    product_business.append(dic["yewu"] or u'')
+                    product_business.append(dic["yewu"] or None)
                 except:
-                    product_business.append(u'')
+                    product_business.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["setupDate"])[:10])))
-                    setup_date.append(date or u'')
+                    setup_date.append(date or None)
                 except:
-                    setup_date.append(u'')
+                    setup_date.append(None)
                 try:
-                    product_valuation.append(dic["value"] or u'')
+                    product_valuation.append(dic["value"] or None)
                 except:
-                    product_valuation.append(u'')
+                    product_valuation.append(None)
 
         item["product_name"] = product_name
         item["product_logo"] = product_logo
@@ -832,8 +843,14 @@ class TianYanCha_Spider(CrawlSpider):
         judgement_id = item["judgement_id"]
         case_type = item["case_type"]
 
+        data = json.loads(response.body)
+
+        try:
+            test =  data["data"]["items"]
+        except:
+            flag[13] = 0
+
         if flag[13] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 safe_append(judgement_name, dic, 'title')
                 safe_append_date(lawsuit_date, dic, 'submittime')
@@ -863,6 +880,11 @@ class TianYanCha_Spider(CrawlSpider):
                                          callback=self.parse_lawsuit_detail)
                 yield request
             else:
+                item["relative_comp"] = []
+                item["judgement_title"] = []
+                item["case_num"] = []
+                item["judgement_content"] = []
+
                 next_url = 'http://www.tianyancha.com/v2/court/' + str(item["company_name"]) + '.json?'
                 request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag},
                                          callback=self.parse_court_announcement)
@@ -918,31 +940,31 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             for dic in data["courtAnnouncements"]:
                 try:
-                    announce_time.append(dic["publishdate"] or u'')
+                    announce_time.append(dic["publishdate"] or None)
                 except:
-                    announce_time.append(u'')
+                    announce_time.append(None)
                 try:
-                    appeal.append(dic["party1"] or u'')
+                    appeal.append(dic["party1"] or None)
                 except:
-                    appeal.append(u'')
+                    appeal.append(None)
                 try:
-                    respondent.append(dic["party2"] or u'')
+                    respondent.append(dic["party2"] or None)
                 except:
-                    respondent.append(u'')
+                    respondent.append(None)
                 try:
-                    announce_type.append(dic["bltntypename"] or u'')
+                    announce_type.append(dic["bltntypename"] or None)
                 except:
-                    announce_type.append(u'')
+                    announce_type.append(None)
 
                 try:
-                    court.append(dic["courtcode"] or u'')
+                    court.append(dic["courtcode"] or None)
                 except:
-                    court.append(u'')
+                    court.append(None)
 
                 try:
-                    announce_content.append(dic["content"] or u'')
+                    announce_content.append(dic["content"] or None)
                 except:
-                    announce_content.append(u'')
+                    announce_content.append(None)
 
         item["announce_time"] = announce_time
         item["appeal"] = appeal
@@ -976,61 +998,61 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
-                    dis_company.append(dic["iname"] or u'')
+                    dis_company.append(dic["iname"] or None)
                 except:
-                    dis_company.append(u'')
+                    dis_company.append(None)
 
                 try:
-                    dic_legalrepre.append(dic["businessentity"] or u'')
+                    dic_legalrepre.append(dic["businessentity"] or None)
                 except:
-                    dic_legalrepre.append(u'')
+                    dic_legalrepre.append(None)
 
                 try:
-                    dis_code.append(dic["cardnum"] or u'')
+                    dis_code.append(dic["cardnum"] or None)
                 except:
-                    dis_code.append(u'')
+                    dis_code.append(None)
                 try:
-                    execute_number.append(dic["casecode"] or u'')
+                    execute_number.append(dic["casecode"] or None)
                 except:
-                    execute_number.append(u'')
+                    execute_number.append(None)
 
                 try:
-                    case_number.append(dic["gistid"] or u'')
+                    case_number.append(dic["gistid"] or None)
                 except:
-                    case_number.append(u'')
+                    case_number.append(None)
 
                 try:
-                    execute_unite.append(dic["gistunit"] or u'')
+                    execute_unite.append(dic["gistunit"] or None)
                 except:
-                    execute_unite.append(u'')
+                    execute_unite.append(None)
                 try:
-                    legal_obligation.append(dic["duty"] or u'')
+                    legal_obligation.append(dic["duty"] or None)
                 except:
-                    legal_obligation.append(u'')
+                    legal_obligation.append(None)
 
                 try:
-                    performance.append(dic["performance"] or u'')
+                    performance.append(dic["performance"] or None)
                 except:
-                    performance.append(u'')
+                    performance.append(None)
 
                 try:
-                    execute_court.append(dic["courtname"] or u'')
+                    execute_court.append(dic["courtname"] or None)
                 except:
-                    execute_court.append(u'')
+                    execute_court.append(None)
                 try:
-                    province.append(dic["areaname"] or u'')
+                    province.append(dic["areaname"] or None)
                 except:
-                    province.append(u'')
+                    province.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["regdate"])[:10])))
                     filing_time.append(date)
                 except:
-                    filing_time.append(u'')
+                    filing_time.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishdate"])[:10])))
                     pub_time.append(date)
                 except:
-                    pub_time.append(u'')
+                    pub_time.append(None)
 
         item["dis_company"] = dis_company
         item["dic_legalrepre"] = dic_legalrepre
@@ -1070,21 +1092,21 @@ class TianYanCha_Spider(CrawlSpider):
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["caseCreateTime"])[:10])))
                     filing_date.append(date)
                 except:
-                    filing_date.append(u'')
+                    filing_date.append(None)
                 try:
-                    executed_target.append(dic["execMoney"] or u'')
+                    executed_target.append(dic["execMoney"] or None)
                 except:
-                    executed_target.append(u'')
+                    executed_target.append(None)
 
                 try:
-                    case_code.append(dic["caseCode"] or u'')
+                    case_code.append(dic["caseCode"] or None)
                 except:
-                    case_code.append(u'')
+                    case_code.append(None)
 
                 try:
-                    executed_court.append(dic["execCourtName"] or u'')
+                    executed_court.append(dic["execCourtName"] or None)
                 except:
-                    executed_court.append(u'')
+                    executed_court.append(None)
 
         item["filing_date"] = filing_date
         item["executed_target"] = executed_target
@@ -1129,19 +1151,19 @@ class TianYanCha_Spider(CrawlSpider):
                 safe_append(remove_reason, dic, 'removeReason')
                 safe_append(remove_authority, dic, 'removeDepartment')
                 try:
-                    include_date.append(dic["putDate"] or u'')
+                    include_date.append(dic["putDate"] or None)
                 except:
-                    include_date.append(u'')
+                    include_date.append(None)
 
                 try:
-                    include_reason.append(dic["putReason"] or u'')
+                    include_reason.append(dic["putReason"] or None)
                 except:
-                    include_reason.append(u'')
+                    include_reason.append(None)
 
                 try:
-                    include_authority.append(dic["putDepartment"] or u'')
+                    include_authority.append(dic["putDepartment"] or None)
                 except:
-                    include_authority.append(u'')
+                    include_authority.append(None)
 
         item["include_date"] = include_date
         item["include_reason"] = include_reason
@@ -1180,32 +1202,32 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
-                    pub_code.append(dic["punishNumber"] or u'')
+                    pub_code.append(dic["punishNumber"] or None)
                 except:
-                    pub_code.append(u'')
+                    pub_code.append(None)
 
                 try:
-                    pub_type.append(dic["type"] or u'')
+                    pub_type.append(dic["type"] or None)
                 except:
-                    pub_type.append(u'')
+                    pub_type.append(None)
                 try:
                     pub_content.append(dic["content"] or u'未公示')
                 except:
                     pub_content.append(u'未公示')
                 try:
-                    pub_date.append(dic["decisionDate"] or u'')
+                    pub_date.append(dic["decisionDate"] or None)
                 except:
-                    pub_date.append(u'')
+                    pub_date.append(None)
 
                 try:
-                    pub_authority.append(dic["departmentName"] or u'')
+                    pub_authority.append(dic["departmentName"] or None)
                 except:
-                    pub_authority.append(u'')
+                    pub_authority.append(None)
 
                 try:
-                    pub_people.append(dic["legalPersonName"] or u'')
+                    pub_people.append(dic["legalPersonName"] or None)
                 except:
-                    pub_people.append(u'')
+                    pub_people.append(None)
 
         item["pub_code"] = pub_code
         item["pub_type"] = pub_type
@@ -1244,15 +1266,15 @@ class TianYanCha_Spider(CrawlSpider):
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["putDate"])[:10])))
                     set_time.append(date)
                 except:
-                    set_time.append(u'')
+                    set_time.append(None)
                 try:
                     set_reason.append(dic["putReason"])
                 except:
-                    set_reason.append(u'')
+                    set_reason.append(None)
                 try:
                     set_department.append(dic["putDepartment"])
                 except:
-                    set_department.append(u'')
+                    set_department.append(None)
 
         item["set_time"] = set_time
         item["set_reason"] = set_reason
@@ -1298,37 +1320,37 @@ class TianYanCha_Spider(CrawlSpider):
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["regDate"])[:10])))
                     regist_date.append(date)
                 except:
-                    regist_date.append(u'')
+                    regist_date.append(None)
                 try:
-                    regist_num.append(dic["regNumber"] or u'')
+                    regist_num.append(dic["regNumber"] or None)
                 except:
-                    regist_num.append(u'')
+                    regist_num.append(None)
                 try:
-                    regist_cond.append(dic["state"] or u'')
+                    regist_cond.append(dic["state"] or None)
                 except:
-                    regist_cond.append(u'')
+                    regist_cond.append(None)
                 try:
-                    pledged_amount.append(dic["equityAmount"] or u'')
+                    pledged_amount.append(dic["equityAmount"] or None)
                 except:
-                    pledged_amount.append(u'')
+                    pledged_amount.append(None)
                 try:
-                    pledgor.append(dic["pledgor"] or u'')
+                    pledgor.append(dic["pledgor"] or None)
                 except:
-                    pledgor.append(u'')
+                    pledgor.append(None)
 
                 try:
-                    pledged_code.append(dic["certifNumber"] or u'')
+                    pledged_code.append(dic["certifNumber"] or None)
                 except:
-                    pledged_code.append(u'')
+                    pledged_code.append(None)
 
                 try:
-                    pledgee.append(dic["pledgee"] or u'')
+                    pledgee.append(dic["pledgee"] or None)
                 except:
-                    pledgee.append(u'')
+                    pledgee.append(None)
                 try:
-                    pledgee_code.append(dic["certifNumberR"] or u'')
+                    pledgee_code.append(dic["certifNumberR"] or None)
                 except:
-                    pledgee_code.append(u'')
+                    pledgee_code.append(None)
 
         item["regist_date"] = regist_date
         item["regist_num"] = regist_num
@@ -1389,62 +1411,62 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(data["data"])
             for dic in data["items"]:
                 try:
-                    registed_num.append(dic["baseInfo"]["regNum"] or u'')
+                    registed_num.append(dic["baseInfo"]["regNum"] or None)
                 except:
-                    registed_num.append(u'')
+                    registed_num.append(None)
 
                 try:
-                    registed_depart.append(dic["baseInfo"]["regDepartment"] or u'')
+                    registed_depart.append(dic["baseInfo"]["regDepartment"] or None)
                 except:
-                    registed_depart.append(u'')
+                    registed_depart.append(None)
 
                 try:
-                    registed_date.append(dic["baseInfo"]["regDate"] or u'')
+                    registed_date.append(dic["baseInfo"]["regDate"] or None)
                 except:
-                    registed_date.append(u'')
+                    registed_date.append(None)
 
                 try:
-                    registed_cond.append(dic["baseInfo"]["status"] or u'')
+                    registed_cond.append(dic["baseInfo"]["status"] or None)
                 except:
-                    registed_cond.append(u'')
+                    registed_cond.append(None)
 
                 try:
-                    vouched_type.append(dic["baseInfo"]["type"] or u'')
+                    vouched_type.append(dic["baseInfo"]["type"] or None)
                 except:
-                    vouched_type.append(u'')
+                    vouched_type.append(None)
 
                 try:
-                    vouched_amount.append(dic["baseInfo"]["amount"] or u'')
+                    vouched_amount.append(dic["baseInfo"]["amount"] or None)
                 except:
-                    vouched_amount.append(u'')
+                    vouched_amount.append(None)
 
                 try:
-                    debt_start.append(dic["baseInfo"]["term"][2:12].replace(u'年', '-').replace(u'月', '-').replace(u'日', '') or u'')
+                    debt_start.append(dic["baseInfo"]["term"][2:12].replace(u'年', '-').replace(u'月', '-').replace(u'日', '') or None)
                 except:
-                    debt_start.append(u'')
+                    debt_start.append(None)
 
                 try:
-                    debt_end.append(dic["baseInfo"]["term"][-10:].replace(u'年', '-').replace(u'月', '-').replace(u'日', '') or u'')
+                    debt_end.append(dic["baseInfo"]["term"][-10:].replace(u'年', '-').replace(u'月', '-').replace(u'日', '') or None)
                 except:
-                    debt_end.append(u'')
+                    debt_end.append(None)
 
                 try:
-                    vouched_range.append(dic["baseInfo"]["scope"] or u'')
+                    vouched_range.append(dic["baseInfo"]["scope"] or None)
                 except:
-                    vouched_range.append(u'')
+                    vouched_range.append(None)
                 try:
                     cancel_date.append(dic["baseInfo"]["cancelDate"])
                     cancel_reason.append(dic["baseInfo"]["cancelReason"])
                 except:
-                    cancel_date.append(u'')
-                    cancel_reason.append(u'')
+                    cancel_date.append(None)
+                    cancel_reason.append(None)
 
                 safe_append(mortgagee_info, dic, 'peopleInfo')
 
                 try:
                     pawn_info.append(str(dic["pawnInfoList"]).decode("unicode-escape"))
                 except:
-                    pawn_info.append(u'')
+                    pawn_info.append(None)
 
         item["registed_num"] = registed_num
         item["registed_depart"] = registed_depart
@@ -1494,29 +1516,29 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
-                    tax_date.append(dic["publishDate"] or u'')
+                    tax_date.append(dic["publishDate"] or None)
                 except:
-                    tax_date.append(u'')
+                    tax_date.append(None)
                 try:
-                    tax_num.append(dic["taxIdNumber"] or u'')
+                    tax_num.append(dic["taxIdNumber"] or None)
                 except:
-                    tax_num.append(u'')
+                    tax_num.append(None)
                 try:
-                    tax_type.append(dic["taxCategory"] or u'')
+                    tax_type.append(dic["taxCategory"] or None)
                 except:
-                    tax_type.append(u'')
+                    tax_type.append(None)
                 try:
-                    tax_current.append(dic[""] or u'')
+                    tax_current.append(dic[""] or None)
                 except:
-                    tax_current.append(u'')
+                    tax_current.append(None)
                 try:
-                    tax_balance.append(dic["ownTaxAmount"] or u'')
+                    tax_balance.append(dic["ownTaxAmount"] or None)
                 except:
-                    tax_balance.append(u'')
+                    tax_balance.append(None)
                 try:
-                    tax_depart.append(dic[""] or u'')
+                    tax_depart.append(dic[""] or None)
                 except:
-                    tax_depart.append(u'')
+                    tax_depart.append(None)
 
         item["tax_date"] = tax_date
         item["tax_num"] = tax_num
@@ -1565,21 +1587,21 @@ class TianYanCha_Spider(CrawlSpider):
                     url = 'http://www.tianyancha.com/extend/getCompanyBidByUUID.json?uuid=' + str(dic["uuid"])
                     bid_url.append(url)
                 except:
-                    bid_url.append(u'')
+                    bid_url.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishTime"])[:10])))
                     bid_time.append(date)
                 except:
-                    bid_time.append(u'')
+                    bid_time.append(None)
                 try:
-                    bid_title.append(dic["title"] or u'')
+                    bid_title.append(dic["title"] or None)
                 except:
-                    bid_title.append(u'')
+                    bid_title.append(None)
 
                 try:
-                    bid_purchaser.append(dic["purchaser"] or u'')
+                    bid_purchaser.append(dic["purchaser"] or None)
                 except:
-                    bid_purchaser.append(u'')
+                    bid_purchaser.append(None)
 
                 safe_append(bid_content, dic, "intro")
 
@@ -1719,52 +1741,52 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             for dic in data["data"]["bondList"]:
                 try:
-                    bond_name.append(dic["bondName"] or u'')
+                    bond_name.append(dic["bondName"] or None)
                 except:
-                    bond_name.append(u'')
+                    bond_name.append(None)
 
                 try:
-                    bond_code.append(dic["bondNum"] or u'')
+                    bond_code.append(dic["bondNum"] or None)
                 except:
-                    bond_code.append(u'')
+                    bond_code.append(None)
 
                 try:
-                    bond_publisher.append(dic["publisherName"] or u'')
+                    bond_publisher.append(dic["publisherName"] or None)
                 except:
-                    bond_publisher.append(u'')
+                    bond_publisher.append(None)
                 try:
-                    bond_type.append(dic["bondType"] or u'')
+                    bond_type.append(dic["bondType"] or None)
                 except:
-                    bond_type.append(u'')
+                    bond_type.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishTime"])[:10])))
                     bond_start.append(date)
                 except:
-                    bond_start.append(u'')
+                    bond_start.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["publishExpireTime"])[:10])))
                     bond_end.append(date)
                 except:
-                    bond_end.append(u'')
+                    bond_end.append(None)
                 try:
-                    bond_duration.append(dic["bondTimeLimit"] or u'')
+                    bond_duration.append(dic["bondTimeLimit"] or None)
                 except:
-                    bond_duration.append(u'')
+                    bond_duration.append(None)
 
                 try:
-                    trading_day.append(dic["bondTradeTime"] or u'')
+                    trading_day.append(dic["bondTradeTime"] or None)
                 except:
-                    trading_day.append(u'')
+                    trading_day.append(None)
 
                 try:
-                    interest_mode.append(dic["calInterestType"] or u'')
+                    interest_mode.append(dic["calInterestType"] or None)
                 except:
-                    interest_mode.append(u'')
+                    interest_mode.append(None)
 
                 try:
-                    bond_delisting.append(dic["bondStopTime"] or u'')
+                    bond_delisting.append(dic["bondStopTime"] or None)
                 except:
-                    bond_delisting.append(u'')
+                    bond_delisting.append(None)
                 try:
                     credit_agency.append(dic["creditRatingGov"] or u'未公示')
                 except:
@@ -1774,57 +1796,57 @@ class TianYanCha_Spider(CrawlSpider):
                 except:
                     bond_rating.append(u'未公示')
                 try:
-                    face_value.append(dic["faceValue"] or u'')
+                    face_value.append(dic["faceValue"] or None)
                 except:
-                    face_value.append(u'')
+                    face_value.append(None)
 
                 try:
                     reference_rate.append(dic["refInterestRate"] or u'未公示')
                 except:
                     reference_rate.append(u'未公示')
                 try:
-                    coupon_rate.append(dic["faceInterestRate"] or u'')
+                    coupon_rate.append(dic["faceInterestRate"] or None)
                 except:
-                    coupon_rate.append(u'')
+                    coupon_rate.append(None)
 
                 try:
-                    actual_circulation.append(dic["realIssuedQuantity"] or u'')
+                    actual_circulation.append(dic["realIssuedQuantity"] or None)
                 except:
-                    actual_circulation.append(u'')
+                    actual_circulation.append(None)
 
                 try:
-                    planned_circulation.append(dic["planIssuedQuantity"] or u'')
+                    planned_circulation.append(dic["planIssuedQuantity"] or None)
                 except:
-                    planned_circulation.append(u'')
+                    planned_circulation.append(None)
 
                 try:
-                    issue_price.append(dic["issuedPrice"] or u'')
+                    issue_price.append(dic["issuedPrice"] or None)
                 except:
-                    issue_price.append(u'')
+                    issue_price.append(None)
 
                 try:
                     spread.append(dic["interestDiff"] or u'未公示')
                 except:
                     spread.append(u'未公示')
                 try:
-                    frequency.append(dic["payInterestHZ"] or u'')
+                    frequency.append(dic["payInterestHZ"] or None)
                 except:
-                    frequency.append(u'')
+                    frequency.append(None)
 
                 try:
-                    bond_date.append(dic["startCalInterestTime"] or u'')
+                    bond_date.append(dic["startCalInterestTime"] or None)
                 except:
-                    bond_date.append(u'')
+                    bond_date.append(None)
 
                 try:
-                    trustee.append(dic["escrowAgent"] or u'')
+                    trustee.append(dic["escrowAgent"] or None)
                 except:
-                    trustee.append(u'')
+                    trustee.append(None)
 
                 try:
-                    circulation_scope.append(dic["flowRange"] or u'')
+                    circulation_scope.append(dic["flowRange"] or None)
                 except:
-                    circulation_scope.append(u'')
+                    circulation_scope.append(None)
                 try:
                     exercise_type.append(dic["exeRightType"] or u'未公示')
                 except:
@@ -1913,82 +1935,82 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             for dic in data["data"]["companyPurchaseLandList"]:
                 try:
-                    admini_region.append(dic["adminRegion"] or u'')
+                    admini_region.append(dic["adminRegion"] or None)
                 except:
-                    admini_region.append(u'')
+                    admini_region.append(None)
 
                 try:
-                    supervision_num.append(dic["elecSupervisorNo"] or u'')
+                    supervision_num.append(dic["elecSupervisorNo"] or None)
                 except:
-                    supervision_num.append(u'')
+                    supervision_num.append(None)
 
                 try:
-                    pruchase_trustee.append(dic["assignee"] or u'')
+                    pruchase_trustee.append(dic["assignee"] or None)
                 except:
-                    pruchase_trustee.append(u'')
+                    pruchase_trustee.append(None)
 
                 try:
-                    trasaction_price.append(dic["dealPrice"] or u'')
+                    trasaction_price.append(dic["dealPrice"] or None)
                 except:
-                    trasaction_price.append(u'')
+                    trasaction_price.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["signedDate"])[:10])))
                     signed_date.append(date)
                 except:
-                    signed_date.append(u'')
+                    signed_date.append(None)
                 try:
-                    total_area.append(dic["totalArea"] or u'')
+                    total_area.append(dic["totalArea"] or None)
                 except:
-                    total_area.append(u'')
+                    total_area.append(None)
 
                 try:
-                    parcel_location.append(dic["location"] or u'')
+                    parcel_location.append(dic["location"] or None)
                 except:
-                    parcel_location.append(u'')
+                    parcel_location.append(None)
 
                 try:
-                    purchase_assignee.append(dic["assignee"] or u'')
+                    purchase_assignee.append(dic["assignee"] or None)
                 except:
-                    purchase_assignee.append(u'')
+                    purchase_assignee.append(None)
 
                 try:
-                    superior_company.append(dic["parentCompany"] or u'')
+                    superior_company.append(dic["parentCompany"] or None)
                 except:
-                    superior_company.append(u'')
+                    superior_company.append(None)
 
                 try:
-                    land_use.append(dic["purpose"] or u'')
+                    land_use.append(dic["purpose"] or None)
                 except:
-                    land_use.append(u'')
+                    land_use.append(None)
 
                 try:
-                    supply_mode.append(dic["supplyWay"] or u'')
+                    supply_mode.append(dic["supplyWay"] or None)
                 except:
-                    supply_mode.append(u'')
+                    supply_mode.append(None)
 
                 try:
-                    max_volume.append(dic["maxVolume"] or u'')
+                    max_volume.append(dic["maxVolume"] or None)
                 except:
-                    max_volume.append(u'')
+                    max_volume.append(None)
 
                 try:
-                    min_volume.append(dic["minVolume"] or u'')
+                    min_volume.append(dic["minVolume"] or None)
                 except:
-                    min_volume.append(u'')
+                    min_volume.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["startTime"])[:10])))
                     start_time.append(date)
                 except:
-                    start_time.append(u'')
+                    start_time.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["endTime"])[:10])))
                     end_time.append(date)
                 except:
-                    end_time.append(u'')
+                    end_time.append(None)
                 try:
-                    link_url.append(dic["linkUrl"] or u'')
+                    link_url.append(dic["linkUrl"] or None)
                 except:
-                    link_url.append(u'')
+                    link_url.append(None)
 
         item["admini_region"] = admini_region
         item["supervision_num"] = supervision_num
@@ -2054,68 +2076,68 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             for dic in data["data"]["companyEmploymentList"]:
                 try:
-                    employ_position.append(dic["title"] or u'')
+                    employ_position.append(dic["title"] or None)
                 except:
-                    employ_position.append(u'')
+                    employ_position.append(None)
 
                 try:
-                    employ_city.append(dic["city"] or u'')
+                    employ_city.append(dic["city"] or None)
                 except:
-                    employ_city.append(u'')
+                    employ_city.append(None)
 
                 try:
-                    employ_area.append(dic["district"] or u'')
+                    employ_area.append(dic["district"] or None)
                 except:
-                    employ_area.append(u'')
+                    employ_area.append(None)
 
                 try:
-                    employ_company.append(dic["companyName"] or u'')
+                    employ_company.append(dic["companyName"] or None)
                 except:
-                    employ_company.append(u'')
+                    employ_company.append(None)
 
                 try:
-                    wage.append(dic["oriSalary"] or u'')
+                    wage.append(dic["oriSalary"] or None)
                 except:
-                    wage.append(u'')
+                    wage.append(None)
 
                 try:
-                    experience.append(dic["experience"] or u'')
+                    experience.append(dic["experience"] or None)
                 except:
-                    experience.append(u'')
+                    experience.append(None)
 
                 try:
-                    source.append(dic["source"] or u'')
+                    source.append(dic["source"] or None)
                 except:
-                    source.append(u'')
+                    source.append(None)
 
                 try:
-                    source_url.append(dic["urlPath"] or u'')
+                    source_url.append(dic["urlPath"] or None)
                 except:
-                    source_url.append(u'')
+                    source_url.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["startdate"])[:10])))
                     start_date.append(date)
                 except:
-                    start_date.append(u'')
+                    start_date.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["enddate"])[:10])))
                     end_date.append(date)
                 except:
-                    end_date.append(u'')
+                    end_date.append(None)
                 try:
-                    education.append(dic["education"] or u'')
+                    education.append(dic["education"] or None)
                 except:
-                    education.append(u'')
+                    education.append(None)
 
                 try:
-                    employ_num.append(dic["employerNumber"] or u'')
+                    employ_num.append(dic["employerNumber"] or None)
                 except:
-                    employ_num.append(u'')
+                    employ_num.append(None)
 
                 try:
-                    position_desc.append(dic["description"] or u'')
+                    position_desc.append(dic["description"] or None)
                 except:
-                    position_desc.append(u'')
+                    position_desc.append(None)
 
         item["employ_position"] = employ_position
         item["employ_city"] = employ_city
@@ -2162,29 +2184,29 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
-                    rating_year.append(dic["year"] or u'')
+                    rating_year.append(dic["year"] or None)
                 except:
-                    rating_year.append(u'')
+                    rating_year.append(None)
 
                 try:
-                    rating_level.append(dic["grade"] or u'')
+                    rating_level.append(dic["grade"] or None)
                 except:
-                    rating_level.append(u'')
+                    rating_level.append(None)
 
                 try:
-                    rating_type.append(dic["type"] or u'')
+                    rating_type.append(dic["type"] or None)
                 except:
-                    rating_type.append(u'')
+                    rating_type.append(None)
 
                 try:
-                    rating_num.append(dic["idNumber"] or u'')
+                    rating_num.append(dic["idNumber"] or None)
                 except:
-                    rating_num.append(u'')
+                    rating_num.append(None)
 
                 try:
-                    rating_office.append(dic["evalDepartment"] or u'')
+                    rating_office.append(dic["evalDepartment"] or None)
                 except:
-                    rating_office.append(u'')
+                    rating_office.append(None)
 
         if len(response.body) > 500:
             item["page"] += 1
@@ -2269,34 +2291,34 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
-                    product_icon.append(dic["icon"] or u'')
+                    product_icon.append(dic["icon"] or None)
                 except:
-                    product_icon.append(u'')
+                    product_icon.append(None)
 
                 try:
-                    product_title.append(dic["name"] or u'')
+                    product_title.append(dic["name"] or None)
                 except:
-                    product_title.append(u'')
+                    product_title.append(None)
 
                 try:
-                    product_short.append(dic["filterName"] or u'')
+                    product_short.append(dic["filterName"] or None)
                 except:
-                    product_short.append(u'')
+                    product_short.append(None)
 
                 try:
-                    product_type.append(dic["type"] or u'')
+                    product_type.append(dic["type"] or None)
                 except:
-                    product_type.append(u'')
+                    product_type.append(None)
 
                 try:
-                    product_field.append(dic["classes"] or u'')
+                    product_field.append(dic["classes"] or None)
                 except:
-                    product_field.append(u'')
+                    product_field.append(None)
 
                 try:
-                    product_desc.append(dic["brief"] or u'')
+                    product_desc.append(dic["brief"] or None)
                 except:
-                    product_desc.append(u'')
+                    product_desc.append(None)
 
         item["product_icon"] = product_icon
         item["product_title"] = product_title
@@ -2338,34 +2360,34 @@ class TianYanCha_Spider(CrawlSpider):
             data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
-                    device_num.append(dic["deviceType"] or u'')
+                    device_num.append(dic["deviceType"] or None)
                 except:
-                    device_num.append(u'')
+                    device_num.append(None)
 
                 try:
-                    permit_num.append(dic["licenceNum"] or u'')
+                    permit_num.append(dic["licenceNum"] or None)
                 except:
-                    permit_num.append(u'')
+                    permit_num.append(None)
 
                 try:
-                    device_name.append(dic["deviceName"] or u'')
+                    device_name.append(dic["deviceName"] or None)
                 except:
-                    device_name.append(u'')
+                    device_name.append(None)
 
                 try:
-                    cert_type.append(dic["licenceType"] or u'')
+                    cert_type.append(dic["licenceType"] or None)
                 except:
-                    cert_type.append(u'')
+                    cert_type.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["issueDate"])[:10])))
                     cert_start.append(date)
                 except:
-                    cert_start.append(u'')
+                    cert_start.append(None)
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["toDate"])[:10])))
                     cert_end.append(date)
                 except:
-                    cert_end.append(u'')
+                    cert_end.append(None)
 
         item["device_name"] = device_name
         item["cert_type"] = cert_type
@@ -2415,27 +2437,27 @@ class TianYanCha_Spider(CrawlSpider):
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["appDate"])[:10])))
                     brand_date.append(date)
                 except:
-                    brand_date.append(u'')
+                    brand_date.append(None)
                 try:
-                    brand_icon.append(dic["tmPic"] or u'')
+                    brand_icon.append(dic["tmPic"] or None)
                 except:
-                    brand_icon.append(u'')
+                    brand_icon.append(None)
                 try:
-                    brand_name.append(dic["tmName"] or u'')
+                    brand_name.append(dic["tmName"] or None)
                 except:
-                    brand_name.append(u'')
+                    brand_name.append(None)
                 try:
-                    brand_num.append(dic["regNo"] or u'')
+                    brand_num.append(dic["regNo"] or None)
                 except:
-                    brand_num.append(u'')
+                    brand_num.append(None)
                 try:
-                    brand_type.append(dic["intCls"] or u'')
+                    brand_type.append(dic["intCls"] or None)
                 except:
-                    brand_type.append(u'')
+                    brand_type.append(None)
                 try:
-                    brand_cond.append(dic["category"] or u'')
+                    brand_cond.append(dic["category"] or None)
                 except:
-                    brand_cond.append(u'')
+                    brand_cond.append(None)
 
         item["brand_date"] = brand_date
         item["brand_icon"] = brand_icon
@@ -2498,70 +2520,70 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[32] is 1:
             for dic in data["data"]["items"]:
                 try:
-                    patent_pic.append(dic["imgUrl"] or u'')
+                    patent_pic.append(dic["imgUrl"] or None)
                 except:
-                    patent_pic.append("u''")
+                    patent_pic.append("None")
                 try:
-                    app_num.append(dic["applicationPublishNum"] or u'')
+                    app_num.append(dic["applicationPublishNum"] or None)
                 except:
-                    app_num.append(u'')
+                    app_num.append(None)
 
                 try:
-                    patent_num.append(dic["patentNum"] or u'')
+                    patent_num.append(dic["patentNum"] or None)
                 except:
-                    patent_num.append(u'')
+                    patent_num.append(None)
 
                 try:
-                    category_num.append(dic["allCatNum"] or u'')
+                    category_num.append(dic["allCatNum"] or None)
                 except:
-                    category_num.append(u'')
+                    category_num.append(None)
 
                 try:
-                    patent_name.append(dic["patentName"] or u'')
+                    patent_name.append(dic["patentName"] or None)
                 except:
-                    patent_name.append(u'')
+                    patent_name.append(None)
 
                 try:
-                    patent_address.append(dic["address"] or u'')
+                    patent_address.append(dic["address"] or None)
                 except:
-                    patent_address.append(u'')
+                    patent_address.append(None)
 
                 try:
-                    inventor.append(dic["inventor"] or u'')
+                    inventor.append(dic["inventor"] or None)
                 except:
-                    inventor.append(u'')
+                    inventor.append(None)
 
                 try:
-                    applicant.append(dic["applicantName"] or u'')
+                    applicant.append(dic["applicantName"] or None)
                 except:
-                    applicant.append(u'')
+                    applicant.append(None)
 
                 try:
-                    apply_date.append(dic["applicationTime"] or u'')
+                    apply_date.append(dic["applicationTime"] or None)
                 except:
-                    apply_date.append(u'')
+                    apply_date.append(None)
 
                 try:
-                    publish_date.append(dic["applicationPublishTime"] or u'')
+                    publish_date.append(dic["applicationPublishTime"] or None)
                 except:
-                    publish_date.append(u'')
+                    publish_date.append(None)
 
                 try:
-                    patent_id.append(dic["pid"] or u'')
+                    patent_id.append(dic["pid"] or None)
                 except:
-                    patent_id.append(u'')
+                    patent_id.append(None)
                 try:
-                    agency.append(dic["agency"] or u'')
+                    agency.append(dic["agency"] or None)
                 except:
-                    agency.append(u'')
+                    agency.append(None)
                 try:
-                    agent.append(dic["agent"] or u'')
+                    agent.append(dic["agent"] or None)
                 except:
-                    agent.append(u'')
+                    agent.append(None)
                 try:
-                    abstracts.append(dic["abstracts"] or u'')
+                    abstracts.append(dic["abstracts"] or None)
                 except:
-                    abstracts.append(u'')
+                    abstracts.append(None)
 
         item["patent_id"] = patent_id
         item["patent_pic"] = patent_pic
@@ -2620,43 +2642,43 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[33] is 1:
             for dic in data["data"]["items"]:
                 try:
-                    simple_name.append(dic["simplename"] or u'')
+                    simple_name.append(dic["simplename"] or None)
                 except:
-                    simple_name.append(u'')
+                    simple_name.append(None)
                 try:
-                    reg_num.append(dic["regnum"] or u'')
+                    reg_num.append(dic["regnum"] or None)
                 except:
-                    reg_num.append(u'')
+                    reg_num.append(None)
 
                 try:
-                    cat_num.append(dic["catnum"] or u'')
+                    cat_num.append(dic["catnum"] or None)
                 except:
-                    cat_num.append(u'')
+                    cat_num.append(None)
 
                 try:
-                    version.append(dic["version"] or u'')
+                    version.append(dic["version"] or None)
                 except:
-                    version.append(u'')
+                    version.append(None)
 
                 try:
-                    author_nationality.append(dic["authorNationality"] or u'')
+                    author_nationality.append(dic["authorNationality"] or None)
                 except:
-                    author_nationality.append(u'')
+                    author_nationality.append(None)
 
                 try:
-                    first_publish.append(dic["publishtime"] or u'')
+                    first_publish.append(dic["publishtime"] or None)
                 except:
-                    first_publish.append(u'')
+                    first_publish.append(None)
 
                 try:
-                    reg_time.append(dic["regtime"] or u'')
+                    reg_time.append(dic["regtime"] or None)
                 except:
-                    reg_time.append(u'')
+                    reg_time.append(None)
 
                 try:
-                    full_name.append(dic["fullname"] or u'')
+                    full_name.append(dic["fullname"] or None)
                 except:
-                    full_name.append(u'')
+                    full_name.append(None)
 
         item["full_name"] = full_name
         item["simple_name"] = simple_name
@@ -2698,35 +2720,35 @@ class TianYanCha_Spider(CrawlSpider):
         if flag[34] is 1:
             for dic in data["data"]:
                 try:
-                    domain_name.append(dic["ym"] or u'')
+                    domain_name.append(dic["ym"] or None)
                 except:
-                    domain_name.append(u'')
+                    domain_name.append(None)
                 try:
-                    record_date.append(dic["examineDate"] or u'')
+                    record_date.append(dic["examineDate"] or None)
                 except:
-                    record_date.append(u'')
+                    record_date.append(None)
 
                 try:
-                    web_name.append(dic["webName"] or u'')
+                    web_name.append(dic["webName"] or None)
                 except:
-                    web_name.append(u'')
+                    web_name.append(None)
 
                 try:
-                    record_num.append(dic["liscense"] or u'')
+                    record_num.append(dic["liscense"] or None)
                 except:
-                    record_num.append(u'')
+                    record_num.append(None)
 
                 web_status.append(u'正常')
 
                 try:
-                    unit_nature.append(dic["companyType"] or u'')
+                    unit_nature.append(dic["companyType"] or None)
                 except:
-                    unit_nature.append(u'')
+                    unit_nature.append(None)
                 try:
                     web = '，'.join(dic["webSite"])
                     web_url.append(web)
                 except:
-                    web_url.append(u'')
+                    web_url.append(None)
 
         item["record_date"] = record_date
         item["web_name"] = web_name
