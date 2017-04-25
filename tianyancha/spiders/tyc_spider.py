@@ -30,8 +30,6 @@ class TianYanCha_Spider(CrawlSpider):
         item = TianyanchaItem()
         company_id = response.url[34:]
         company_name = response.selector.xpath('//div[@class="company_header_width"]/div[1]/span/text()').extract_first(default=u'未公开')
-        print company_name
-        print 'COMPANY_NAME HAS PRINTED!!!!!!!!!!!!'
         legal_representative = response.selector.xpath('//a[@ng-if="company.legalPersonName"]/text()').extract_first(default=u'未公开')
         registered_capital = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[2]/div/text()').extract_first(default=u'未公开')
         registered_time = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[3]/div/text()').extract_first(default=u'未公开')
@@ -345,24 +343,22 @@ class TianYanCha_Spider(CrawlSpider):
         item["branch_legalrep"] = []
         item["branch_cond"] = []
         item["branch_regtime"] = []
+        item["total_assets"] = []
+        item["total_sales"] = []
+        item["mainbusiness_income"] = []
+        item["total_tax"] = []
+        item["total_ownersequity"] = []
+        item["total_profit"] = []
+        item["retained_profits"] = []
+        item["total_liabilities"] = []
+
+        item["amend_date"] = []
+        item["amend_event"] = []
+        item["before_amend"] = []
+        item["after_amend"] = []
         item["page"] = 1
 
         if flag[6] is 1:
-
-            item["total_assets"] = []
-            item["total_sales"] = []
-            item["mainbusiness_income"] = []
-            item["total_tax"] = []
-            item["total_ownersequity"] = []
-            item["total_profit"] = []
-            item["retained_profits"] = []
-            item["total_liabilities"] = []
-
-            item["amend_date"] = []
-            item["amend_event"] = []
-            item["before_amend"] = []
-            item["after_amend"] = []
-
             item["page"] = 1
             next_url = item["annual_url"][0]
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_annual_detail)
@@ -2665,15 +2661,8 @@ class TianYanCha_Spider(CrawlSpider):
                 except:
                     author_nationality.append(None)
 
-                try:
-                    first_publish.append(dic["publishtime"] or None)
-                except:
-                    first_publish.append(None)
-
-                try:
-                    reg_time.append(dic["regtime"] or None)
-                except:
-                    reg_time.append(None)
+                safe_append_date(first_publish, dic, 'publishtime')
+                safe_append_date(reg_time, dic, 'regtime')
 
                 try:
                     full_name.append(dic["fullname"] or None)

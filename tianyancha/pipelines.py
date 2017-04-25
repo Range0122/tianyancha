@@ -441,8 +441,8 @@ class TianyanchaPipeline(object):
                 selec_result = self.cursor.execute("SELECT companyid FROM company WHERE tyqycid='%s'" % y)
 
                 if selec_result == 0:
-                    self.cursor.execute("INSERT INTO company(tyqycid,comp_name,organization_code,credit_code,comp_type) "
-                                        "VALUES (%s,%s,'000','000','000')", (y, x))
+                    self.cursor.execute("INSERT INTO company(tyqycid,comp_name) "
+                                        "VALUES (%s,%s)", (y, x))
                     share_company_fk = int(self.cursor.lastrowid)
                 else:
                     share_company_fk = int(self.cursor.fetchone()[0])
@@ -478,10 +478,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
-             self.cursor.execute("INSERT INTO report "
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
+                self.cursor.execute("INSERT INTO report "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "report", self.annual_reports)
@@ -493,10 +499,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
-             self.cursor.execute("INSERT INTO financing "
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
+                self.cursor.execute("INSERT INTO financing "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "financing", self.finance_history)
@@ -509,8 +521,8 @@ class TianyanchaPipeline(object):
             selec_result = self.cursor.execute("SELECT companyid FROM company WHERE tyqycid='%s'" % y)
             try:
              if selec_result == 0:
-                self.cursor.execute("INSERT INTO company(tyqycid,comp_name,organization_code,credit_code,comp_type) "
-                                        "VALUES (%s,%s,'000','000','000')", (y, x))
+                self.cursor.execute("INSERT INTO company(tyqycid,comp_name) "
+                                        "VALUES (%s,%s)", (y, x))
                 invested_fk.append(str(int(self.cursor.lastrowid)))
              else:
                 invested_fk.append(str(int(self.cursor.fetchone()[0])))
@@ -522,10 +534,16 @@ class TianyanchaPipeline(object):
              memory.append(item[self.investment[i]])
          for i in xrange(0, len(memory[0])):
             try:
-             self.cursor.execute("INSERT INTO investment_info "
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
+                self.cursor.execute("INSERT INTO investment_info "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
              print traceback.print_exc()
          # self.date_insert(item, "investment", self.investment)
@@ -537,10 +555,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
-             self.cursor.execute("INSERT INTO change_record "
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
+                self.cursor.execute("INSERT INTO change_record "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "change_record", self.change_record)
@@ -552,10 +576,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO core_team "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "core_team", self.core_team)
@@ -567,10 +597,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO business_info "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "business_info", self.enterprise_business)
@@ -582,10 +618,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO investment_event "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "investment_event", self.investment_event)
@@ -597,10 +639,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO competing_product "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "competing_product", self.competing_product)
@@ -613,9 +661,15 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO judgement "
                                 "VALUES(NULL,%s,%s,%s,%s,%s)",
-                                tuple(str(x[i]) for x in memory))
+                                tuple(tmp))
                 judge_fk.append(str(int(self.cursor.lastrowid)))
             except Exception,e:
                 print tuple(x[i] for x in memory)
@@ -633,10 +687,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO law_suit "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "lawsuit", self.)
@@ -649,10 +709,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO court_announcement "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "court_announcement", self.court_announcement)
@@ -664,10 +730,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO executed_people "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "executed_people", self.the_executed)
@@ -679,10 +751,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO administrative_penalty "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "administrative_penalty", self.adminis_pubnish)
@@ -697,10 +775,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO equity_pledged "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "equity_pledged", self.equity_pledge)
@@ -713,9 +797,15 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO RFP "
                                 "VALUES(NULL,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
                 rfp_fk.append(str(int(self.cursor.lastrowid)))
             except Exception,e:
                 print traceback.print_exc()
@@ -730,10 +820,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO tendering "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "tendering", self.)
@@ -745,10 +841,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO recruitment "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "recruitment", self.the_employ)
@@ -760,10 +862,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO tax_level "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "tax_level", self.rating_tax)
@@ -775,10 +883,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO random_check "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "random_check", self.random_check)
@@ -790,10 +904,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO product_info "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "product_info", self.product_info)
@@ -805,10 +925,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO tradmark_infomation "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "tradmark_infomation", self.brand_info)
@@ -820,10 +946,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO patent "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "patent", self.patent_info)
@@ -835,10 +967,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO copyright "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "copyright", self.copyright_info)
@@ -850,10 +988,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO website_record "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "website_record", self.website_filing)
@@ -865,10 +1009,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO qualification "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "qualification", self.quality_cert)
@@ -880,10 +1030,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO bond_info "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "bond_info", self.bond_information)
@@ -895,10 +1051,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO land_purchase "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
             # self.date_insert(item, "land_purchase", self.purchase_island)
@@ -910,10 +1072,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO tax_announcement "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
             # self.date_insert(item, "tax_announcement", self.owe_tax)
@@ -928,10 +1096,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO chattel_mortgage "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(str(x[i]) for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
          # self.date_insert(item, "detailed_report", self.)
@@ -943,10 +1117,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO serious_offense "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "serious_offense", self.seriously_illegal)
@@ -958,10 +1138,15 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
-                self.cursor.execute("INSERT INTO abnormal_operation"
-                                "VALUES(NULL," + item["company_id"] + ","
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
+                self.cursor.execute("INSERT INTO abnormal_operation VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "", self.)
@@ -973,10 +1158,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO dishonest_people "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "dishonest_people", self.the_dishonest)
@@ -988,10 +1179,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO branch "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "branch", self.branches)
@@ -1003,10 +1200,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO detailed_report "
                                 "VALUES(NULL," + item["company_id"] + ','
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "detailed_report", self.detailed_report)
@@ -1018,10 +1221,16 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
          for i in xrange(0, len(memory[0])):
             try:
+                tmp = []
+                for x in memory:
+                    if isinstance(x[i], None):
+                        tmp.append(x[i])
+                    else:
+                        tmp.append(str(x[i]))
                 self.cursor.execute("INSERT INTO amendment "
                                 "VALUES(NULL," + item["company_id"] + ','
                                                                       "%s,%s,%s,%s)",
-                                tuple(x[i] for x in memory))
+                                tuple(tmp))
             except Exception,e:
                 print traceback.print_exc()
             # self.date_insert(item, "amendment", self.)
