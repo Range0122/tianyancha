@@ -255,8 +255,8 @@ class TianyanchaPipeline(object):
                                 'supervision_num',
                                 'total_area',
                                 'superior_company',
-                                'supply_mode',
                                 'max_volume',
+                                'supply_mode',
                                 'end_time',
                                 ]
         self.the_employ = ['start_date',
@@ -480,10 +480,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO report "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s)",
@@ -501,10 +501,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO financing "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -536,10 +536,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO investment_info "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -557,10 +557,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO change_record "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s)",
@@ -578,10 +578,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO core_team "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s)",
@@ -599,10 +599,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO business_info "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s)",
@@ -620,10 +620,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO investment_event "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -641,10 +641,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO competing_product "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -663,10 +663,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO judgement "
                                 "VALUES(NULL,%s,%s,%s,%s,%s)",
                                 tuple(tmp))
@@ -689,10 +689,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO law_suit "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s)",
@@ -711,10 +711,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO court_announcement "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
@@ -732,10 +732,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO executed_people "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s)",
@@ -753,10 +753,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO administrative_penalty "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s)",
@@ -777,10 +777,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO equity_pledged "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -799,10 +799,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO RFP "
                                 "VALUES(NULL,%s,%s,%s,%s)",
                                 tuple(tmp))
@@ -822,10 +822,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO tendering "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s)",
@@ -843,10 +843,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO recruitment "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -864,10 +864,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO tax_level "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s)",
@@ -885,10 +885,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO random_check "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s)",
@@ -906,10 +906,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO product_info "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
@@ -927,10 +927,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO tradmark_infomation "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
@@ -948,10 +948,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO patent "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -969,10 +969,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO copyright "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -990,10 +990,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO website_record "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
@@ -1011,10 +1011,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO qualification "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
@@ -1032,10 +1032,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO bond_info "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -1053,10 +1053,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO land_purchase "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -1074,10 +1074,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO tax_announcement "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
@@ -1098,10 +1098,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO chattel_mortgage "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -1119,10 +1119,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO serious_offense "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s)",
@@ -1140,10 +1140,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO abnormal_operation VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
                                 tuple(tmp))
@@ -1160,10 +1160,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO dishonest_people "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -1181,10 +1181,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO branch "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s)",
@@ -1202,10 +1202,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO detailed_report "
                                 "VALUES(NULL," + item["company_id"] + ','
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -1223,10 +1223,10 @@ class TianyanchaPipeline(object):
             try:
                 tmp = []
                 for x in memory:
-                    if isinstance(x[i], None):
-                        tmp.append(x[i])
-                    else:
+                    if isinstance(x[i], list):
                         tmp.append(str(x[i]))
+                    else:
+                        tmp.append(x[i])
                 self.cursor.execute("INSERT INTO amendment "
                                 "VALUES(NULL," + item["company_id"] + ','
                                                                       "%s,%s,%s,%s)",

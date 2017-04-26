@@ -105,8 +105,13 @@ class TianYanCha_Spider(CrawlSpider):
         person_name = []
         position = []
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["result"]
+        except:
+            flag[2] = 0
+
         if flag[2] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["result"]:
                 person_id.append(dic["id"])
                 person_name.append(dic["name"])
@@ -387,17 +392,22 @@ class TianYanCha_Spider(CrawlSpider):
             names[alter_event_name_list[i]] = item[alter_event_item_list[i]]
 
         data = json.loads(response.body)
+        try:
+            temp = data["data"]
+        except:
+            flag[6] = 0
 
-        for item_name in asset_status_name_list:
-            safe_appends(names[item_name], data["data"], "baseInfo", item_name)
+        if flag[6] is 1:
+            for item_name in asset_status_name_list:
+                safe_appends(names[item_name], data["data"], "baseInfo", item_name)
 
-        for item_name in alter_event_name_list:
-            safe_appends(names[item_name], data["data"], "changeRecordList", item_name)
+            for item_name in alter_event_name_list:
+                safe_appends(names[item_name], data["data"], "changeRecordList", item_name)
 
-        for i in range(len(asset_status_name_list)):
-            item[asset_status_item_list[i]] = names[asset_status_name_list[i]]
-        for i in range(len(alter_event_name_list)):
-            item[alter_event_item_list[i]] = names[alter_event_name_list[i]]
+            for i in range(len(asset_status_name_list)):
+                item[asset_status_item_list[i]] = names[asset_status_name_list[i]]
+            for i in range(len(alter_event_name_list)):
+                item[alter_event_item_list[i]] = names[alter_event_name_list[i]]
 
         if response.url == item["annual_url"][-1]:
 
@@ -680,6 +690,12 @@ class TianYanCha_Spider(CrawlSpider):
         invest_industry = item["invest_industry"]
         invest_business = item["invest_business"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["page"]["rows"]
+        except:
+            flag[11] = 0
+
         if flag[11] is 1:
             data = json.loads(response.body)
             for dic in data["data"]["page"]["rows"]:
@@ -767,8 +783,13 @@ class TianYanCha_Spider(CrawlSpider):
         setup_date = item["setup_date"]
         product_valuation = item["product_valuation"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["page"]["rows"]
+        except:
+            flag[12] = 0
+
         if flag[12] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["page"]["rows"]:
                 try:
                     product_name.append(dic["jingpinProduct"] or None)
@@ -932,8 +953,13 @@ class TianYanCha_Spider(CrawlSpider):
         court = []
         announce_content = []
 
+        data = json.loads(response.body)
+        try:
+            test = data["courtAnnouncements"]
+        except:
+            flag[14] = 0
+
         if flag[14] is 1:
-            data = json.loads(response.body)
             for dic in data["courtAnnouncements"]:
                 try:
                     announce_time.append(dic["publishdate"] or None)
@@ -990,8 +1016,14 @@ class TianYanCha_Spider(CrawlSpider):
         filing_time = []
         pub_time = []
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[15] = 0
+
         if flag[15] is 1:
-            data = json.loads(response.body)
+
             for dic in data["data"]["items"]:
                 try:
                     dis_company.append(dic["iname"] or None)
@@ -1081,8 +1113,14 @@ class TianYanCha_Spider(CrawlSpider):
         case_code = item["case_code"]
         executed_court = item["executed_court"]
 
+        data = json.loads(response.body)
+
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[16] = 0
+
         if flag[16] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["caseCreateTime"])[:10])))
@@ -1132,7 +1170,6 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
-
         include_date = item["include_date"]
         include_reason = item["include_reason"]
         include_authority = item["include_authority"]
@@ -1140,8 +1177,13 @@ class TianYanCha_Spider(CrawlSpider):
         remove_reason = item["remove_reason"]
         remove_authority = item["remove_authority"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["result"]
+        except:
+            flag[17] = 0
+
         if flag[17] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["result"]:
                 safe_append(remove_date, dic, 'removeDate')
                 safe_append(remove_reason, dic, 'removeReason')
@@ -1194,8 +1236,13 @@ class TianYanCha_Spider(CrawlSpider):
         pub_authority = item["pub_authority"]
         pub_people = item["pub_people"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[18] = 0
+
         if flag[18] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
                     pub_code.append(dic["punishNumber"] or None)
@@ -1255,8 +1302,13 @@ class TianYanCha_Spider(CrawlSpider):
         set_reason = item["set_reason"]
         set_department = item["set_department"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[19] = 0
+
         if flag[19] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
                     date = time.strftime("%Y-%m-%d", time.localtime(int(str(dic["putDate"])[:10])))
@@ -1308,6 +1360,12 @@ class TianYanCha_Spider(CrawlSpider):
         pledged_code = item["pledged_code"]
         pledgee = item["pledgee"]
         pledgee_code = item["pledgee_code"]
+
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[20] = 0
 
         if flag[20] is 1:
             data = json.loads(response.body)
@@ -1402,9 +1460,14 @@ class TianYanCha_Spider(CrawlSpider):
         mortgagee_info = item["mortgagee_info"]
         pawn_info = item["pawn_info"]
 
-        if flag[21] is 1:
-            data = json.loads(response.body)
+        data = json.loads(response.body)
+        try:
             data = json.loads(data["data"])
+            test = data[" items"]
+        except:
+            flag[21] = 0
+
+        if flag[21] is 1:
             for dic in data["items"]:
                 try:
                     registed_num.append(dic["baseInfo"]["regNum"] or None)
@@ -1508,8 +1571,13 @@ class TianYanCha_Spider(CrawlSpider):
         tax_balance = item["tax_balance"]
         tax_depart = item["tax_depart"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[22] = 0
+
         if flag[22] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
                     tax_date.append(dic["publishDate"] or None)
@@ -1703,7 +1771,6 @@ class TianYanCha_Spider(CrawlSpider):
                                      callback=self.parse_bond_infomation)
             yield request
 
-
     def parse_bond_infomation(self, response):
         flag = response.meta["flag"]
         item = response.meta["item"]
@@ -1733,8 +1800,13 @@ class TianYanCha_Spider(CrawlSpider):
         trustee = item["trustee"]
         circulation_scope = item["circulation_scope"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["bondList"]
+        except:
+            flag[24] = 0
+
         if flag[24] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["bondList"]:
                 try:
                     bond_name.append(dic["bondName"] or None)
@@ -1927,8 +1999,13 @@ class TianYanCha_Spider(CrawlSpider):
         end_time = item["end_time"]
         link_url = item["link_url"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["companyPurchaseLandList"]
+        except:
+            flag[25] = 0
+
         if flag[25] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["companyPurchaseLandList"]:
                 try:
                     admini_region.append(dic["adminRegion"] or None)
@@ -2068,8 +2145,13 @@ class TianYanCha_Spider(CrawlSpider):
         employ_num = item["employ_num"]
         position_desc = item["position_desc"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["companyEmploymentList"]
+        except:
+            flag[26] = 0
+
         if flag[26] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["companyEmploymentList"]:
                 try:
                     employ_position.append(dic["title"] or None)
@@ -2176,8 +2258,13 @@ class TianYanCha_Spider(CrawlSpider):
         rating_num = item["rating_num"]
         rating_office = item["rating_office"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[27] = 0
+
         if flag[27] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
                     rating_year.append(dic["year"] or None)
@@ -2229,8 +2316,13 @@ class TianYanCha_Spider(CrawlSpider):
         check_result = item["check_result"]
         check_office = item["check_office"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[28] = 0
+
         if flag[28] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
                     check_date.append(dic["checkDate"] or '')
@@ -2283,8 +2375,13 @@ class TianYanCha_Spider(CrawlSpider):
         product_field = item["product_field"]
         product_desc = item["product_desc"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[29] = 0
+
         if flag[29] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
                     product_icon.append(dic["icon"] or None)
@@ -2352,8 +2449,13 @@ class TianYanCha_Spider(CrawlSpider):
         device_num = item["device_num"]
         permit_num = item["permit_num"]
 
+        data = json.loads(response.body)
+        try:
+            test = data["data"]["items"]
+        except:
+            flag[30] = 0
+
         if flag[30] is 1:
-            data = json.loads(response.body)
             for dic in data["data"]["items"]:
                 try:
                     device_num.append(dic["deviceType"] or None)
