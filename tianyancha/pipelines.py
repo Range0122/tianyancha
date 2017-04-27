@@ -473,6 +473,7 @@ class TianyanchaPipeline(object):
 
         """ report"""
         memory = []
+        annual_re_fk=[]
         for i in xrange(len(self.annual_reports)):
             memory.append(item[self.annual_reports[i]])
         if len(memory[0]) > 0:
@@ -488,9 +489,11 @@ class TianyanchaPipeline(object):
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s)",
                                 tuple(tmp))
+                annual_re_fk.append(str(int(self.cursor.lastrowid)))
             except Exception,e:
                 print traceback.print_exc()
         # self.date_insert(item, "report", self.annual_reports)
+        self.conn.commit()
 
         """ Financing"""
         memory = []
@@ -1207,7 +1210,7 @@ class TianyanchaPipeline(object):
                     else:
                         tmp.append(x[i])
                 self.cursor.execute("INSERT INTO detailed_report "
-                                "VALUES(NULL," + item["company_id"] + ','
+                                "VALUES(NULL," + annual_re_fk[i] + ','
                                                                       "%s,%s,%s,%s,%s,%s,%s,%s)",
                                 tuple(tmp))
             except Exception,e:
@@ -1228,7 +1231,7 @@ class TianyanchaPipeline(object):
                     else:
                         tmp.append(x[i])
                 self.cursor.execute("INSERT INTO amendment "
-                                "VALUES(NULL," + item["company_id"] + ','
+                                "VALUES(NULL," + annual_re_fk[item["annual_flag"][i]] + ','
                                                                       "%s,%s,%s,%s)",
                                 tuple(tmp))
             except Exception,e:

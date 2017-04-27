@@ -3,6 +3,7 @@
 import scrapy
 import codecs
 import time
+import traceback
 import re
 import json
 from tianyancha.items import TianyanchaItem
@@ -361,15 +362,14 @@ class TianYanCha_Spider(CrawlSpider):
         item["amend_event"] = []
         item["before_amend"] = []
         item["after_amend"] = []
+        item["annual_flag"] = []
         item["page"] = 1
 
-        if flag[6] is 1:
-            item["page"] = 1
+        if len(item["annual_url"]) > 0:
             next_url = item["annual_url"][0]
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_annual_detail)
             yield request
         else:
-            item["page"] = 1
             next_url = 'http://www.tianyancha.com/expanse/branch.json?id=' + str(item["company_id"]) + '&ps=10&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_branch)
             yield request
@@ -380,11 +380,13 @@ class TianYanCha_Spider(CrawlSpider):
 
         asset_status_name_list = ['totalAssets', 'totalEquity', 'totalSales', 'totalProfit', 'primeBusProfit',
                                   'retainedProfit', 'totalTax', 'totalLiability']
-        asset_status_item_list = ['total_assets', 'total_sales', 'mainbusiness_income', 'total_tax', 'total_ownersequity',
-                                  'total_profit', 'retained_profits', 'total_liabilities']
+        asset_status_item_list = ['total_assets', 'total_sales', 'mainbusiness_income', 'total_tax',
+                                  'total_ownersequity', 'total_profit', 'retained_profits', 'total_liabilities']
 
         alter_event_name_list = ['changeItem', 'contentBefore', 'contentAfter', 'changeTime']
-        alter_event_item_list = ['amend_date', 'amend_event', 'before_amend', 'after_amend']
+        alter_event_item_list = ['amend_event', 'before_amend', 'after_amend', 'amend_date']
+
+        annual_flag = item["annual_flag"]
 
         for i in range(len(asset_status_name_list)):
             names[asset_status_name_list[i]] = item[asset_status_item_list[i]]
@@ -392,25 +394,25 @@ class TianYanCha_Spider(CrawlSpider):
             names[alter_event_name_list[i]] = item[alter_event_item_list[i]]
 
         data = json.loads(response.body)
+
+        for item_name in asset_status_name_list:
+            safe_appends(names[item_name], data["data"], "baseInfo", item_name)
+
         try:
-            temp = data["data"]
+            for dic in data["data"]["changeRecordList"]:
+                annual_flag.append(item["page"]-1)
+                for item_name in alter_event_name_list:
+                    safe_append(names[item_name], dic, item_name)
         except:
-            flag[6] = 0
+            pass
 
-        if flag[6] is 1:
-            for item_name in asset_status_name_list:
-                safe_appends(names[item_name], data["data"], "baseInfo", item_name)
+        for i in range(len(asset_status_name_list)):
+            item[asset_status_item_list[i]] = names[asset_status_name_list[i]]
 
-            for item_name in alter_event_name_list:
-                safe_appends(names[item_name], data["data"], "changeRecordList", item_name)
-
-            for i in range(len(asset_status_name_list)):
-                item[asset_status_item_list[i]] = names[asset_status_name_list[i]]
-            for i in range(len(alter_event_name_list)):
-                item[alter_event_item_list[i]] = names[alter_event_name_list[i]]
+        for i in range(len(alter_event_name_list)):
+            item[alter_event_item_list[i]] = names[alter_event_name_list[i]]
 
         if response.url == item["annual_url"][-1]:
-
             next_url = 'http://www.tianyancha.com/expanse/branch.json?id=' + str(item["company_id"]) + '&ps=10&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_branch)
             yield request
