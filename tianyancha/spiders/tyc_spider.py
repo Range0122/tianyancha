@@ -21,39 +21,16 @@ class TianYanCha_Spider(CrawlSpider):
     start_urls = ['http://www.tianyancha.com                 ']
 
     def parse(self, response):
-        item = TianyanchaItem()
-
-        item["shareholder_id"] = []
-        item["shareholder_name"] = []
-        item["investment_proportion"] = []
-        item["subscribed_contribution"] = []
-        item["subscribed_contribution_time"] = []
-        item["really_contribution"] = []
-
-        item["invested_company_id"] = []
-        item["invested_company_name"] = []
-        item["invested_representative"] = []
-        item["registered_cap"] = []
-        item["investment_amount"] = []
-        item["investment_prop"] = []
-        item["registered_date"] = []
-        item["condit"] = []
-
-        item["change_time"] = []
-        item["change_item"] = []
-        item["before_change"] = []
-        item["after_change"] = []
-
         with codecs.open('../company_test.txt', 'r', encoding='utf-8') as f:
             for line in f.readlines():
                 url = str(line.replace('\r', '').replace('\n', '').replace('=', ''))
-                requests = scrapy.Request(url, meta={"item": item}, callback=self.parse_basic_info)
+                requests = scrapy.Request(url, callback=self.parse_basic_info)
                 yield requests
 
     def parse_basic_info(self, response):
-        item = response.meta["item"]
+        item = TianyanchaItem()
         company_id = response.url[34:]
-        company_name = response.selector.xpath('//div[@class="company_header_width"]/div[1]/span/text()').extract_first(default=u'未公开')
+        company_name = response.selector.xpath('//div[@class="company_header_width ie9Style"]/div[1]/span/text()').extract_first(default=u'未公开')
         legal_representative = response.selector.xpath('//a[@ng-if="company.legalPersonName"]/text()').extract_first(default=u'未公开')
         registered_capital = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[2]/div/text()').extract_first(default=u'未公开')
         registered_time = response.selector.xpath('//div[@class="baseInfo_model2017"]/table/tbody/tr/td[3]/div/text()').extract_first(default=u'未公开')
@@ -91,13 +68,31 @@ class TianYanCha_Spider(CrawlSpider):
             else:
                 flag[i] = 1
 
-        name_list = ['flag', 'company_name', 'legal_representative', 'registered_capital', 'registered_time',
-                     'condition', 'registered_number', 'organization_number', 'credit_number', 'enterprise_type',
-                     'industry', 'operating_start', 'operating_end', 'approved_date', 'registration_authority',
-                     'registered_address', 'business_scope', 'telephone', 'email', 'website', 'logo_location',
-                     'address', 'score', 'company_id', 'former_name']
-        for name in name_list:
-            item[name] = names[name]
+        item["flag"] = flag
+        item["company_name"] = company_name
+        item["legal_representative"] = legal_representative
+        item["registered_capital"] = registered_capital
+        item["registered_time"] = registered_time
+        item["condition"] = condition
+        item["registered_number"] = registered_number
+        item["organization_number"] = organization_number
+        item["credit_number"] = credit_number
+        item["enterprise_type"] = enterprise_type
+        item["industry"] = industry
+        item["operating_start"] = operating_start
+        item["operating_end"] = operating_end
+        item["approved_date"] = approved_date
+        item["registration_authority"] = registration_authority
+        item["registered_address"] = registered_address
+        item["business_scope"] = business_scope
+        item["telephone"] = telephone
+        item["email"] = email
+        item["website"] = website
+        item["logo_location"] = logo_location
+        item["address"] = address
+        item["score"] = score
+        item["company_id"] = company_id
+        item["former_name"] = former_name
 
         next_url = 'http://www.tianyancha.com/expanse/staff.json?id=' + str(item["company_id"]) + '&ps=20&pn=1'
         request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_main_person)
@@ -107,9 +102,9 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
-        name_list = ['person_id', 'person_name', 'position']
-        for name in name_list:
-            names[name] = []
+        person_id = []
+        person_name = []
+        position = []
 
         data = json.loads(response.body)
         try:
@@ -123,9 +118,16 @@ class TianYanCha_Spider(CrawlSpider):
                 person_name.append(dic["name"])
                 position.append(dic["typeJoin"][0])
 
-        for name in name_list:
-            item[name] = names[name]
+        item["person_id"] = person_id
+        item["person_name"] = person_name
+        item["position"] = position
 
+        item["shareholder_id"] = []
+        item["shareholder_name"] = []
+        item["investment_proportion"] = []
+        item["subscribed_contribution"] = []
+        item["subscribed_contribution_time"] = []
+        item["really_contribution"] = []
         item["page"] = 1
 
         next_url = 'http://www.tianyancha.com/expanse/holder.json?id=' + str(item["company_id"]) + '&ps=20&pn=1'
@@ -136,11 +138,12 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
-        name_list = ['shareholder_id', 'shareholder_name', 'investment_proportion', 'subscribed_contribution',
-                     'subscribed_contribution_time', 'really_contribution']
-
-        for name in name_list:
-            names[name] = item[name]
+        shareholder_id = item["shareholder_id"]
+        shareholder_name = item["shareholder_name"]
+        investment_proportion = item["investment_proportion"]
+        subscribed_contribution = item["subscribed_contribution"]
+        subscribed_contribution_time = item["subscribed_contribution_time"]
+        really_contribution = item["really_contribution"]
 
         data = json.loads(response.body)
         try:
@@ -150,8 +153,15 @@ class TianYanCha_Spider(CrawlSpider):
 
         if flag[3] is 1:
             for dic in data["data"]["result"]:
-                safe_append(shareholder_id, dic, 'id')
-                safe_append(shareholder_name, dic, 'name')
+                try:
+                    shareholder_id.append(dic["id"] or None)
+                except:
+                    shareholder_id.append(None)
+
+                try:
+                    shareholder_name.append(dic["name"] or None)
+                except:
+                    shareholder_name.append(None)
 
                 try:
                     investment_proportion.append(dic["capital"][0]["percent"][:-1] or None)
@@ -173,8 +183,12 @@ class TianYanCha_Spider(CrawlSpider):
                 except:
                     really_contribution.append(None)
 
-        for name in name_list:
-            item[name] = names[name]
+        item["shareholder_id"] = shareholder_id
+        item["shareholder_name"] = shareholder_name
+        item["investment_proportion"] = investment_proportion
+        item["subscribed_contribution"] = subscribed_contribution
+        item["subscribed_contribution_time"] = subscribed_contribution_time
+        item["really_contribution"] = really_contribution
 
         if len(response.body) > 1000:
             item["page"] += 1
@@ -182,7 +196,16 @@ class TianYanCha_Spider(CrawlSpider):
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_shareholder_info)
             yield request
         else:
+            item["invested_company_id"] = []
+            item["invested_company_name"] = []
+            item["invested_representative"] = []
+            item["registered_cap"] = []
+            item["investment_amount"] = []
+            item["investment_prop"] = []
+            item["registered_date"] = []
+            item["condit"] = []
             item["page"] = 1
+
             next_url = 'http://www.tianyancha.com/expanse/inverst.json?id=' + str(item["company_id"]) + '&ps=20&pn=1'
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_investment)
             yield request
@@ -191,11 +214,14 @@ class TianYanCha_Spider(CrawlSpider):
         flag = response.meta["flag"]
         item = response.meta["item"]
 
-        name_list = ['invested_company_id', 'invested_company_name', 'invested_representative', 'registered_cap',
-                     'investment_amount', 'investment_prop', 'registered_date', 'condit']
-
-        for name in name_list:
-            names[name] = item[name]
+        invested_company_id = item["invested_company_id"]
+        invested_company_name = item["invested_company_name"]
+        invested_representative = item["invested_representative"]
+        registered_cap = item["registered_cap"]
+        investment_amount = item["investment_amount"]
+        investment_prop = item["investment_prop"]
+        registered_date = item["registered_date"]
+        condit = item["condit"]
 
         data = json.loads(response.body)
         try:
@@ -218,8 +244,14 @@ class TianYanCha_Spider(CrawlSpider):
                 safe_append_date(registered_date, dic, 'estiblishTime')
                 safe_append(condit, dic, 'regStatus')
 
-        for name in name_list:
-            item[name] = names[name]
+        item["invested_company_id"] = invested_company_id
+        item["invested_company_name"] = invested_company_name
+        item["invested_representative"] = invested_representative
+        item["registered_cap"] = registered_cap
+        item["investment_amount"] = investment_amount
+        item["investment_prop"] = investment_prop
+        item["registered_date"] = registered_date
+        item["condit"] = condit
 
         if len(response.body) > 3000:
             item["page"] += 1
@@ -227,6 +259,10 @@ class TianYanCha_Spider(CrawlSpider):
             request = scrapy.Request(url=next_url, meta={"item": item, "flag": flag}, callback=self.parse_investment)
             yield request
         else:
+            item["change_time"] = []
+            item["change_item"] = []
+            item["before_change"] = []
+            item["after_change"] = []
             item["page"] = 1
 
             next_url = 'http://www.tianyancha.com/expanse/changeinfo.json?id=' + str(item["company_id"]) + '&ps=5&pn=1'
