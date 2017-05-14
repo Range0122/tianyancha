@@ -7,7 +7,7 @@
 import re
 import urllib
 import urllib2
-# import MySQLdb
+import MySQLdb
 import traceback
 
 import sys
@@ -43,7 +43,7 @@ class TianyanchaPipeline(object):
          self.conn.commit()
 
     def __init__(self):
-        self.conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="123456", db="Kbase", port=3306,
+        self.conn = MySQLdb.connect(host="192.168.1.123", user="root", passwd="123456", db="Kbase", port=3306,
                                     charset="utf8")
         self.cursor = self.conn.cursor()
 
@@ -322,8 +322,8 @@ class TianyanchaPipeline(object):
                             'category_num',
                             'patent_name',
                             'patent_address',
-                            'inventor',
                             'applicant',
+			    'inventor',
                             'apply_date',
                             'agency',
                             'agent',
@@ -348,81 +348,81 @@ class TianyanchaPipeline(object):
     def process_item(self, item, spider):
         try:
             response = urllib2.urlopen(item["logo_location"])
-            pic_name = re.findall(r'.*/(.*png)', str(item["logo_location"]))[0]
-            urllib.urlretrieve(item["logo_location"], "F:\\%s" % pic_name)
-            item["logo_location"] = 'F:\\%s' % pic_name
+            pic_name = re.findall(r'.*/(.*[png|jpg|gif])', str(item["logo_location"]))[0]
+            urllib.urlretrieve(item["logo_location"], "/home/wr/tianyancha/picture/%s" % pic_name)
+            item["logo_location"] = pic_name
         except:
-            item["logo_location"] = 'F:\\default.jpg'
+            item["logo_location"] = 'default.jpg'
 
         for i in range(len(item["member_icon"])):
-            print 'member_icon', item["member_icon"][i]
+            # print 'member_icon', item["member_icon"][i]
             try:
                 response = urllib2.urlopen(item["member_icon"][i])
-                pic_name = re.findall(r'.*/(.*png)', str(item["member_icon"][i]))[0]
-                urllib.urlretrieve(item["member_icon"][i], "F:\\%s" % pic_name)
-                item["member_icon"][i] = 'F:\\%s' % pic_name
+                pic_name = re.findall(r'.*/(.*[png|jpg|gif])', str(item["member_icon"][i]))[0]
+                urllib.urlretrieve(item["member_icon"][i], "/home/wr/tianyancha/picture/%s" % pic_name)
+                item["member_icon"][i] = pic_name
             except:
-                item["member_icon"][i] = 'F:\\default.jpg'
+                item["member_icon"][i] = 'default.jpg'
 
         for i in range(len(item["business_logo"])):
-            print 'business_logo', item["business_logo"][i]
+            # print 'business_logo', item["business_logo"][i]
             try:
                 response = urllib2.urlopen(item["business_logo"][i])
-                pic_name = re.findall(r'.*/(.*png)', str(item["business_logo"][i]))[0]
-                urllib.urlretrieve(item["business_logo"][i], "F:\\%s" % pic_name)
-                item["business_logo"][i] = 'F:\\%s' % pic_name
+                pic_name = re.findall(r'.*/(.*[png|jpg|gif])', str(item["business_logo"][i]))[0]
+                urllib.urlretrieve(item["business_logo"][i], "/home/wr/tianyancha/picture/%s" % pic_name)
+                item["business_logo"][i] = pic_name
             except:
-                item["business_logo"][i] = 'F:\\default.jpg'
+                item["business_logo"][i] = 'default.jpg'
 
         for i in range(len(item["invest_pro_icon"])):
-            print 'invest_pro_icon', item["invest_pro_icon"][i]
+            # print 'invest_pro_icon', item["invest_pro_icon"][i]
             try:
                 response = urllib2.urlopen(item["invest_pro_icon"][i])
-                pic_name = re.findall(r'.*/(.*png)', str(item["invest_pro_icon"][i]))[0]
-                urllib.urlretrieve(item["invest_pro_icon"][i], "F:\\%s" % pic_name)
-                item["invest_pro_icon"][i] = 'F:\\%s' % pic_name
+                pic_name = re.findall(r'.*/(.*[png|jpg|gif])', str(item["invest_pro_icon"][i]))[0]
+                urllib.urlretrieve(item["invest_pro_icon"][i], "/home/wr/tianyancha/picture/%s" % pic_name)
+                item["invest_pro_icon"][i] = pic_name
             except:
-                item["invest_pro_icon"][i] = 'F:\\default.jpg'
+                item["invest_pro_icon"][i] = 'default.jpg'
 
         for i in range(len(item["product_logo"])):
-            print 'product_logo', item["product_logo"][i]
+            # print 'product_logo', item["product_logo"][i]
             try:
                 response = urllib2.urlopen(item["product_logo"][i])
-                pic_name = re.findall(r'.*/(.*png)', str(item["product_logo"][i]))[0]
-                urllib.urlretrieve(item["product_logo"][i], "F:\\%s" % pic_name)
-                item["product_logo"][i] = 'F:\\%s' % pic_name
+                pic_name = re.findall(r'.*/(.*[png|jpg|gif])', str(item["product_logo"][i]))[0]
+                urllib.urlretrieve(item["product_logo"][i], "/home/wr/tianyancha/picture/%s" % pic_name)
+                item["product_logo"][i] = pic_name
             except:
-                item["product_logo"][i] = 'F:\\default.jpg'
+                item["product_logo"][i] = 'default.jpg'
 
         for i in range(len(item["product_icon"])):
-            print 'product_icon', item["product_icon"][i]
+            # print 'product_icon', item["product_icon"][i]
             try:
                 response = urllib2.urlopen(item["product_icon"][i])
-                pic_name = re.findall(r'.*/(.*png)', str(item["product_icon"][i]))[0]
-                urllib.urlretrieve(item["product_icon"][i], "F:\\%s" % pic_name)
-                item["product_icon"][i] = 'F:\\%s' % pic_name
+                pic_name = re.findall(r'.*/(.*[png|jpg|gif])', str(item["product_icon"][i]))[0]
+                urllib.urlretrieve(item["product_icon"][i], "/home/wr/tianyancha/picture/%s" % pic_name)
+                item["product_icon"][i] = pic_name
             except:
-                item["product_icon"][i] = 'F:\\default.jpg'
+                item["product_icon"][i] = 'default.jpg'
 
         for i in range(len(item["brand_icon"])):
-            print 'brand_icon', item["brand_icon"][i]
+            # print 'brand_icon', item["brand_icon"][i]
             try:
                 response = urllib2.urlopen(item["brand_icon"][i])
-                pic_name = re.findall(r'.*/(.*png)', str(item["brand_icon"][i]))[0]
-                urllib.urlretrieve(item["brand_icon"][i], "F:\\%s" % pic_name)
-                item["brand_icon"][i] = 'F:\\%s' % pic_name
+                pic_name = re.findall(r'.*/(.*[png|jpg|gif])', str(item["brand_icon"][i]))[0]
+                urllib.urlretrieve(item["brand_icon"][i], "/home/wr/tianyancha/picture/%s" % pic_name)
+                item["brand_icon"][i] = pic_name
             except:
-                item["brand_icon"][i] = 'F:\\default.jpg'
+                item["brand_icon"][i] = 'default.jpg'
 
         for i in range(len(item["patent_pic"])):
-            print 'patent_pic', item["patent_pic"][i]
+            # print 'patent_pic', item["patent_pic"][i]
             try:
                 response = urllib2.urlopen(item["patent_pic"][i])
-                pic_name = re.findall(r'.*/(.*png)', str(item["patent_pic"][i]))[0]
-                urllib.urlretrieve(item["patent_pic"][i], "F:\\%s" % pic_name)
-                item["patent_pic"][i] = 'F:\\%s' % pic_name
+                pic_name = re.findall(r'.*/(.*[png|jpg|gif])', str(item["patent_pic"][i]))[0]
+                urllib.urlretrieve(item["patent_pic"][i], "/home/wr/tianyancha/picture/%s" % pic_name)
+                item["patent_pic"][i] = pic_name
             except:
-                item["patent_pic"][i] = 'F:\\default.jpg'
+                item["patent_pic"][i] = 'default.jpg'
 
         memory = []
         """ company"""
@@ -529,7 +529,7 @@ class TianyanchaPipeline(object):
         if len(memory[0]) > 0:
           for (x, y, i) in zip(item["shareholder_name"], item["shareholder_id"], xrange(len(memory[0]))):
            try:
-            if len(x) > 4 and x.find(u'公司'):
+            if len(x) > 4 and x.find(u'¹«ËŸ'):
                 selec_result = self.cursor.execute("SELECT companyid FROM company WHERE tyqycid='%s'" % y)
 
                 if selec_result == 0:
@@ -538,7 +538,7 @@ class TianyanchaPipeline(object):
                     share_company_fk = int(self.cursor.lastrowid)
                 else:
                     share_company_fk = int(self.cursor.fetchone()[0])
-                self.cursor.execute("INSERT INTO share_info VALUES (NULL,NULL," + str(share_company_fk) + ','
+                self.cursor.execute("INSERT INTO share_info VALUES (NULL,"+item["company_id"]+",NULL," + str(share_company_fk) + ','
                                                                                                     "%s,%s,%s,%s)",
                                     tuple(x[i] for x in memory))
             else:
@@ -548,7 +548,7 @@ class TianyanchaPipeline(object):
                     share_person_fk = int(self.cursor.lastrowid)
                 else:
                     share_person_fk = int(self.cursor.fetchone()[0])
-                self.cursor.execute("INSERT INTO share_info VALUES (NULL," + str(share_person_fk) + ",NULL,"
+                self.cursor.execute("INSERT INTO share_info VALUES (NULL,"+item["company_id"]+"," + str(share_person_fk) + ",NULL,"
                                                                                               "%s,%s,%s,%s)",
                                    tuple(x[i] for x in memory))
            except Exception,e:
@@ -1026,7 +1026,7 @@ class TianyanchaPipeline(object):
                         tmp.append(str(x[i]))
                     else:
                         tmp.append(x[i])
-                self.cursor.execute("INSERT INTO tradmark_infomation "
+                self.cursor.execute("INSERT INTO tradmark_information "
                                 "VALUES(NULL," + item["company_id"] + ","
                                                                       "%s,%s,%s,%s,%s,%s)",
                                 tuple(tmp))
